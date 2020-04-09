@@ -1,4 +1,6 @@
 #include "ChessBoard.h"
+#include "ChessModel.h"
+#include "Pieces.h"
 #include <iostream>
 
 ChessBoard::ChessBoard()
@@ -58,7 +60,7 @@ ChessBoard::ChessBoard()
     }
 
     // draw text
-    char *whiteText = "White", *blackText = "Black";
+    const char *whiteText = "White", *blackText = "Black";
     for (int i = 0; i < 5; i++) {
         m_array[(m_w / 2 - 2) + i] = whiteText[i];
         m_array[m_w * (m_h - 1) + ((m_w/2 - 2) + i)] = blackText[i];
@@ -67,6 +69,27 @@ ChessBoard::ChessBoard()
 
 void ChessBoard::show()
 {
+    system("cls");
+
+    int cellWidth = 3;
+    int cellHeight = 2;
+    int boardSize = 8;
+
+    int modelIndex = 0;
+    for (int y = 0; y < boardSize * cellHeight; y += cellHeight) {
+        for (int x = 0; x < boardSize * cellWidth; x += cellWidth) {
+            if (m_model->get(modelIndex) != nullptr) {
+                m_array[m_w * (y + cellWidth) + (x + cellHeight)]     = m_model->get(modelIndex)->color();
+                m_array[m_w * (y + cellWidth) + (x + cellHeight) + 1] = m_model->get(modelIndex)->type();
+            }
+            else {
+                m_array[m_w * (y + cellWidth) + (x + cellHeight)] = ' ';
+                m_array[m_w * (y + cellWidth) + (x + cellHeight) + 1] = ' ';
+            }
+            modelIndex++;
+        }
+    }
+
     for (int indx = 0; indx < m_w * m_h; indx++) {
         if (indx % m_w == 0) {
             std::cout << std::endl;
@@ -74,4 +97,9 @@ void ChessBoard::show()
         std::cout << m_array[indx];
     }
     std::cout << std::endl;
+}
+
+void ChessBoard::setModel(const ChessModel *model)
+{
+    m_model = model;
 }

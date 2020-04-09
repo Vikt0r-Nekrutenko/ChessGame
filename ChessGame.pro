@@ -5,7 +5,11 @@ CONFIG -= qt
 DEFINES += UNICODE
 SOURCES += \
         ChessBoard.cpp \
+        ChessModel.cpp \
+        Pieces.cpp \
         main.cpp
 
 HEADERS += \
-    ChessBoard.h
+    ChessBoard.h \
+    ChessModel.h \
+    Pieces.h
