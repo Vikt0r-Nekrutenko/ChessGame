@@ -15,8 +15,9 @@ public:
     bool pieceIsJumping(int cX, int cY, const int dX, const int dY) const;
     void move(const int cX, const int cY, const int dX, const int dY);
 private:
-    const int N = 8;
     std::vector<Piece *> map;
+    const int N = 8;
+    unsigned char m_player = 'W';
 };
 
 #endif // CHESSMODEL_H

@@ -30,6 +30,9 @@ ChessModel::ChessModel() {
 
     map[4] = new Queen('W');
     map[N * 7 + 4] = new Queen('B');
+
+    map[N * 5 + 1] = map[N + 1];
+    map[N + 1] = nullptr;
 }
 
 ChessModel::~ChessModel()
@@ -93,8 +96,14 @@ void ChessModel::move(const int cX, const int cY, const int dX, const int dY)
         return;
     }
 
+    // check player
+    if (map[curIndx]->color() != m_player) {
+        std::cout << "another player move" << std::endl;
+        return;
+    }
+
     // check motion
-    if (!map[curIndx]->motionValidator(cx, cy, dx, dy)) {
+    if (!map[curIndx]->motionValidator(cx, cy, dx, dy, map[destIndx])) {
         std::cout << "not allowed" << std::endl;
         return;
     }
@@ -111,12 +120,15 @@ void ChessModel::move(const int cX, const int cY, const int dX, const int dY)
         return;
     }
 
-    // check destination cell and color for hint
+    // check destination cell and color for hit
     if (map[destIndx] != nullptr && map[destIndx]->color() != map[curIndx]->color()) {
         std::cout << map[destIndx]->color() << map[destIndx]->type() << " is dead!" << std::endl;
         delete map[destIndx];
     }
 
+    map[curIndx]->move();
     map[destIndx] = map[curIndx];
     map[curIndx] = nullptr;
+
+    m_player = m_player == 'W' ? 'B' : 'W';
 }
