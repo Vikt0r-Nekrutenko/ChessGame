@@ -6,6 +6,7 @@
 class Piece;
 
 class ChessModel {
+    friend class ModelBackup;
 public:
     ChessModel();
     ~ChessModel();
@@ -14,9 +15,12 @@ public:
     bool coordIsValid(const int cX, const int cY, const int dX, const int dY) const;
     bool pieceIsJumping(int cX, int cY, const int dX, const int dY) const;
     void move(const int cX, const int cY, const int dX, const int dY);
+    int getN() const;
+    unsigned char getPlayer() const;
+
 private:
     std::vector<Piece *> map;
-    const int N = 8;
+    const int m_N = 8;
     unsigned char m_player = 'W';
 };
 

@@ -6,10 +6,12 @@ DEFINES += UNICODE
 SOURCES += \
         ChessBoard.cpp \
         ChessModel.cpp \
+        ModelBackup.cpp \
         Pieces.cpp \
         main.cpp
 
 HEADERS += \
     ChessBoard.h \
     ChessModel.h \
+    ModelBackup.h \
     Pieces.h

@@ -3,36 +3,33 @@
 #include <iostream>
 
 ChessModel::ChessModel() {
-    map.resize(N * N, nullptr);
+    map.resize(m_N * m_N, nullptr);
 
-    for (int x = 0; x < N; x++) {
-        map[N + x] = new Pawn('W');
-        map[N * 6 + x] = new Pawn('B');
+    for (int x = 0; x < m_N; x++) {
+        map[m_N + x] = new Pawn('W');
+        map[m_N * 6 + x] = new Pawn('B');
     }
 
     map[0] = new Rook('W');
-    map[N - 1] = new Rook('W');
-    map[N * 7] = new Rook('B');
-    map[N * 7 + 7] = new Rook('B');
+    map[m_N - 1] = new Rook('W');
+    map[m_N * 7] = new Rook('B');
+    map[m_N * 7 + 7] = new Rook('B');
 
     map[1] = new Knight('W');
-    map[N - 2] = new Knight('W');
-    map[N * 7 + 1] = new Knight('B');
-    map[N * 7 + 6] = new Knight('B');
+    map[m_N - 2] = new Knight('W');
+    map[m_N * 7 + 1] = new Knight('B');
+    map[m_N * 7 + 6] = new Knight('B');
 
     map[2] = new Bishop('W');
-    map[N - 3] = new Bishop('W');
-    map[N * 7 + 2] = new Bishop('B');
-    map[N * 7 + 5] = new Bishop('B');
+    map[m_N - 3] = new Bishop('W');
+    map[m_N * 7 + 2] = new Bishop('B');
+    map[m_N * 7 + 5] = new Bishop('B');
 
     map[3] = new King('W');
-    map[N * 7 + 3] = new King('B');
+    map[m_N * 7 + 3] = new King('B');
 
     map[4] = new Queen('W');
-    map[N * 7 + 4] = new Queen('B');
-
-    map[N * 5 + 1] = map[N + 1];
-    map[N + 1] = nullptr;
+    map[m_N * 7 + 4] = new Queen('B');
 }
 
 ChessModel::~ChessModel()
@@ -44,7 +41,7 @@ ChessModel::~ChessModel()
 
 Piece *ChessModel::get(const int x, const int y)
 {
-    return map[N * y + x];
+    return map[m_N * y + x];
 }
 
 Piece *ChessModel::get(const int indx) const
@@ -68,7 +65,7 @@ bool ChessModel::pieceIsJumping(int cX, int cY, const int dX, const int dY) cons
     int lim = (X > Y ? X : Y) - 1;
 
     for (int i = 0; i < lim; i++) {
-        if (map[N * (cY += _Y) + (cX += _X)] != nullptr) {
+        if (map[m_N * (cY += _Y) + (cX += _X)] != nullptr) {
             return true;
         }
     }
@@ -87,8 +84,8 @@ void ChessModel::move(const int cX, const int cY, const int dX, const int dY)
     int dx = dX - 'a';
     int dy = dY - '1';
 
-    int curIndx = N * cy + cx;
-    int destIndx = N * dy + dx;
+    int curIndx = m_N * cy + cx;
+    int destIndx = m_N * dy + dx;
 
     // check existing the piece
     if (map[curIndx] == nullptr) {
@@ -131,4 +128,14 @@ void ChessModel::move(const int cX, const int cY, const int dX, const int dY)
     map[curIndx] = nullptr;
 
     m_player = m_player == 'W' ? 'B' : 'W';
+}
+
+int ChessModel::getN() const
+{
+    return m_N;
+}
+
+unsigned char ChessModel::getPlayer() const
+{
+    return m_player;
 }
