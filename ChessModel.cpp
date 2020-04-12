@@ -10,25 +10,25 @@ enum class CastlingType {
 ChessModel::ChessModel() {
     map.resize(m_N * m_N, nullptr);
 
-    for (int x = 0; x < m_N; x++) {
-        map[m_N + x] = new Pawn('W');
-        map[m_N * 6 + x] = new Pawn('B');
-    }
+//    for (int x = 0; x < m_N; x++) {
+//        map[m_N + x] = new Pawn('W');
+//        map[m_N * 6 + x] = new Pawn('B');
+//    }
 
-    map[0] = new Rook('W');
-    map[m_N - 1] = new Rook('W');
-    map[m_N * 7] = new Rook('B');
-    map[m_N * 7 + 7] = new Rook('B');
+//    map[0] = new Rook('W');
+//    map[m_N - 1] = new Rook('W');
+//    map[m_N * 7] = new Rook('B');
+//    map[m_N * 7 + 7] = new Rook('B');
 
-    map[1] = new Knight('W');
-    map[m_N - 2] = new Knight('W');
-    map[m_N * 7 + 1] = new Knight('B');
-    map[m_N * 7 + 6] = new Knight('B');
+//    map[1] = new Knight('W');
+//    map[m_N - 2] = new Knight('W');
+//    map[m_N * 7 + 1] = new Knight('B');
+//    map[m_N * 7 + 6] = new Knight('B');
 
-    map[2] = new Bishop('W');
-    map[m_N - 3] = new Bishop('W');
-    map[m_N * 7 + 2] = new Bishop('B');
-    map[m_N * 7 + 5] = new Bishop('B');
+//    map[2] = new Bishop('W');
+//    map[m_N - 3] = new Bishop('W');
+//    map[m_N * 7 + 2] = new Bishop('B');
+//    map[m_N * 7 + 5] = new Bishop('B');
 
     map[3] = new King('W');
     map[m_N * 7 + 3] = new King('B');
@@ -124,6 +124,23 @@ void ChessModel::pawnTransformation()
     }
 }
 
+void ChessModel::isCheck(const int destIndx) const
+{
+    unsigned char opponent = m_player == 'W' ? 'B' : 'W';
+    int kingX = 0, kingY = 0;
+    for (size_t i = 0; i < map.size(); i++) {
+        if (map[i] != nullptr && map[i]->color() == opponent && map[i]->type() == 'K') {
+            kingX = i % m_N;
+            kingY = i / m_N;
+        }
+    }
+
+    int x = destIndx % m_N, y = destIndx / m_N;
+    if (map[destIndx]->motionIsValid(x, y, kingX, kingY, nullptr) && pieceCanJumpTo(x, y, kingX, kingY)) {
+        std::cout << m_player << " attacked " << opponent << " king!" << std::endl;
+    }
+}
+
 bool ChessModel::coordIsValid(const int cX, const int cY, const int dX, const int dY) const
 {
     if ((cX >= 'a' && cX <= 'h' && cY >= '1' && cY <= '8') && (dX >= 'a' && dX <= 'h' && dY >= '1' && dY <= '8')) {
@@ -132,19 +149,23 @@ bool ChessModel::coordIsValid(const int cX, const int cY, const int dX, const in
     return false;
 }
 
-bool ChessModel::pieceIsJumping(int cX, int cY, const int dX, const int dY) const
+bool ChessModel::pieceCanJumpTo(int cX, int cY, const int dX, const int dY) const
 {
     int X = abs(dX - cX), Y = abs(dY - cY);
-    int _X = dX - cX; _X = (_X == 0) ? 0 : _X / X;
-    int _Y = dY - cY; _Y = (_Y == 0) ? 0 : _Y / Y;
+    int _X = dX - cX;
+    _X = (_X == 0) ? 0 : _X / X;
+
+    int _Y = dY - cY;
+    _Y = (_Y == 0) ? 0 : _Y / Y;
+
     int lim = (X > Y ? X : Y) - 1;
 
     for (int i = 0; i < lim; i++) {
         if (map[m_N * (cY += _Y) + (cX += _X)] != nullptr) {
-            return true;
+            return false;
         }
     }
-    return false;
+    return true;
 }
 
 void ChessModel::move(const int cX, const int cY, const int dX, const int dY)
@@ -187,7 +208,7 @@ void ChessModel::move(const int cX, const int cY, const int dX, const int dY)
     }
 
     // check jumping
-    if (!map[curIndx]->canJump() && pieceIsJumping(cx, cy, dx, dy)) {
+    if (!map[curIndx]->canJump() && !pieceCanJumpTo(cx, cy, dx, dy)) {
         std::cout << "jumps not allowed" << std::endl;
         return;
     }
@@ -209,6 +230,7 @@ void ChessModel::move(const int cX, const int cY, const int dX, const int dY)
     map[curIndx] = nullptr;
 
     pawnTransformation();
+    isCheck(destIndx);
     m_player = m_player == 'W' ? 'B' : 'W';
 }
 
