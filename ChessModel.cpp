@@ -124,7 +124,17 @@ void ChessModel::pawnTransformation()
     }
 }
 
-void ChessModel::isCheck(const int destIndx) const
+bool ChessModel::isCheckmate(const int destIndx) const
+{
+    if (map[destIndx]->type() == 'K') {
+        const char *playerName = (m_player == 'W') ? "White" : "Black";
+        std::cout << playerName << " win. Checkmate!" << std::endl;
+        return true;
+    }
+    return false;
+}
+
+bool ChessModel::isCheck(const int destIndx) const
 {
     unsigned char opponent = m_player == 'W' ? 'B' : 'W';
     int kingX = 0, kingY = 0;
@@ -137,8 +147,9 @@ void ChessModel::isCheck(const int destIndx) const
 
     int x = destIndx % m_N, y = destIndx / m_N;
     if (map[destIndx]->motionIsValid(x, y, kingX, kingY, nullptr) && pieceCanJumpTo(x, y, kingX, kingY)) {
-        std::cout << m_player << " attacked " << opponent << " king!" << std::endl;
+        return true;
     }
+    return false;
 }
 
 bool ChessModel::coordIsValid(const int cX, const int cY, const int dX, const int dY) const
@@ -222,6 +233,10 @@ void ChessModel::move(const int cX, const int cY, const int dX, const int dY)
     // check destination cell and color for hit
     if (map[destIndx] != nullptr && map[destIndx]->color() != map[curIndx]->color()) {
         std::cout << map[destIndx]->color() << map[destIndx]->type() << " is dead!" << std::endl;
+        if (isCheckmate(destIndx)) {
+            m_movesIsPossible = false;
+            return;
+        }
         delete map[destIndx];
     }
 
@@ -230,7 +245,12 @@ void ChessModel::move(const int cX, const int cY, const int dX, const int dY)
     map[curIndx] = nullptr;
 
     pawnTransformation();
-    isCheck(destIndx);
+
+    if (isCheck(destIndx)) {
+        const char *playerName = (m_player == 'W') ? "White" : "Black";
+        const char *opponentName = (m_player == 'W') ? "Black" : "White";
+        std::cout << playerName << " attacked the " << opponentName << " king. Check!" << std::endl;
+    }
     m_player = m_player == 'W' ? 'B' : 'W';
 }
 
@@ -239,7 +259,12 @@ int ChessModel::getN() const
     return m_N;
 }
 
-unsigned char ChessModel::getPlayer() const
+const char *ChessModel::getPlayer() const
 {
-    return m_player;
+    return (m_player == 'W') ? "White" : "Black";
+}
+
+bool ChessModel::movesIsPossible() const
+{
+    return m_movesIsPossible;
 }
