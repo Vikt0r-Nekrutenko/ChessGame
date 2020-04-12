@@ -10,25 +10,25 @@ enum class CastlingType {
 ChessModel::ChessModel() {
     map.resize(m_N * m_N, nullptr);
 
-//    for (int x = 0; x < m_N; x++) {
-//        map[m_N + x] = new Pawn('W');
-//        map[m_N * 6 + x] = new Pawn('B');
-//    }
+    for (int x = 0; x < m_N; x++) {
+        map[m_N + x] = new Pawn('W');
+        map[m_N * 6 + x] = new Pawn('B');
+    }
 
-//    map[0] = new Rook('W');
-//    map[m_N - 1] = new Rook('W');
-//    map[m_N * 7] = new Rook('B');
-//    map[m_N * 7 + 7] = new Rook('B');
+    map[0] = new Rook('W');
+    map[m_N - 1] = new Rook('W');
+    map[m_N * 7] = new Rook('B');
+    map[m_N * 7 + 7] = new Rook('B');
 
-//    map[1] = new Knight('W');
-//    map[m_N - 2] = new Knight('W');
-//    map[m_N * 7 + 1] = new Knight('B');
-//    map[m_N * 7 + 6] = new Knight('B');
+    map[1] = new Knight('W');
+    map[m_N - 2] = new Knight('W');
+    map[m_N * 7 + 1] = new Knight('B');
+    map[m_N * 7 + 6] = new Knight('B');
 
-//    map[2] = new Bishop('W');
-//    map[m_N - 3] = new Bishop('W');
-//    map[m_N * 7 + 2] = new Bishop('B');
-//    map[m_N * 7 + 5] = new Bishop('B');
+    map[2] = new Bishop('W');
+    map[m_N - 3] = new Bishop('W');
+    map[m_N * 7 + 2] = new Bishop('B');
+    map[m_N * 7 + 5] = new Bishop('B');
 
     map[3] = new King('W');
     map[m_N * 7 + 3] = new King('B');
@@ -42,11 +42,6 @@ ChessModel::~ChessModel()
     for (int i = map.size() - 1; i >= 0; i--) {
         delete map[i];
     }
-}
-
-Piece *ChessModel::get(const int x, const int y)
-{
-    return map[m_N * y + x];
 }
 
 Piece *ChessModel::get(const int indx) const
@@ -81,8 +76,8 @@ void ChessModel::castling(const int curIndx, const int destIndx, const CastlingT
 
 CastlingType ChessModel::castlingIsPossible(const int cX, const int cY, const int dX, const int dY) const
 {
-    int curIndx = m_N * cY + cX;
-    int destIndx = m_N * dY + dX;
+    const int curIndx = m_N * cY + cX;
+    const int destIndx = m_N * dY + dX;
 
     Piece *king = map[curIndx];
     Piece *rookRight = map[destIndx + 2];
@@ -90,6 +85,7 @@ CastlingType ChessModel::castlingIsPossible(const int cX, const int cY, const in
 
     if (king->type() == 'K' && king->moves() == 0) {
         if (rookRight != nullptr && rookRight->type() == 'R' && rookRight->moves() == 0) {
+            // try to find pieces between king & right rook
             for (int i = curIndx + 1; i <= destIndx + 1; i++) {
                 if (map[i] != nullptr) {
                     return CastlingType::NONE;
@@ -97,6 +93,7 @@ CastlingType ChessModel::castlingIsPossible(const int cX, const int cY, const in
             }
             return CastlingType::RIGHT;
         } else if (rookLeft != nullptr && rookLeft->type() == 'R' && rookLeft->moves() == 0) {
+            // try to find pieces between king & left rook
             for (int i = curIndx - 1; i >= destIndx; i--) {
                 if (map[i] != nullptr) {
                     return CastlingType::NONE;
@@ -113,8 +110,8 @@ void ChessModel::pawnTransformation()
     for (int j = 0; j < m_N; j += 7) {
         for (int i = 0; i < m_N; i++) {
             if (map[m_N * j + i] != nullptr && map[m_N * j + i]->type() == 'P') {
-                unsigned char pieces[] = "QRBN";
-                unsigned char color = map[m_N * j + i]->color();
+                const unsigned char pieces[] = "QRBN";
+                const unsigned char color = map[m_N * j + i]->color();
 
                 delete map[m_N * j + i];
                 PieceGenerator gen;
@@ -136,7 +133,7 @@ bool ChessModel::isCheckmate(const int destIndx) const
 
 bool ChessModel::isCheck(const int destIndx) const
 {
-    unsigned char opponent = m_player == 'W' ? 'B' : 'W';
+    const unsigned char opponent = m_player == 'W' ? 'B' : 'W';
     int kingX = 0, kingY = 0;
     for (size_t i = 0; i < map.size(); i++) {
         if (map[i] != nullptr && map[i]->color() == opponent && map[i]->type() == 'K') {
@@ -145,7 +142,7 @@ bool ChessModel::isCheck(const int destIndx) const
         }
     }
 
-    int x = destIndx % m_N, y = destIndx / m_N;
+    const int x = destIndx % m_N, y = destIndx / m_N;
     if (map[destIndx]->motionIsValid(x, y, kingX, kingY, nullptr) && pieceCanJumpTo(x, y, kingX, kingY)) {
         return true;
     }
@@ -162,14 +159,16 @@ bool ChessModel::coordIsValid(const int cX, const int cY, const int dX, const in
 
 bool ChessModel::pieceCanJumpTo(int cX, int cY, const int dX, const int dY) const
 {
-    int X = abs(dX - cX), Y = abs(dY - cY);
+    const int X = abs(dX - cX);
+    const int Y = abs(dY - cY);
+
     int _X = dX - cX;
     _X = (_X == 0) ? 0 : _X / X;
 
     int _Y = dY - cY;
     _Y = (_Y == 0) ? 0 : _Y / Y;
 
-    int lim = (X > Y ? X : Y) - 1;
+    const int lim = (X > Y ? X : Y) - 1;
 
     for (int i = 0; i < lim; i++) {
         if (map[m_N * (cY += _Y) + (cX += _X)] != nullptr) {
@@ -186,13 +185,13 @@ void ChessModel::move(const int cX, const int cY, const int dX, const int dY)
         return;
     }
 
-    int cx = cX - 'a';
-    int cy = cY - '1';
-    int dx = dX - 'a';
-    int dy = dY - '1';
+    const int cx = cX - 'a';
+    const int cy = cY - '1';
+    const int dx = dX - 'a';
+    const int dy = dY - '1';
 
-    int curIndx = m_N * cy + cx;
-    int destIndx = m_N * dy + dx;
+    const int curIndx = m_N * cy + cx;
+    const int destIndx = m_N * dy + dx;
 
     // check existing the piece
     if (map[curIndx] == nullptr) {

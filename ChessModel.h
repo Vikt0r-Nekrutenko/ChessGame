@@ -11,7 +11,6 @@ class ChessModel {
 public:
     ChessModel();
     ~ChessModel();
-    Piece *get(const int x, const int y);
     Piece *get(const int indx) const;
     CastlingType castlingIsPossible(const int cX, const int cY, const int dX, const int dY) const;
     void castling(const int curIndx, const int destIndx, const CastlingType type);
@@ -24,7 +23,6 @@ public:
     void move(const int cX, const int cY, const int dX, const int dY);
     int getN() const;
     const char *getPlayer() const;
-
 
 private:
     std::vector<Piece *> map;
