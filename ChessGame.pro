@@ -13,5 +13,6 @@ SOURCES += \
 HEADERS += \
     ChessBoard.h \
     ChessModel.h \
+    GrigParts.h \
     ModelBackup.h \
     Pieces.h
