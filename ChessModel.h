@@ -12,6 +12,7 @@ public:
     ~ChessModel();
     Piece *get(const int x, const int y);
     Piece *get(const int indx) const;
+    void pawnTransformation();
     bool coordIsValid(const int cX, const int cY, const int dX, const int dY) const;
     bool pieceIsJumping(int cX, int cY, const int dX, const int dY) const;
     void move(const int cX, const int cY, const int dX, const int dY);

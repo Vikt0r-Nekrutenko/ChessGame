@@ -1,5 +1,6 @@
 #include "ChessModel.h"
 #include "Pieces.h"
+#include "ModelBackup.h"
 #include <iostream>
 
 ChessModel::ChessModel() {
@@ -47,6 +48,22 @@ Piece *ChessModel::get(const int x, const int y)
 Piece *ChessModel::get(const int indx) const
 {
     return map[indx];
+}
+
+void ChessModel::pawnTransformation()
+{
+    for (int j = 0; j < m_N; j += 7) {
+        for (int i = 0; i < m_N; i++) {
+            if (map[m_N * j + i] != nullptr && map[m_N * j + i]->type() == 'P') {
+                unsigned char pieces[] = "QRBN";
+                unsigned char color = map[m_N * j + i]->color();
+
+                delete map[m_N * j + i];
+                PieceGenerator gen;
+                map[m_N * j + i] = gen.generate(color, pieces[rand()%4]);
+            }
+        }
+    }
 }
 
 bool ChessModel::coordIsValid(const int cX, const int cY, const int dX, const int dY) const
@@ -127,6 +144,7 @@ void ChessModel::move(const int cX, const int cY, const int dX, const int dY)
     map[destIndx] = map[curIndx];
     map[curIndx] = nullptr;
 
+    pawnTransformation();
     m_player = m_player == 'W' ? 'B' : 'W';
 }
 
