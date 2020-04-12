@@ -3,6 +3,10 @@
 #include "ModelBackup.h"
 #include <iostream>
 
+enum class CastlingType {
+    LEFT, RIGHT, NONE
+};
+
 ChessModel::ChessModel() {
     map.resize(m_N * m_N, nullptr);
 
@@ -48,6 +52,60 @@ Piece *ChessModel::get(const int x, const int y)
 Piece *ChessModel::get(const int indx) const
 {
     return map[indx];
+}
+
+void ChessModel::castling(const int curIndx, const int destIndx, const CastlingType type)
+{
+    // king motion
+    map[curIndx]->move();
+    map[destIndx] = map[curIndx];
+    map[curIndx] = nullptr;
+
+    if (type == CastlingType::RIGHT) {
+        // rook motion
+        map[destIndx + 2]->move();
+        map[destIndx - 1] = map[destIndx + 2];
+        map[destIndx + 2] = nullptr;
+
+        std::cout << "long castling" << std::endl;
+    }
+    else if (type == CastlingType::LEFT) {
+        // rook motion
+        map[destIndx - 1]->move();
+        map[destIndx + 1] = map[destIndx - 1];
+        map[destIndx - 1] = nullptr;
+
+        std::cout << "short castling" << std::endl;
+    }
+}
+
+CastlingType ChessModel::castlingIsPossible(const int cX, const int cY, const int dX, const int dY) const
+{
+    int curIndx = m_N * cY + cX;
+    int destIndx = m_N * dY + dX;
+
+    Piece *king = map[curIndx];
+    Piece *rookRight = map[destIndx + 2];
+    Piece *rookLeft = map[destIndx - 1];
+
+    if (king->type() == 'K' && king->moves() == 0) {
+        if (rookRight != nullptr && rookRight->type() == 'R' && rookRight->moves() == 0) {
+            for (int i = curIndx + 1; i <= destIndx + 1; i++) {
+                if (map[i] != nullptr) {
+                    return CastlingType::NONE;
+                }
+            }
+            return CastlingType::RIGHT;
+        } else if (rookLeft != nullptr && rookLeft->type() == 'R' && rookLeft->moves() == 0) {
+            for (int i = curIndx - 1; i >= destIndx; i--) {
+                if (map[i] != nullptr) {
+                    return CastlingType::NONE;
+                }
+            }
+            return CastlingType::LEFT;
+        }
+    }
+    return CastlingType::NONE;
 }
 
 void ChessModel::pawnTransformation()
@@ -116,8 +174,14 @@ void ChessModel::move(const int cX, const int cY, const int dX, const int dY)
         return;
     }
 
+    CastlingType type = castlingIsPossible(cx, cy, dx, dy);
+    if (type != CastlingType::NONE) {
+        castling(curIndx, destIndx, type);
+        return;
+    }
+
     // check motion
-    if (!map[curIndx]->motionValidator(cx, cy, dx, dy, map[destIndx])) {
+    if (!map[curIndx]->motionIsValid(cx, cy, dx, dy, map[destIndx])) {
         std::cout << "not allowed" << std::endl;
         return;
     }

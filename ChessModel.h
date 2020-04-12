@@ -4,6 +4,7 @@
 #include <vector>
 
 class Piece;
+enum class CastlingType;
 
 class ChessModel {
     friend class ModelBackup;
@@ -12,6 +13,8 @@ public:
     ~ChessModel();
     Piece *get(const int x, const int y);
     Piece *get(const int indx) const;
+    void castling(const int curIndx, const int destIndx, const CastlingType type);
+    CastlingType castlingIsPossible(const int cX, const int cY, const int dX, const int dY) const;
     void pawnTransformation();
     bool coordIsValid(const int cX, const int cY, const int dX, const int dY) const;
     bool pieceIsJumping(int cX, int cY, const int dX, const int dY) const;
