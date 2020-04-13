@@ -49,7 +49,7 @@ ChessModel::ChessModel()
 ChessModel::~ChessModel()
 {
     for (int i = map.size() - 1; i >= 0; i--) {
-        delete map[i];
+		delete map[i];
     }
 }
 
