@@ -1,6 +1,11 @@
 #include "ModelBackup.h"
 #include "ChessModel.h"
-#include "Pieces.h"
+#include "Queen.h"
+#include "King.h"
+#include "Bishop.h"
+#include "Knight.h"
+#include "Rook.h"
+#include "Pawn.h"
 #include <fstream>
 #include <iostream>
 

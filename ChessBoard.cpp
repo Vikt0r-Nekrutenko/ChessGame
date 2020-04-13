@@ -1,6 +1,6 @@
 #include "ChessBoard.h"
 #include "ChessModel.h"
-#include "Pieces.h"
+#include "Piece.h"
 #include "GrigParts.h"
 #include <iostream>
 
