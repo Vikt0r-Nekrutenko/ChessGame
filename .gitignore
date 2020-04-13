@@ -3,6 +3,7 @@
 debug
 release
 *.opendb
+*.db
 *~
 *.autosave
 *.a
