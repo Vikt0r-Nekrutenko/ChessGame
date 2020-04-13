@@ -74,3 +74,8 @@ Thumbs.db
 *.dll
 *.exe
 
+/.opencppcov/ChessName
+/ipch/UNITTESTS-aef6712e
+/UnitTests/.opencppcov/UnitTests
+/UnitTests/LastCoverageResults.log
+/LastCoverageResults.log
