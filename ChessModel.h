@@ -4,7 +4,10 @@
 #include <vector>
 
 class Piece;
-enum class CastlingType;
+enum class CastlingType
+{
+	LEFT, RIGHT, NONE
+};
 
 class ChessModel {
     friend class ModelBackup;

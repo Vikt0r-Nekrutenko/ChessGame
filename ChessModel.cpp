@@ -3,11 +3,6 @@
 #include "ModelBackup.h"
 #include <iostream>
 
-enum class CastlingType
-{
-    LEFT, RIGHT, NONE
-};
-
 ChessModel::ChessModel()
 {
     map.resize(m_N * m_N, nullptr);
