@@ -46,7 +46,7 @@ int main()
                 std::cout << "Game ended. Type Restart." << std::endl;
             }
         }
-        system("pause");
+//        system("pause");
     }
     while(true);
 

@@ -72,8 +72,11 @@ ChessBoard::ChessBoard()
 
 void ChessBoard::show()
 {
+#if defined(_MSC_VER) || defined(WIN64) || defined(_WIN64) || defined(__WIN64__) || defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
     system("cls");
-
+#else
+    printf("\033[0;0H");
+#endif
     const int cellWidth = 3;
     const int cellHeight = 2;
     const int boardSize = 8;
