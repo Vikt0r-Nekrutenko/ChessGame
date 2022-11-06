@@ -1,8 +1,19 @@
 TEMPLATE = app
-CONFIG += console c++11
+CONFIG += console c++17
 CONFIG -= app_bundle
 CONFIG -= qt
-DEFINES += UNICODE
+
+LIBS += -L$$PWD/../stf/release/ -lstf
+
+INCLUDEPATH += $$PWD/../stf/
+                $$PWD/../stf/smv
+                $$PWD/../stf/sdb
+
+
+DEPENDPATH += $$PWD/../stf/
+                $$PWD/../stf/smv
+                $$PWD/../stf/sdb
+
 SOURCES += \
         Bishop.cpp \
         ChessBoard.cpp \
