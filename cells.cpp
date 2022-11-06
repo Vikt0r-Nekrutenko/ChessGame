@@ -17,6 +17,11 @@ stf::ColorTable BoardCell::color() const
     return stf::ColorTable::Default;
 }
 
+bool BoardCell::canJump(const stf::Vec2d &selected, const stf::Vec2d &selectable) const
+{
+    return false;
+}
+
 int BoardCell::uniqueView() const
 {
     return 0;

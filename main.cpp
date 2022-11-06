@@ -25,6 +25,16 @@ public:
         return mBoard.at(Size.x * pos.y + pos.x);
     }
 
+    void place(const stf::Vec2d& pos, BoardCell *cell)
+    {
+        mBoard.at(Size.x * pos.y + pos.x) = cell;
+    }
+
+    void clear(const stf::Vec2d& pos)
+    {
+        mBoard.at(Size.x * pos.y + pos.x) = cells::emptyCell();
+    }
+
     std::vector<BoardCell *> mBoard;
 };
 
@@ -57,6 +67,24 @@ public:
 
     GameBoard mBoard = GameBoard();
     Cursor mCursor = Cursor();
+
+    stf::smv::IView *put(stf::smv::IView *sender)
+    {
+        if(mCursor.selectedCell.cell == cells::emptyCell())
+        {
+            mCursor.select(mBoard[{mCursor.selectableCell.pos}]);
+        }
+        else
+        {
+            if(mCursor.selectedCell.cell->canJump(mCursor.selectedCell.pos, mCursor.selectableCell.pos))
+            {
+                mBoard.place(mCursor.selectableCell.pos, mCursor.selectedCell.cell);
+                mBoard.clear(mCursor.selectedCell.pos);
+                mCursor.reset();
+            }
+        }
+        return sender;
+    }
 
     stf::smv::IView *keyEventsHandler(stf::smv::IView *sender, const int key) override
     {
@@ -93,8 +121,8 @@ public:
             case 'q':
                 return nullptr;
 
-//            case ' ':
-//                return put(sender);
+            case ' ':
+                return put(sender);
             }
             return sender;
     }
