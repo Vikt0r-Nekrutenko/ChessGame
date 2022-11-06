@@ -14,6 +14,11 @@ class ViewedCell
 {
 public:
     virtual uint8_t view() const = 0;
+
+    void *operator new(size_t size)
+    {
+        return CellAllocator::cellAllocator.allocate(size);
+    }
 };
 
 class ColoredCell
