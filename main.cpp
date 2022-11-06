@@ -16,8 +16,8 @@ public:
             mBoard.push_back(cells::emptyCell());
         }
 
-        mBoard.at(0) = pieces::bPawn();
-        mBoard.at(1) = pieces::wPawn();
+        mBoard.at(10) = pieces::bPawn();
+        mBoard.at(50) = pieces::wPawn();
     }
 
     BoardCell* operator[](const stf::Vec2d& pos) const
