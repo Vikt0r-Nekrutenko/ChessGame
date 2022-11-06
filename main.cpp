@@ -53,6 +53,15 @@ public:
     }
 };
 
+class BlackColoredCell : public ColoredCell
+{
+public:
+    stf::ColorTable color() const override
+    {
+        return stf::ColorTable::Black;
+    }
+};
+
 class UniqueIntViewedCell
 {
 public:
@@ -76,9 +85,20 @@ public:
 class EmptyCell : public BoardCell
 {
 public:
-    uint8_t view() const override { return ' '; }
-    stf::ColorTable color() const override { return stf::ColorTable::Default; }
-    int uniqueView() const override { return 0; }
+    uint8_t view() const override
+    {
+        return ' ';
+    }
+
+    stf::ColorTable color() const override
+    {
+        return stf::ColorTable::Default;
+    }
+
+    int uniqueView() const override
+    {
+        return 0;
+    }
 };
 
 class Player : public ColoredCell
@@ -89,25 +109,33 @@ public:
 
 class WhitePlayer : public Player
 {
-    Player* opponent() const override { return nullptr; }
+    Player* opponent() const override
+    {
+        return nullptr;
+    }
 };
 
 class BlackPlayer : public Player
 {
-    Player* opponent() const override { return nullptr; }
+    Player* opponent() const override
+    {
+        return nullptr;
+    }
 };
 
 class Piece : public BoardCell {};
 
 class Pawn : public Piece
 {
-    uint8_t view() const override { return 'P'; }
+    uint8_t view() const override
+    {
+        return 'P';
+    }
 };
 
 class WPawn : public Pawn
 {
 public:
-    stf::ColorTable color() const override { return stf::ColorTable::White; }
     int uniqueView() const override { return -1; }
 };
 
