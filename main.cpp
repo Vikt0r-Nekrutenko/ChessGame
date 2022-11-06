@@ -80,11 +80,13 @@ public:
 
 class WhitePlayer : public Player
 {
-public:
-    Player* opponent() const override { return new BlackPlayer(); }
+    Player* opponent() const override { return nullptr; }
 };
 
-class BlackPlayer : public Player {};
+class BlackPlayer : public Player
+{
+    Player* opponent() const override { return nullptr; }
+};
 
 class Game : public stf::Window
 {
