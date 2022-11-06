@@ -17,9 +17,24 @@ public:
     bool canJump(const stf::Vec2d& selected, const stf::Vec2d& selectable) const override;
 };
 
+class WQueen : public Queen, public WhiteColoredCell
+{
+public:
+    int uniqueView() const override { return +5; }
+};
+
+class BQueen : public Queen, public BlackColoredCell
+{
+public:
+    int uniqueView() const override { return -5; }
+};
+
+
 namespace pieces {
 static CellCreator<WPawn> wPawn = CellCreator<WPawn>();
 static CellCreator<BPawn> bPawn = CellCreator<BPawn>();
+static CellCreator<WQueen> wQueen = CellCreator<WQueen>();
+static CellCreator<BQueen> bQueen = CellCreator<BQueen>();
 }
 
 #endif // PAWNS_HPP

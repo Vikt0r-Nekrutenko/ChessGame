@@ -16,7 +16,7 @@ public:
         }
 
         mBoard.at(11) = pieces::bPawn();
-        mBoard.at(50) = pieces::wPawn();
+        mBoard.at(50) = pieces::wQueen();
     }
 
     BoardCell* operator[](const stf::Vec2d& pos) const
