@@ -10,7 +10,13 @@ public:
 class ColoredCell
 {
 public:
-    virtual uint8_t color() const = 0;
+    virtual stf::ColorTable color() const = 0;
+};
+
+class UniqueIntViewedCell
+{
+public:
+    virtual int uniqueView() const = 0;
 };
 
 class Game : public stf::Window
