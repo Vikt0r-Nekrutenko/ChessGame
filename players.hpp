@@ -7,7 +7,6 @@ class Player
 {
 public:
     virtual Player* opponent() const = 0;
-    void *operator new(size_t size);
 };
 
 class WhitePlayer : public Player, public WhiteColoredCell

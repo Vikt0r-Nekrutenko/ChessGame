@@ -26,6 +26,7 @@ SOURCES += \
         Queen.cpp \
         Rook.cpp \
         cells.cpp \
+        gameboard.cpp \
         main.cpp \
         pawns.cpp \
         pieces.cpp \
@@ -44,6 +45,7 @@ HEADERS += \
     Queen.h \
     Rook.h \
     cells.hpp \
+    gameboard.hpp \
     pawns.hpp \
     pieces.hpp \
     players.hpp

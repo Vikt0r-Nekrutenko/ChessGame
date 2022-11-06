@@ -27,7 +27,7 @@ bool BoardCell::canJump(const stf::Vec2d &selected, const stf::Vec2d &selectable
     return false;
 }
 
-bool BoardCell::canAttack(const GameBoard *board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
+bool BoardCell::canAttack(const GameBoard &board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
     return false;
 }
