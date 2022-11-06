@@ -54,6 +54,47 @@ public:
 
     GameBoard mBoard = GameBoard();
     Cursor mCursor = Cursor();
+
+    stf::smv::IView *keyEventsHandler(stf::smv::IView *sender, const int key) override
+    {
+        switch (key)
+            {
+            case 'w':
+                if(mCursor.selectableCell.pos.y > 0)
+                    mCursor.selectableCell.pos.y -= 1;
+                else
+                    mCursor.selectableCell.pos.y = mBoard.Size.y - 1;
+                break;
+
+            case 'a':
+                if(mCursor.selectableCell.pos.x > 0)
+                    mCursor.selectableCell.pos.x -= 1;
+                else
+                    mCursor.selectableCell.pos.x = mBoard.Size.x - 1;
+                break;
+
+            case 's':
+                if(mCursor.selectableCell.pos.y < mBoard.Size.y-1)
+                    mCursor.selectableCell.pos.y += 1;
+                else
+                    mCursor.selectableCell.pos.y = 0;
+                break;
+
+            case 'd':
+                if(mCursor.selectableCell.pos.x < mBoard.Size.x-1)
+                    mCursor.selectableCell.pos.x += 1;
+                else
+                    mCursor.selectableCell.pos.x = 0;
+                break;
+
+            case 'q':
+                return nullptr;
+
+//            case ' ':
+//                return put(sender);
+            }
+            return sender;
+    }
 };
 
 class GameView : public stf::smv::IView
@@ -94,7 +135,7 @@ class Game : public stf::Window
 
     void keyEvents(const int key) final
     {
-
+        currentView->keyEventsHandler(key);
     }
 
     void mouseEvents(const stf::MouseRecord& mr) final
