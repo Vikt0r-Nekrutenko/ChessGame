@@ -33,7 +33,7 @@ public:
     virtual stf::ColorTable color() const;
     virtual stf::ColorTable getOpponent() const;
 
-    virtual bool canJump(const stf::Vec2d& selected, const stf::Vec2d& selectable) const;
+    virtual bool canJump(const GameBoard& board, const stf::Vec2d& selected, const stf::Vec2d& selectable) const;
     virtual bool canAttack(const GameBoard& board, const stf::Vec2d& selected, const stf::Vec2d& selectable) const;
 };
 

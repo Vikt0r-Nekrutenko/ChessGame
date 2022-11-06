@@ -13,8 +13,10 @@ int BPawn::uniqueView() const
     return -1;
 }
 
-bool WPawn::canJump(const stf::Vec2d &selected, const stf::Vec2d &selectable) const
+bool WPawn::canJump(const GameBoard &board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
+    if(!Pawn::canJump(board, selected, selectable))
+        return false;
     if(selectable - selected == stf::Vec2d(0, -1))
         return true;
     else if(selected.y == WPAWN_SPAWN_Y && selectable - selected == stf::Vec2d(0, -2))
@@ -22,8 +24,10 @@ bool WPawn::canJump(const stf::Vec2d &selected, const stf::Vec2d &selectable) co
     return false;
 }
 
-bool BPawn::canJump(const stf::Vec2d &selected, const stf::Vec2d &selectable) const
+bool BPawn::canJump(const GameBoard &board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
+    if(!Pawn::canJump(board, selected, selectable))
+        return false;
     if(selectable - selected == stf::Vec2d(0, +1))
         return true;
     else if(selected.y == BPAWN_SPAWN_Y && selectable - selected == stf::Vec2d(0, +2))

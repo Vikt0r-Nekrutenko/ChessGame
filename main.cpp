@@ -44,7 +44,7 @@ public:
         else
         {
             if(mCursor.selectedCell.cell->canAttack(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos) ||
-               mCursor.selectedCell.cell->canJump(mCursor.selectedCell.pos, mCursor.selectableCell.pos))
+               mCursor.selectedCell.cell->canJump(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos))
             {
                 mBoard.place(mCursor.selectableCell.pos, mCursor.selectedCell.cell);
                 mBoard.clear(mCursor.selectedCell.pos);
