@@ -90,7 +90,10 @@ class BlackPlayer : public Player
 
 class Piece : public BoardCell {};
 
-class Pawn : public Piece {};
+class Pawn : public Piece
+{
+    uint8_t view() const override { return 'P'; }
+};
 
 class Game : public stf::Window
 {
