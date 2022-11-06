@@ -52,7 +52,8 @@ class GameModel : public stf::smv::BaseModel
 {
 public:
 
-    GameBoard mBoard;
+    GameBoard mBoard = GameBoard();
+    Cursor mCursor = Cursor();
 };
 
 class GameView : public stf::smv::IView
@@ -69,6 +70,13 @@ public:
                 renderer.drawPixel({x * 2 + 1, y + 2}, gm->mBoard[{x,y}]->view()==' '?'.':gm->mBoard[{x,y}]->view(), gm->mBoard[{x,y}]->color());
             }
         }
+        if(gm->mCursor.selectedCell.cell != cells::emptyCell())
+        {
+            renderer.drawPixel({gm->mCursor.selectedCell.pos.x * 2,     gm->mCursor.selectedCell.pos.y + 2}, '(');
+            renderer.drawPixel({gm->mCursor.selectedCell.pos.x * 2 + 2, gm->mCursor.selectedCell.pos.y + 2}, ')');
+        }
+        renderer.drawPixel({gm->mCursor.selectableCell.pos.x * 2,     gm->mCursor.selectableCell.pos.y + 2}, '[');
+        renderer.drawPixel({gm->mCursor.selectableCell.pos.x * 2 + 2, gm->mCursor.selectableCell.pos.y + 2}, ']');
     }
 };
 
