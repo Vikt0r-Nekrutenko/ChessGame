@@ -25,7 +25,10 @@ public:
 class ViewedCell
 {
 public:
-    virtual uint8_t view() const = 0;
+    virtual uint8_t view() const
+    {
+        return 0;
+    }
 
     void *operator new(size_t size)
     {
@@ -36,7 +39,10 @@ public:
 class ColoredCell
 {
 public:
-    virtual stf::ColorTable color() const = 0;
+    virtual stf::ColorTable color() const
+    {
+        return stf::ColorTable::Default;
+    }
 
     void *operator new(size_t size)
     {
@@ -44,7 +50,7 @@ public:
     }
 };
 
-class WhiteColoredCell : public ColoredCell
+class WhiteColoredCell : virtual public ColoredCell
 {
 public:
     stf::ColorTable color() const override
@@ -65,7 +71,10 @@ public:
 class UniqueIntViewedCell
 {
 public:
-    virtual int uniqueView() const = 0;
+    virtual int uniqueView() const
+    {
+        return 0;
+    }
 
     void *operator new(size_t size)
     {
@@ -123,9 +132,7 @@ class BlackPlayer : public Player
     }
 };
 
-class Piece : public BoardCell {};
-
-class Pawn : public Piece
+class Pawn : virtual public BoardCell
 {
     uint8_t view() const override
     {
@@ -133,7 +140,14 @@ class Pawn : public Piece
     }
 };
 
-class WPawn : public Pawn
+class WPawn : public Pawn, public WhiteColoredCell
+{
+public:
+    using WhiteColoredCell::color;
+    int uniqueView() const override { return +1; }
+};
+
+class BPawn : public Pawn, public BlackColoredCell
 {
 public:
     int uniqueView() const override { return -1; }
