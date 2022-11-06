@@ -12,18 +12,12 @@ public:
 
 class WhitePlayer : public Player, public WhiteColoredCell
 {
-    Player* opponent() const override
-    {
-        return nullptr;
-    }
+    Player* opponent() const override;
 };
 
 class BlackPlayer : public Player, public BlackColoredCell
 {
-    Player* opponent() const override
-    {
-        return nullptr;
-    }
+    Player* opponent() const override;
 };
 
 namespace players {
