@@ -5,14 +5,14 @@ CONFIG -= qt
 
 LIBS += -L$$PWD/../stf/release/ -lstf
 
-INCLUDEPATH += $$PWD/../stf/
-                $$PWD/../stf/smv
-                $$PWD/../stf/sdb
+INCLUDEPATH += $$PWD/../stf/ \
+                $$PWD/../stf/smv \
+                $$PWD/../stf/sdb \
 
 
-DEPENDPATH += $$PWD/../stf/
-                $$PWD/../stf/smv
-                $$PWD/../stf/sdb
+DEPENDPATH += $$PWD/../stf/ \
+                $$PWD/../stf/smv \
+                $$PWD/../stf/sdb \
 
 SOURCES += \
         Bishop.cpp \

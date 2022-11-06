@@ -1,5 +1,14 @@
 #include <window.hpp>
 #include <iostream>
+#include "model.hpp"
+
+class CellAllocator
+{
+public:
+    static stf::sdb::DynamicFieldsAllocator cellAllocator;
+};
+
+stf::sdb::DynamicFieldsAllocator CellAllocator::cellAllocator = stf::sdb::DynamicFieldsAllocator();
 
 class ViewedCell
 {
@@ -32,9 +41,17 @@ public:
     int uniqueView() const override { return 0; }
 };
 
-class Player : public ColoredCell {};
+class Player : public ColoredCell
+{
+public:
+    virtual Player* opponent() const = 0;
+};
 
-class WhitePlayer : public Player {};
+class WhitePlayer : public Player
+{
+public:
+    Player* opponent() const override { return new BlackPlayer(); }
+};
 
 class BlackPlayer : public Player {};
 
