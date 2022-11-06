@@ -22,46 +22,25 @@ public:
     T *cell = nullptr;
 };
 
-class ViewedCell
+class BoardCell
 {
 public:
-    virtual uint8_t view() const;
-
     void *operator new(size_t size);
-};
-
-class ColoredCell
-{
-public:
-    virtual stf::ColorTable color() const;
-
-    void *operator new(size_t size);
-};
-
-class WhiteColoredCell : virtual public ColoredCell
-{
-public:
-    stf::ColorTable color() const override;
-};
-
-class BlackColoredCell : public ColoredCell
-{
-public:
-    stf::ColorTable color() const override;
-};
-
-class UniqueIntViewedCell
-{
-public:
     virtual int uniqueView() const;
-
-    void *operator new(size_t size);
+    virtual uint8_t view() const;
+    virtual stf::ColorTable color() const;
 };
 
-class BoardCell : public ColoredCell, public ViewedCell, public UniqueIntViewedCell
+class WhiteColoredCell : virtual public BoardCell
 {
 public:
-    void *operator new(size_t size);
+    stf::ColorTable color() const final;
+};
+
+class BlackColoredCell : virtual public BoardCell
+{
+public:
+    stf::ColorTable color() const final;
 };
 
 class EmptyCell : public BoardCell

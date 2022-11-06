@@ -15,6 +15,9 @@ public:
         for(int i = 0; i < Size.x * Size.y; ++i) {
             mBoard.push_back(cells::emptyCell());
         }
+
+        mBoard.at(0) = pieces::bPawn();
+        mBoard.at(1) = pieces::wPawn();
     }
 
     BoardCell* operator[](const stf::Vec2d& pos) const
@@ -108,7 +111,9 @@ public:
 
         for(int y = 0; y < gm->mBoard.Size.y; ++y) {
             for(int x = 0; x < gm->mBoard.Size.y; ++x) {
-                renderer.drawPixel({x * 2 + 1, y + 2}, gm->mBoard[{x,y}]->view()==' '?'.':gm->mBoard[{x,y}]->view(), gm->mBoard[{x,y}]->color());
+                renderer.drawPixel({x * 2 + 1, y + 2},
+                        gm->mBoard[{x,y}]->view()==' '?'.':gm->mBoard[{x,y}]->view(),
+                        gm->mBoard[{x,y}]->color());
             }
         }
         if(gm->mCursor.selectedCell.cell != cells::emptyCell())

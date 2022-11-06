@@ -2,24 +2,24 @@
 
 stf::sdb::DynamicFieldsAllocator CellAllocator::cellAllocator = stf::sdb::DynamicFieldsAllocator();
 
-uint8_t ViewedCell::view() const
+void *BoardCell::operator new(size_t size)
+{
+    return CellAllocator::cellAllocator.allocate(size);
+}
+
+uint8_t BoardCell::view() const
 {
     return 0;
 }
 
-void *ViewedCell::operator new(size_t size)
-{
-    return CellAllocator::cellAllocator.allocate(size);
-}
-
-stf::ColorTable ColoredCell::color() const
+stf::ColorTable BoardCell::color() const
 {
     return stf::ColorTable::Default;
 }
 
-void *ColoredCell::operator new(size_t size)
+int BoardCell::uniqueView() const
 {
-    return CellAllocator::cellAllocator.allocate(size);
+    return 0;
 }
 
 stf::ColorTable WhiteColoredCell::color() const
@@ -29,22 +29,7 @@ stf::ColorTable WhiteColoredCell::color() const
 
 stf::ColorTable BlackColoredCell::color() const
 {
-    return stf::ColorTable::Black;
-}
-
-int UniqueIntViewedCell::uniqueView() const
-{
-    return 0;
-}
-
-void *UniqueIntViewedCell::operator new(size_t size)
-{
-    return CellAllocator::cellAllocator.allocate(size);
-}
-
-void *BoardCell::operator new(size_t size)
-{
-    return CellAllocator::cellAllocator.allocate(size);
+    return stf::ColorTable::Red;
 }
 
 uint8_t EmptyCell::view() const

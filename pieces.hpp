@@ -5,6 +5,7 @@
 
 class Pawn : virtual public BoardCell
 {
+public:
     uint8_t view() const override;
 };
 

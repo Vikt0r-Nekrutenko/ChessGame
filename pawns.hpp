@@ -6,7 +6,6 @@
 class WPawn : public Pawn, public WhiteColoredCell
 {
 public:
-    using WhiteColoredCell::color;
     int uniqueView() const override;
 };
 
@@ -18,7 +17,7 @@ public:
 
 namespace pieces {
 static CellCreator<WPawn> wPawn = CellCreator<WPawn>();
-static CellCreator<WPawn> bPawn = CellCreator<WPawn>();
+static CellCreator<BPawn> bPawn = CellCreator<BPawn>();
 }
 
 #endif // PAWNS_HPP
