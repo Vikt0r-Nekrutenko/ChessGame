@@ -44,6 +44,15 @@ public:
     }
 };
 
+class WhiteColoredCell : public ColoredCell
+{
+public:
+    stf::ColorTable color() const override
+    {
+        return stf::ColorTable::White;
+    }
+};
+
 class UniqueIntViewedCell
 {
 public:
