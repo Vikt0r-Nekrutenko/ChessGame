@@ -2,6 +2,22 @@
 #include <iostream>
 #include "pawns.hpp"
 
+class GameBoard
+{
+public:
+
+    const stf::Vec2d Size { 8, 8 };
+
+    GameBoard()
+    {
+        for(int i = 0; i < Size.x * Size.y; ++i) {
+            mBoard.push_back(cells::emptyCell());
+        }
+    }
+
+    std::vector<BoardCell *> mBoard;
+};
+
 class Game : public stf::Window
 {
     bool onUpdate(const float) final
@@ -22,6 +38,5 @@ class Game : public stf::Window
 
 int main()
 {
-//    return Game().run();
-    std::cout << (int)WPawn().color() << std::endl;
+    return Game().run();
 }

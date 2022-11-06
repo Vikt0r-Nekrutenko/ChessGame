@@ -74,4 +74,9 @@ public:
     int uniqueView() const override;
 };
 
+namespace cells
+{
+static CellCreator<EmptyCell> emptyCell = CellCreator<EmptyCell>();
+}
+
 #endif // CELLS_HPP

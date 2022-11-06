@@ -25,4 +25,9 @@ class BlackPlayer : public Player
     }
 };
 
+namespace players {
+static CellCreator<WhitePlayer> wPlayer = CellCreator<WhitePlayer>();
+static CellCreator<BlackPlayer> bPlayer = CellCreator<BlackPlayer>();
+}
+
 #endif // PLAYERS_HPP

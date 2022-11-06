@@ -16,5 +16,9 @@ public:
     int uniqueView() const override;
 };
 
+namespace pieces {
+static CellCreator<WPawn> wPawn = CellCreator<WPawn>();
+static CellCreator<WPawn> bPawn = CellCreator<WPawn>();
+}
 
 #endif // PAWNS_HPP
