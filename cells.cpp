@@ -42,9 +42,19 @@ stf::ColorTable WhiteColoredCell::color() const
     return stf::ColorTable::White;
 }
 
+stf::ColorTable WhiteColoredCell::getOpponent() const
+{
+    return stf::ColorTable::Red;
+}
+
 stf::ColorTable BlackColoredCell::color() const
 {
     return stf::ColorTable::Red;
+}
+
+stf::ColorTable BlackColoredCell::getOpponent() const
+{
+    return stf::ColorTable::White;
 }
 
 uint8_t EmptyCell::view() const

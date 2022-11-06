@@ -41,12 +41,14 @@ class WhiteColoredCell : virtual public BoardCell
 {
 public:
     stf::ColorTable color() const final;
+    stf::ColorTable getOpponent() const final;
 };
 
 class BlackColoredCell : virtual public BoardCell
 {
 public:
     stf::ColorTable color() const final;
+    stf::ColorTable getOpponent() const final;
 };
 
 class EmptyCell : public BoardCell
