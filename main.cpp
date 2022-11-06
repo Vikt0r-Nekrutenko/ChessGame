@@ -1,6 +1,8 @@
 #include <window.hpp>
 #include <iostream>
 #include "pawns.hpp"
+#include "imodel.hpp"
+#include "iview.hpp"
 
 class GameBoard
 {
@@ -15,13 +17,47 @@ public:
         }
     }
 
+    BoardCell* operator[](const stf::Vec2d& pos) const
+    {
+        return mBoard.at(Size.x * pos.y + pos.x);
+    }
+
     std::vector<BoardCell *> mBoard;
+};
+
+class GameModel : public stf::smv::BaseModel
+{
+public:
+
+    GameBoard mBoard;
+};
+
+class GameView : public stf::smv::IView
+{
+public:
+    GameView(GameModel *model) : stf::smv::IView(model) {}
+
+    void show(stf::Renderer &renderer) override
+    {
+        GameModel *gm = static_cast<GameModel*>(m_model);
+
+        for(int y = 0; y < gm->mBoard.Size.y; ++y) {
+            for(int x = 0; x < gm->mBoard.Size.y; ++x) {
+                renderer.drawPixel({x * 2 + 2, y + 2}, gm->mBoard[{x,y}]->view()==' '?'.':gm->mBoard[{x,y}]->view(), gm->mBoard[{x,y}]->color());
+            }
+        }
+    }
 };
 
 class Game : public stf::Window
 {
+    GameModel gm = GameModel();
+    GameView gv = GameView(&gm);
+    stf::smv::IView *currentView = &gv;
+
     bool onUpdate(const float) final
     {
+        gv.show(renderer);
         return true;
     }
 
