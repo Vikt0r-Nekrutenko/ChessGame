@@ -24,6 +24,14 @@ class BoardCell : public ColoredCell, public ViewedCell, public UniqueIntViewedC
 public:
 };
 
+class EmptyCell : public ColoredCell, public ViewedCell, public UniqueIntViewedCell
+{
+public:
+    uint8_t view() const override { return ' '; }
+    stf::ColorTable color() const override { return stf::ColorTable::Default; }
+    int uniqueView() const override { return 0; }
+};
+
 class Game : public stf::Window
 {
     bool onUpdate(const float) final
