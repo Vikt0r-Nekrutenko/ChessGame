@@ -95,6 +95,13 @@ class Pawn : public Piece
     uint8_t view() const override { return 'P'; }
 };
 
+class WPawn : public Pawn
+{
+public:
+    stf::ColorTable color() const override { return stf::ColorTable::White; }
+    int uniqueView() const override { return -1; }
+};
+
 class Game : public stf::Window
 {
     bool onUpdate(const float) final
@@ -115,5 +122,6 @@ class Game : public stf::Window
 
 int main()
 {
-    return Game().run();
+//    return Game().run();
+    std::cout << (int)WPawn().color() << std::endl;
 }
