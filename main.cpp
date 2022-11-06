@@ -32,6 +32,8 @@ public:
     int uniqueView() const override { return 0; }
 };
 
+class Player : public ColoredCell {};
+
 class Game : public stf::Window
 {
     bool onUpdate(const float) final
