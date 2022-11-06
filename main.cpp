@@ -119,7 +119,8 @@ public:
                 break;
 
             case 'q':
-                return nullptr;
+                mCursor.reset();
+                break;
 
             case ' ':
                 return put(sender);
