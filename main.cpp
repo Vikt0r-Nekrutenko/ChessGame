@@ -25,6 +25,29 @@ public:
     std::vector<BoardCell *> mBoard;
 };
 
+struct Selector
+{
+    stf::Vec2d pos = stf::Vec2d( 0, 0 );
+    BoardCell *cell = cells::emptyCell();
+};
+
+struct Cursor
+{
+    Selector selectableCell;
+    Selector selectedCell;
+
+    void reset()
+    {
+        selectedCell.cell = selectableCell.cell = cells::emptyCell();
+    }
+
+    void select(BoardCell *cell)
+    {
+        selectedCell.pos = selectableCell.pos;
+        selectedCell.cell = selectableCell.cell = cell;
+    }
+};
+
 class GameModel : public stf::smv::BaseModel
 {
 public:
@@ -43,7 +66,7 @@ public:
 
         for(int y = 0; y < gm->mBoard.Size.y; ++y) {
             for(int x = 0; x < gm->mBoard.Size.y; ++x) {
-                renderer.drawPixel({x * 2 + 2, y + 2}, gm->mBoard[{x,y}]->view()==' '?'.':gm->mBoard[{x,y}]->view(), gm->mBoard[{x,y}]->color());
+                renderer.drawPixel({x * 2 + 1, y + 2}, gm->mBoard[{x,y}]->view()==' '?'.':gm->mBoard[{x,y}]->view(), gm->mBoard[{x,y}]->color());
             }
         }
     }
@@ -57,7 +80,7 @@ class Game : public stf::Window
 
     bool onUpdate(const float) final
     {
-        gv.show(renderer);
+        currentView->show(renderer);
         return true;
     }
 
