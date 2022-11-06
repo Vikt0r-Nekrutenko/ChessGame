@@ -25,16 +25,7 @@ uint8_t Queen::view() const
 
 bool Queen::canAttack(const GameBoard &board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
-    const stf::Vec2d pos = selectable - selected;
-    const stf::Vec2d posAbs = { std::abs(pos.x), std::abs(pos.y) };
-
-    const bool diagonals = posAbs.x == posAbs.y;
-    const bool vertical  = selected.x != selectable.x && selected.y == selectable.y;
-    const bool horizontal= selected.x == selectable.x && selected.y != selectable.y;
-
-    if ((diagonals || vertical || horizontal) && isOpponent(board, selected, selectable)) {
-        return true;
-    } return false;
+    return canJump(selected, selectable) && isOpponent(board, selected, selectable);
 }
 
 bool Queen::canJump(const stf::Vec2d &selected, const stf::Vec2d &selectable) const
