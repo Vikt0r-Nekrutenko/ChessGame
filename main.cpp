@@ -4,7 +4,13 @@
 class ViewedCell
 {
 public:
-    virtual uint8_t view() = 0;
+    virtual uint8_t view() const = 0;
+};
+
+class ColoredCell
+{
+public:
+    virtual uint8_t color() const = 0;
 };
 
 class Game : public stf::Window
