@@ -25,7 +25,11 @@ SOURCES += \
         Piece.cpp \
         Queen.cpp \
         Rook.cpp \
-        main.cpp
+        cells.cpp \
+        main.cpp \
+        pawns.cpp \
+        pieces.cpp \
+        players.cpp
 
 HEADERS += \
     Bishop.h \
@@ -38,4 +42,8 @@ HEADERS += \
     Pawn.h \
     Piece.h \
     Queen.h \
-    Rook.h
+    Rook.h \
+    cells.hpp \
+    pawns.hpp \
+    pieces.hpp \
+    players.hpp
