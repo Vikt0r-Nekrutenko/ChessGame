@@ -19,6 +19,11 @@ public:
     virtual int uniqueView() const = 0;
 };
 
+class BoardCell : public ColoredCell, public ViewedCell, public UniqueIntViewedCell
+{
+public:
+};
+
 class Game : public stf::Window
 {
     bool onUpdate(const float) final
