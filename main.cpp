@@ -34,6 +34,10 @@ public:
 
 class Player : public ColoredCell {};
 
+class WhitePlayer : public Player {};
+
+class BlackPlayer : public Player {};
+
 class Game : public stf::Window
 {
     bool onUpdate(const float) final
