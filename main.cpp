@@ -16,7 +16,7 @@ public:
             mBoard.push_back(cells::emptyCell());
         }
 
-        mBoard.at(10) = pieces::bPawn();
+        mBoard.at(11) = pieces::bPawn();
         mBoard.at(50) = pieces::wPawn();
     }
 

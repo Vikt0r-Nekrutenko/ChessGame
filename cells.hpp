@@ -22,6 +22,8 @@ public:
     T *cell = nullptr;
 };
 
+class GameBoard;
+
 class BoardCell
 {
 public:
@@ -29,8 +31,10 @@ public:
     virtual int uniqueView() const;
     virtual uint8_t view() const;
     virtual stf::ColorTable color() const;
+    virtual stf::ColorTable getOpponent() const;
 
     virtual bool canJump(const stf::Vec2d& selected, const stf::Vec2d& selectable) const;
+    virtual bool canAttack(const GameBoard *board, const stf::Vec2d& selected, const stf::Vec2d& selectable) const;
 };
 
 class WhiteColoredCell : virtual public BoardCell

@@ -17,7 +17,17 @@ stf::ColorTable BoardCell::color() const
     return stf::ColorTable::Default;
 }
 
+stf::ColorTable BoardCell::getOpponent() const
+{
+    return stf::ColorTable::Default;
+}
+
 bool BoardCell::canJump(const stf::Vec2d &selected, const stf::Vec2d &selectable) const
+{
+    return false;
+}
+
+bool BoardCell::canAttack(const GameBoard *board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
     return false;
 }
