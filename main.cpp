@@ -10,6 +10,18 @@ public:
 
 stf::sdb::DynamicFieldsAllocator CellAllocator::cellAllocator = stf::sdb::DynamicFieldsAllocator();
 
+template<class T>
+class CellCreator
+{
+public:
+    T* operator ()()
+    {
+        return cell = cell == nullptr ? new T() : cell;
+    }
+
+    T *cell = nullptr;
+};
+
 class ViewedCell
 {
 public:
@@ -25,20 +37,34 @@ class ColoredCell
 {
 public:
     virtual stf::ColorTable color() const = 0;
+
+    void *operator new(size_t size)
+    {
+        return CellAllocator::cellAllocator.allocate(size);
+    }
 };
 
 class UniqueIntViewedCell
 {
 public:
     virtual int uniqueView() const = 0;
+
+    void *operator new(size_t size)
+    {
+        return CellAllocator::cellAllocator.allocate(size);
+    }
 };
 
 class BoardCell : public ColoredCell, public ViewedCell, public UniqueIntViewedCell
 {
 public:
+    void *operator new(size_t size)
+    {
+        return CellAllocator::cellAllocator.allocate(size);
+    }
 };
 
-class EmptyCell : public ColoredCell, public ViewedCell, public UniqueIntViewedCell
+class EmptyCell : public BoardCell
 {
 public:
     uint8_t view() const override { return ' '; }
