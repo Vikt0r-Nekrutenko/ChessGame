@@ -88,6 +88,10 @@ class BlackPlayer : public Player
     Player* opponent() const override { return nullptr; }
 };
 
+class Piece : public BoardCell {};
+
+class Pawn : public Piece {};
+
 class Game : public stf::Window
 {
     bool onUpdate(const float) final
