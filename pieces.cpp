@@ -66,3 +66,18 @@ bool Knight::noPiecesOnWay(const GameBoard &board, const stf::Vec2d &selected, c
 {
     return true;
 }
+
+
+
+uint8_t Bishop::view() const
+{
+    return 'B';
+}
+
+bool Bishop::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) const
+{
+    int x = abs(source.x - destination.x);
+    int y = abs(source.y - destination.y);
+    if (x == y) return true;
+    return false;
+}

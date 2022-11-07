@@ -61,6 +61,20 @@ public:
     int uniqueView() const override { return -3; }
 };
 
+
+
+class WBishop : public Bishop, public WhiteColoredCell
+{
+public:
+    int uniqueView() const override { return +3; }
+};
+
+class BBishop : public Bishop, public BlackColoredCell
+{
+public:
+    int uniqueView() const override { return -3; }
+};
+
 namespace pieces {
 static CellCreator<WPawn> wPawn = CellCreator<WPawn>();
 static CellCreator<BPawn> bPawn = CellCreator<BPawn>();
@@ -70,6 +84,8 @@ static CellCreator<WRook> wRook = CellCreator<WRook>();
 static CellCreator<BRook> bRook = CellCreator<BRook>();
 static CellCreator<WKnight> wKnight = CellCreator<WKnight>();
 static CellCreator<BKnight> bKnight = CellCreator<BKnight>();
+static CellCreator<WBishop> wBishop = CellCreator<WBishop>();
+static CellCreator<BBishop> bBishop = CellCreator<BBishop>();
 }
 
 #endif // PAWNS_HPP
