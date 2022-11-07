@@ -25,4 +25,11 @@ public:
     bool canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) const final;
 };
 
+class Knight : virtual public BoardCell
+{
+public:
+    uint8_t view() const override;
+    bool canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) const final;
+};
+
 #endif // PIECES_HPP

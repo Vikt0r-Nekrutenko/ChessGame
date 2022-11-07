@@ -17,6 +17,7 @@ public:
 
         mBoard.at(11) = pieces::bPawn();
         mBoard.at(50) = pieces::wQueen();
+        mBoard.at(58) = pieces::wKnight();
         mBoard.at(20) = pieces::bRook();
     }
 

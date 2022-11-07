@@ -46,3 +46,18 @@ bool Rook::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) co
     if (source.x == destination.x && source.y != destination.y) return true;
     return false;
 }
+
+
+
+
+uint8_t Knight::view() const
+{
+    return 'K';
+}
+
+bool Knight::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) const
+{
+    float d = source.diff(destination);
+    if (d < 2.2f || d > 2.3f) return false;
+    return true;
+}

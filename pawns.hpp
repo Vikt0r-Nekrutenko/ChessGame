@@ -47,6 +47,18 @@ public:
     int uniqueView() const override { return -2; }
 };
 
+class WKnight : public Knight, public WhiteColoredCell
+{
+public:
+    int uniqueView() const override { return +3; }
+};
+
+class BKnight : public Knight, public BlackColoredCell
+{
+public:
+    int uniqueView() const override { return -3; }
+};
+
 namespace pieces {
 static CellCreator<WPawn> wPawn = CellCreator<WPawn>();
 static CellCreator<BPawn> bPawn = CellCreator<BPawn>();
@@ -54,6 +66,8 @@ static CellCreator<WQueen> wQueen = CellCreator<WQueen>();
 static CellCreator<BQueen> bQueen = CellCreator<BQueen>();
 static CellCreator<WRook> wRook = CellCreator<WRook>();
 static CellCreator<BRook> bRook = CellCreator<BRook>();
+static CellCreator<WKnight> wKnight = CellCreator<WKnight>();
+static CellCreator<BKnight> bKnight = CellCreator<BKnight>();
 }
 
 #endif // PAWNS_HPP
