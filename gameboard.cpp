@@ -2,7 +2,7 @@
 
 auto findPawnOnLine = [](std::vector<BoardCell *> &board, int beginLine, int endLine, BoardCell *pawn, BoardCell *toPawn){
     for(int x = beginLine; x < endLine; ++x)
-        if(board[x]->color() == pawn->color()) {
+        if(board[x]->view() == pawn->view()) {
             board[x] = toPawn;
         }
 };
