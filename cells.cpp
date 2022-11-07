@@ -25,12 +25,22 @@ stf::ColorTable BoardCell::getOpponent() const
 
 bool BoardCell::canJump(const GameBoard &board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
+    //    return isOpponent(board, selected, selectable) && canMoveTo(selected, selectable) && noPiecesOnWay(board, selected, selectable);
     return board[selectable]->color() == cells::emptyCell()->color();
 }
 
 bool BoardCell::canAttack(const GameBoard &board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
-    return false;
+     if(!BoardCell::canJump(board,selected,selectable))
+        return false;
+
+    if(!noPiecesOnWay(board, selected, selectable))
+        return false;
+
+    if(!canMoveTo(selected, selectable))
+        return false;
+
+    return true;
 }
 
 bool BoardCell::noPiecesOnWay(const GameBoard &board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
@@ -49,6 +59,11 @@ bool BoardCell::noPiecesOnWay(const GameBoard &board, const stf::Vec2d &selected
         }
     }
     return true;
+}
+
+bool BoardCell::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) const
+{
+    return false;
 }
 
 int BoardCell::uniqueView() const
