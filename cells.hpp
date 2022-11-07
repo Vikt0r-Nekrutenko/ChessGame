@@ -3,6 +3,8 @@
 
 #include "model.hpp"
 #include "renderer.hpp"
+#include <list>
+#include <iostream>
 
 class CellAllocator
 {
@@ -35,6 +37,7 @@ public:
 
     virtual bool canJump(const GameBoard& board, const stf::Vec2d& selected, const stf::Vec2d& selectable) const;
     virtual bool canAttack(const GameBoard& board, const stf::Vec2d& selected, const stf::Vec2d& selectable) const;
+    virtual bool noPiecesOnWay(const GameBoard& board, const stf::Vec2d& selected, const stf::Vec2d& selectable) const;
 };
 
 class WhiteColoredCell : virtual public BoardCell

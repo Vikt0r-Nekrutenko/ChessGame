@@ -9,6 +9,10 @@ auto isSamePlayer = [](const GameBoard &board, const stf::Vec2d &p0, const stf::
     return board[{p1}]->color() == board[{p0}]->color();
 };
 
+auto isEmptySell = [](const GameBoard &board, const stf::Vec2d &p0, const stf::Vec2d &p1) {
+    return board[{p1}]->color() == cells::emptyCell()->color();
+};
+
 uint8_t Pawn::view() const
 {
     return 'P';
@@ -16,12 +20,12 @@ uint8_t Pawn::view() const
 
 bool Pawn::canAttack(const GameBoard& board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
-    return isOpponent(board, selected, selectable) && !isSamePlayer(board, selected, selectable);
+    return isOpponent(board, selected, selectable) && !isSamePlayer(board, selected, selectable) && noPiecesOnWay(board, selected, selectable);
 }
 
 bool Pawn::canJump(const GameBoard& board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
-    return !isSamePlayer(board, selected, selectable);
+    return isEmptySell(board, selected, selectable) && BoardCell::noPiecesOnWay(board, selected, selectable);
 }
 
 uint8_t Queen::view() const

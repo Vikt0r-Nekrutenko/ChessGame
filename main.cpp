@@ -43,8 +43,7 @@ public:
         }
         else
         {
-            if(mCursor.selectedCell.cell->canAttack(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos) ||
-               mCursor.selectedCell.cell->canJump(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos))
+            if(mCursor.selectedCell.cell->canJump(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos))
             {
                 mBoard.place(mCursor.selectableCell.pos, mCursor.selectedCell.cell);
                 mBoard.clear(mCursor.selectedCell.pos);
@@ -125,9 +124,17 @@ public:
 
 class Game : public stf::Window
 {
+public:
     GameModel gm = GameModel();
     GameView gv = GameView(&gm);
     stf::smv::IView *currentView = &gv;
+
+    Game()
+    {
+        enableLog();
+        stf::Renderer::log.setHeight(5);
+        stf::Renderer::log.setY(renderer.Size.y - stf::Renderer::log.height());
+    }
 
     bool onUpdate(const float) final
     {
