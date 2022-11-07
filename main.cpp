@@ -51,6 +51,9 @@ public:
                 mCursor.reset();
             }
         }
+
+        mBoard.transformPawns();
+
         return sender;
     }
 

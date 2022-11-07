@@ -34,6 +34,8 @@ public:
         mBoard.at(Size.x * pos.y + pos.x) = cells::emptyCell();
     }
 
+    void transformPawns();
+
     std::vector<BoardCell *> mBoard;
 };
 
