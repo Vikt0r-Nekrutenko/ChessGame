@@ -17,6 +17,8 @@ public:
     uint8_t view() const override;
     bool canAttack(const GameBoard &board, const stf::Vec2d& selected, const stf::Vec2d& selectable) const final;
     bool canJump(const GameBoard &board, const stf::Vec2d& selected, const stf::Vec2d& selectable) const override;
+protected:
+    virtual bool canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) const;
 };
 
 #endif // PIECES_HPP

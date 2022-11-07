@@ -35,7 +35,7 @@ uint8_t Queen::view() const
 
 bool Queen::canAttack(const GameBoard &board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
-    return isOpponent(board, selected, selectable) && noPiecesOnWay(board, selected, selectable);
+    return isOpponent(board, selected, selectable) && canMoveTo(selected, selectable) && noPiecesOnWay(board, selected, selectable);
 }
 
 bool Queen::canJump(const GameBoard& board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
@@ -46,12 +46,20 @@ bool Queen::canJump(const GameBoard& board, const stf::Vec2d &selected, const st
     if(!noPiecesOnWay(board, selected, selectable))
         return false;
 
-    const stf::Vec2d pos = selectable - selected;
+    if(!canMoveTo(selected, selectable))
+        return false;
+
+    return true;
+}
+
+bool Queen::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) const
+{
+    const stf::Vec2d pos = destination - source;
     const stf::Vec2d posAbs = { std::abs(pos.x), std::abs(pos.y) };
 
     const bool diagonals = posAbs.x == posAbs.y;
-    const bool vertical  = selected.x != selectable.x && selected.y == selectable.y;
-    const bool horizontal= selected.x == selectable.x && selected.y != selectable.y;
+    const bool vertical  = source.x != destination.x && source.y == destination.y;
+    const bool horizontal= source.x == destination.x && source.y != destination.y;
 
     if (diagonals || vertical || horizontal) {
         return true;
