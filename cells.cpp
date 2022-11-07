@@ -44,7 +44,6 @@ bool BoardCell::noPiecesOnWay(const GameBoard &board, const stf::Vec2d &selected
     auto pos = selected;
 
     for(int i = 0; i < lim; ++i) {
-        stf::Renderer::log << pos << stf::endl;
         if(board[{ pos += dir }]->color() != cells::emptyCell()->color()) {
             return false;
         }
