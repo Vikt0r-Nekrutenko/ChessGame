@@ -57,3 +57,15 @@ bool Queen::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) c
         return true;
     } return false;
 }
+
+uint8_t Rook::view() const
+{
+    return 'R';
+}
+
+bool Rook::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) const
+{
+    if (source.x != destination.x && source.y == destination.y) return true;
+    if (source.x == destination.x && source.y != destination.y) return true;
+    return false;
+}
