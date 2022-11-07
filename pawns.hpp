@@ -66,13 +66,27 @@ public:
 class WBishop : public Bishop, public WhiteColoredCell
 {
 public:
-    int uniqueView() const override { return +3; }
+    int uniqueView() const override { return +4; }
 };
 
 class BBishop : public Bishop, public BlackColoredCell
 {
 public:
-    int uniqueView() const override { return -3; }
+    int uniqueView() const override { return -4; }
+};
+
+
+
+class WKing : public King, public WhiteColoredCell
+{
+public:
+    int uniqueView() const override { return +6; }
+};
+
+class BKing : public King, public BlackColoredCell
+{
+public:
+    int uniqueView() const override { return -6; }
 };
 
 namespace pieces {
@@ -86,6 +100,8 @@ static CellCreator<WKnight> wKnight = CellCreator<WKnight>();
 static CellCreator<BKnight> bKnight = CellCreator<BKnight>();
 static CellCreator<WBishop> wBishop = CellCreator<WBishop>();
 static CellCreator<BBishop> bBishop = CellCreator<BBishop>();
+static CellCreator<WKing> wKing = CellCreator<WKing>();
+static CellCreator<BKing> bKing = CellCreator<BKing>();
 }
 
 #endif // PAWNS_HPP

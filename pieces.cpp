@@ -30,9 +30,7 @@ bool Queen::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) c
     const bool vertical  = source.x != destination.x && source.y == destination.y;
     const bool horizontal= source.x == destination.x && source.y != destination.y;
 
-    if (diagonals || vertical || horizontal) {
-        return true;
-    } return false;
+    return diagonals || vertical || horizontal;
 }
 
 uint8_t Rook::view() const
@@ -42,9 +40,8 @@ uint8_t Rook::view() const
 
 bool Rook::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) const
 {
-    if (source.x != destination.x && source.y == destination.y) return true;
-    if (source.x == destination.x && source.y != destination.y) return true;
-    return false;
+    return (source.x != destination.x && source.y == destination.y) ||
+           (source.x == destination.x && source.y != destination.y);
 }
 
 
@@ -52,14 +49,13 @@ bool Rook::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) co
 
 uint8_t Knight::view() const
 {
-    return 'K';
+    return 'N';
 }
 
 bool Knight::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) const
 {
     float d = source.diff(destination);
-    if (d < 2.2f || d > 2.3f) return false;
-    return true;
+    return d < 2.2f || d > 2.3f;
 }
 
 bool Knight::noPiecesOnWay(const GameBoard &board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
@@ -78,6 +74,16 @@ bool Bishop::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) 
 {
     int x = abs(source.x - destination.x);
     int y = abs(source.y - destination.y);
-    if (x == y) return true;
-    return false;
+    return x == y;
+}
+
+uint8_t King::view() const
+{
+    return 'K';
+}
+
+bool King::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) const
+{
+    float d = source.diff(destination);
+    return d < 1 || d > 1.5;
 }
