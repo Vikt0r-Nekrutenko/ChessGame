@@ -55,7 +55,7 @@ uint8_t Knight::view() const
 bool Knight::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) const
 {
     float d = source.diff(destination);
-    return d < 2.2f || d > 2.3f;
+    return d > 2.2f && d < 2.3f;
 }
 
 bool Knight::noPiecesOnWay(const GameBoard &board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
