@@ -87,3 +87,18 @@ bool King::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) co
     float d = source.diff(destination);
     return d >= 1 && d < 1.5;
 }
+
+bool King::canJump(const GameBoard &board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
+{
+    for(int y = selectable.y-1; y < selectable.y + 2; ++y) {
+        for(int x = selectable.x-1; x < selectable.x + 2; ++x) {
+            if(x < 0 || y < 0 || x > board.Size.x - 1 || y > board.Size.y - 1)
+                continue;
+            if(selected == stf::Vec2d{x,y})
+                continue;
+            if(board[{x,y}]->view() == King().view())
+                return false;
+        }
+    }
+    return BoardCell::canJump(board, selected, selectable);
+}
