@@ -43,8 +43,8 @@ public:
         }
         else
         {
-            if(mCursor.selectedCell.cell->canJump(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos) ||
-               mCursor.selectedCell.cell->canAttack(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos))
+            if(mCursor.selectedCell.cell->canJump(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos) /*||
+               mCursor.selectedCell.cell->canAttack(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos)*/)
             {
                 mBoard.place(mCursor.selectableCell.pos, mCursor.selectedCell.cell);
                 mBoard.clear(mCursor.selectedCell.pos);
@@ -133,8 +133,8 @@ public:
     Game()
     {
         enableLog();
-        stf::Renderer::log.setHeight(5);
-        stf::Renderer::log.setY(renderer.Size.y - stf::Renderer::log.height());
+        stf::Renderer::log.setHeight(20);
+        stf::Renderer::log.setX(30);
     }
 
     bool onUpdate(const float) final

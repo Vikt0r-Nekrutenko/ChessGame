@@ -35,11 +35,17 @@ uint8_t Queen::view() const
 
 bool Queen::canAttack(const GameBoard &board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
-    return canJump(board, selected, selectable) && isOpponent(board, selected, selectable);
+    return isOpponent(board, selected, selectable) && noPiecesOnWay(board, selected, selectable);
 }
 
 bool Queen::canJump(const GameBoard& board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
+    if(!BoardCell::canJump(board,selected,selectable))
+        return false;
+
+    if(!noPiecesOnWay(board, selected, selectable))
+        return false;
+
     const stf::Vec2d pos = selectable - selected;
     const stf::Vec2d posAbs = { std::abs(pos.x), std::abs(pos.y) };
 
@@ -48,6 +54,6 @@ bool Queen::canJump(const GameBoard& board, const stf::Vec2d &selected, const st
     const bool horizontal= selected.x == selectable.x && selected.y != selectable.y;
 
     if (diagonals || vertical || horizontal) {
-        return !isSamePlayer(board, selected, selectable);
+        return true;
     } return false;
 }

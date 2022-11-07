@@ -38,12 +38,14 @@ bool BoardCell::noPiecesOnWay(const GameBoard &board, const stf::Vec2d &selected
     const stf::Vec2d sub = selectable - selected;
     const stf::Vec2d abss = {std::abs(sub.x), std::abs(sub.y)};
 
-    stf::Vec2d dir = { (sub.x == 0 ? 0 : abss.x / sub.x),
-                       (sub.y == 0 ? 0 : abss.y / sub.y) };
-    const int lim = std::max(sub.x, sub.y) - 1;
+    stf::Vec2d dir = { (sub.x == 0 ? 0 : sub.x / abss.x),
+                       (sub.y == 0 ? 0 : sub.y / abss.y) };
+    const int lim = std::max(abss.x, abss.y) - 1;
+    auto pos = selected;
 
     for(int i = 0; i < lim; ++i) {
-        if(board[{ selected + dir }]->color() != cells::emptyCell()->color()) {
+        stf::Renderer::log << pos << stf::endl;
+        if(board[{ pos += dir }]->color() != cells::emptyCell()->color()) {
             return false;
         }
     }
