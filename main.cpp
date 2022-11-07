@@ -46,6 +46,10 @@ public:
             if(mCursor.selectedCell.cell->canJump(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos) ||
                mCursor.selectedCell.cell->canAttack(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos))
             {
+                mBoard.isCheck(stf::ColorTable::Black, mCursor.selectableCell.pos);
+                if(mBoard.isCheckmate(mCursor.selectableCell.pos, stf::ColorTable::Black))
+                    stf::Renderer::log << stf::endl << "CHECKMATE";
+
                 mBoard.place(mCursor.selectableCell.pos, mCursor.selectedCell.cell);
                 mBoard.clear(mCursor.selectedCell.pos);
                 mCursor.reset();
@@ -59,7 +63,6 @@ public:
 
     stf::smv::IView *keyEventsHandler(stf::smv::IView *sender, const int key) override
     {
-        mBoard.isCheck(stf::ColorTable::Black);
         switch (key)
             {
             case 'w':

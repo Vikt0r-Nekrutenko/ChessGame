@@ -85,5 +85,5 @@ uint8_t King::view() const
 bool King::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) const
 {
     float d = source.diff(destination);
-    return d < 1 || d > 1.5;
+    return d >= 1 && d < 1.5;
 }

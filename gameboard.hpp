@@ -16,31 +16,31 @@ public:
             mBoard.push_back(cells::emptyCell());
         }
 
-        for(int i = 0; i < Size.x; ++i) {
-            mBoard.at(Size.x * 1 + i) = pieces::bPawn();
-            mBoard.at(Size.x * 6 + i) = pieces::wPawn();
-        }
+//        for(int i = 0; i < Size.x; ++i) {
+//            mBoard.at(Size.x * 1 + i) = pieces::bPawn();
+//            mBoard.at(Size.x * 6 + i) = pieces::wPawn();
+//        }
 
-        mBoard.at(Size.x * 0 + 0) = pieces::bRook();
-        mBoard.at(Size.x * 0 + 7) = pieces::bRook();
-        mBoard.at(Size.x * 7 + 0) = pieces::wRook();
-        mBoard.at(Size.x * 7 + 7) = pieces::wRook();
+//        mBoard.at(Size.x * 0 + 0) = pieces::bRook();
+//        mBoard.at(Size.x * 0 + 7) = pieces::bRook();
+//        mBoard.at(Size.x * 7 + 0) = pieces::wRook();
+//        mBoard.at(Size.x * 7 + 7) = pieces::wRook();
 
-        mBoard.at(Size.x * 0 + 1) = pieces::bKnight();
-        mBoard.at(Size.x * 0 + 6) = pieces::bKnight();
-        mBoard.at(Size.x * 7 + 1) = pieces::wKnight();
-        mBoard.at(Size.x * 7 + 6) = pieces::wKnight();
+//        mBoard.at(Size.x * 0 + 1) = pieces::bKnight();
+//        mBoard.at(Size.x * 0 + 6) = pieces::bKnight();
+//        mBoard.at(Size.x * 7 + 1) = pieces::wKnight();
+//        mBoard.at(Size.x * 7 + 6) = pieces::wKnight();
 
-        mBoard.at(Size.x * 0 + 2) = pieces::bBishop();
-        mBoard.at(Size.x * 0 + 5) = pieces::bBishop();
-        mBoard.at(Size.x * 7 + 2) = pieces::wBishop();
-        mBoard.at(Size.x * 7 + 5) = pieces::wBishop();
+//        mBoard.at(Size.x * 0 + 2) = pieces::bBishop();
+//        mBoard.at(Size.x * 0 + 5) = pieces::bBishop();
+//        mBoard.at(Size.x * 7 + 2) = pieces::wBishop();
+//        mBoard.at(Size.x * 7 + 5) = pieces::wBishop();
 
-        mBoard.at(Size.x * 0 + 3) = pieces::bQueen();
-        mBoard.at(Size.x * 7 + 3) = pieces::wQueen();
+//        mBoard.at(Size.x * 0 + 3) = pieces::bQueen();
+//        mBoard.at(Size.x * 7 + 3) = pieces::wQueen();
 
         mBoard.at(Size.x * 0 + 4) = pieces::bKing();
-        mBoard.at(Size.x * 7 + 4) = pieces::wKing();
+        mBoard.at(Size.x * 3 + 4) = pieces::wKing();
     }
 
     BoardCell* operator[](const stf::Vec2d& pos) const
@@ -58,7 +58,7 @@ public:
         mBoard.at(Size.x * pos.y + pos.x) = cells::emptyCell();
     }
 
-    bool isCheck(const stf::ColorTable &playerColor) const
+    bool isCheck(const stf::ColorTable &playerColor, const stf::Vec2d &selectable) const
     {
         stf::Vec2d king {0,0};
         std::vector<stf::Vec2d> pieces;
@@ -69,21 +69,29 @@ public:
                     continue;
                 if((*this)[{x,y}]->color() == playerColor)
                     continue;
-                if((*this)[{x,y}]->view() != King().view()) {
-                    pieces.push_back({x,y});
+
+                pieces.push_back({x,y});
+
+                if((*this)[{x,y}]->view() != King().view())
                     continue;
-                }
+
                 king = stf::Vec2d{x,y};
             }
         }
-        stf::Renderer::log<<stf::endl<<king;
 
         for(auto pos : pieces) {
-            if((*this)[pos]->canAttack(*this, pos, king))
+            if((*this)[pos]->canAttack(*this, pos, king)) {
                 stf::Renderer::log<<"CHECK!!!";
+                return true;
+            }
         }
 
         return false;
+    }
+
+    bool isCheckmate(const stf::Vec2d &selectable, const stf::ColorTable &playerColor) const
+    {
+        return (*this)[selectable]->color() != playerColor && (*this)[selectable]->view() == King().view();
     }
 
     void transformPawns();
