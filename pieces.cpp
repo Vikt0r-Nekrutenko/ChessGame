@@ -6,7 +6,7 @@ auto isOpponent = [](const GameBoard& board, const stf::Vec2d &p0, const stf::Ve
 };
 
 auto isSamePlayer = [](const GameBoard &board, const stf::Vec2d &p0, const stf::Vec2d &p1) {
-    return board[{p1}]->color() != board[{p0}]->color();
+    return board[{p1}]->color() == board[{p0}]->color();
 };
 
 uint8_t Pawn::view() const
@@ -16,15 +16,12 @@ uint8_t Pawn::view() const
 
 bool Pawn::canAttack(const GameBoard& board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
-    const stf::Vec2d pos = selectable - selected;
-    if(std::abs(pos.x) == 1 && std::abs(pos.y) == 1 && isOpponent(board, selected, selectable)) {
-        return true;
-    } return false;
+    return isOpponent(board, selected, selectable) && !isSamePlayer(board, selected, selectable);
 }
 
 bool Pawn::canJump(const GameBoard& board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
-    return isSamePlayer(board, selected, selectable);
+    return !isSamePlayer(board, selected, selectable);
 }
 
 uint8_t Queen::view() const
@@ -47,6 +44,6 @@ bool Queen::canJump(const GameBoard& board, const stf::Vec2d &selected, const st
     const bool horizontal= selected.x == selectable.x && selected.y != selectable.y;
 
     if (diagonals || vertical || horizontal) {
-        return isSamePlayer(board, selected, selectable);
+        return !isSamePlayer(board, selected, selectable);
     } return false;
 }
