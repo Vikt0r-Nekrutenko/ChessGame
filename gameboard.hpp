@@ -2,6 +2,7 @@
 #define GAMEBOARD_HPP
 
 #include "pawns.hpp"
+#include "players.hpp"
 
 class GameBoard
 {
@@ -55,6 +56,34 @@ public:
     void clear(const stf::Vec2d& pos)
     {
         mBoard.at(Size.x * pos.y + pos.x) = cells::emptyCell();
+    }
+
+    bool isCheck(const stf::ColorTable &playerColor) const
+    {
+        stf::Vec2d king {0,0};
+        std::vector<stf::Vec2d> pieces;
+
+        for(int y = 0; y < Size.y; ++y) {
+            for(int x = 0; x < Size.x; ++x) {
+                if((*this)[{x,y}]->view() == cells::emptyCell()->view())
+                    continue;
+                if((*this)[{x,y}]->color() == playerColor)
+                    continue;
+                if((*this)[{x,y}]->view() != King().view()) {
+                    pieces.push_back({x,y});
+                    continue;
+                }
+                king = stf::Vec2d{x,y};
+            }
+        }
+        stf::Renderer::log<<stf::endl<<king;
+
+        for(auto pos : pieces) {
+            if((*this)[pos]->canAttack(*this, pos, king))
+                stf::Renderer::log<<"CHECK!!!";
+        }
+
+        return false;
     }
 
     void transformPawns();

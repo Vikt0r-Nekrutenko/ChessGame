@@ -59,6 +59,7 @@ public:
 
     stf::smv::IView *keyEventsHandler(stf::smv::IView *sender, const int key) override
     {
+        mBoard.isCheck(stf::ColorTable::Black);
         switch (key)
             {
             case 'w':
