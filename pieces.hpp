@@ -30,6 +30,7 @@ class Knight : virtual public BoardCell
 public:
     uint8_t view() const override;
     bool canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) const final;
+    bool noPiecesOnWay(const GameBoard &board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const final;
 };
 
 #endif // PIECES_HPP

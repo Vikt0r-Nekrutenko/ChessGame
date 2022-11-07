@@ -61,3 +61,8 @@ bool Knight::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) 
     if (d < 2.2f || d > 2.3f) return false;
     return true;
 }
+
+bool Knight::noPiecesOnWay(const GameBoard &board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
+{
+    return true;
+}

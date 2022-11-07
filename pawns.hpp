@@ -47,6 +47,8 @@ public:
     int uniqueView() const override { return -2; }
 };
 
+
+
 class WKnight : public Knight, public WhiteColoredCell
 {
 public:
