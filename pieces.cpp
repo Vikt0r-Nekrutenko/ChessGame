@@ -20,12 +20,12 @@ uint8_t Pawn::view() const
 
 bool Pawn::canAttack(const GameBoard& board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
-    return isOpponent(board, selected, selectable) && !isSamePlayer(board, selected, selectable) && noPiecesOnWay(board, selected, selectable);
+    return isOpponent(board, selected, selectable) && noPiecesOnWay(board, selected, selectable);
 }
 
 bool Pawn::canJump(const GameBoard& board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
-    return isEmptySell(board, selected, selectable) && BoardCell::noPiecesOnWay(board, selected, selectable);
+    return isEmptySell(board, selected, selectable) && noPiecesOnWay(board, selected, selectable);
 }
 
 uint8_t Queen::view() const

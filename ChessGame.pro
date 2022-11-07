@@ -27,7 +27,6 @@ SOURCES += \
         Rook.cpp \
         cells.cpp \
         gameboard.cpp \
-        logger.cpp \
         main.cpp \
         pawns.cpp \
         pieces.cpp \
