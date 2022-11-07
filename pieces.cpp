@@ -1,10 +1,6 @@
 #include "pieces.hpp"
 #include "gameboard.hpp"
 
-auto isOpponent = [](const GameBoard& board, const stf::Vec2d &p0, const stf::Vec2d &p1) -> bool {
-    return board[{p1}]->getOpponent() == board[{p0}]->color();
-};
-
 uint8_t Pawn::view() const
 {
     return 'P';
@@ -12,7 +8,7 @@ uint8_t Pawn::view() const
 
 bool Pawn::canAttack(const GameBoard& board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
-    return isOpponent(board, selected, selectable) && noPiecesOnWay(board, selected, selectable);
+    return board[{selectable}]->getOpponent() == board[{selected}]->color() && noPiecesOnWay(board, selected, selectable);
 }
 
 bool Pawn::canJump(const GameBoard& board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
@@ -24,25 +20,6 @@ uint8_t Queen::view() const
 {
     return 'Q';
 }
-
-//bool Queen::canAttack(const GameBoard &board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
-//{
-//    return isOpponent(board, selected, selectable) && canMoveTo(selected, selectable) && noPiecesOnWay(board, selected, selectable);
-//}
-
-//bool Queen::canJump(const GameBoard& board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
-//{
-//    if(!BoardCell::canJump(board,selected,selectable))
-//        return false;
-
-//    if(!noPiecesOnWay(board, selected, selectable))
-//        return false;
-
-//    if(!canMoveTo(selected, selectable))
-//        return false;
-
-//    return true;
-//}
 
 bool Queen::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) const
 {
@@ -62,20 +39,6 @@ uint8_t Rook::view() const
 {
     return 'R';
 }
-
-//bool Rook::canJump(const GameBoard &board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
-//{
-//    if(!BoardCell::canJump(board,selected,selectable))
-//        return false;
-
-//    if(!noPiecesOnWay(board, selected, selectable))
-//        return false;
-
-//    if(!canMoveTo(selected, selectable))
-//        return false;
-
-//    return true;
-//}
 
 bool Rook::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) const
 {

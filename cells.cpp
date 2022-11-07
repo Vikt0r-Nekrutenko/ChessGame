@@ -3,6 +3,10 @@
 
 stf::sdb::DynamicFieldsAllocator CellAllocator::cellAllocator = stf::sdb::DynamicFieldsAllocator();
 
+auto isOpponent = [](const GameBoard& board, const stf::Vec2d &p0, const stf::Vec2d &p1) -> bool {
+    return board[{p1}]->getOpponent() == board[{p0}]->color();
+};
+
 void *BoardCell::operator new(size_t size)
 {
     return CellAllocator::cellAllocator.allocate(size);
@@ -25,21 +29,17 @@ stf::ColorTable BoardCell::getOpponent() const
 
 bool BoardCell::canJump(const GameBoard &board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
-    //    return isOpponent(board, selected, selectable) && canMoveTo(selected, selectable) && noPiecesOnWay(board, selected, selectable);
-    return board[selectable]->color() == cells::emptyCell()->color();
+    return canMoveTo(selected, selectable) && noPiecesOnWay(board, selected, selectable) && board[{selectable}]->view() == cells::emptyCell()->view();
 }
 
 bool BoardCell::canAttack(const GameBoard &board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
-     if(!BoardCell::canJump(board,selected,selectable))
+    if(!isOpponent(board, selected, selectable))
         return false;
-
-    if(!noPiecesOnWay(board, selected, selectable))
+    if(!canMoveTo(selected,selectable))
         return false;
-
-    if(!canMoveTo(selected, selectable))
+    if(!noPiecesOnWay(board,selected,selectable))
         return false;
-
     return true;
 }
 

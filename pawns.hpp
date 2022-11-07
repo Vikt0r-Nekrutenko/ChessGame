@@ -19,6 +19,8 @@ public:
     bool canAttack(const GameBoard &board, const stf::Vec2d& selected, const stf::Vec2d& selectable) const override;
 };
 
+
+
 class WQueen : public Queen, public WhiteColoredCell
 {
 public:
@@ -32,11 +34,26 @@ public:
 };
 
 
+
+class WRook : public Rook, public WhiteColoredCell
+{
+public:
+    int uniqueView() const override { return +2; }
+};
+
+class BRook : public Rook, public BlackColoredCell
+{
+public:
+    int uniqueView() const override { return -2; }
+};
+
 namespace pieces {
 static CellCreator<WPawn> wPawn = CellCreator<WPawn>();
 static CellCreator<BPawn> bPawn = CellCreator<BPawn>();
 static CellCreator<WQueen> wQueen = CellCreator<WQueen>();
 static CellCreator<BQueen> bQueen = CellCreator<BQueen>();
+static CellCreator<WRook> wRook = CellCreator<WRook>();
+static CellCreator<BRook> bRook = CellCreator<BRook>();
 }
 
 #endif // PAWNS_HPP
