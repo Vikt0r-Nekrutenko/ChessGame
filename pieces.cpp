@@ -5,14 +5,6 @@ auto isOpponent = [](const GameBoard& board, const stf::Vec2d &p0, const stf::Ve
     return board[{p1}]->getOpponent() == board[{p0}]->color();
 };
 
-auto isSamePlayer = [](const GameBoard &board, const stf::Vec2d &p0, const stf::Vec2d &p1) {
-    return board[{p1}]->color() == board[{p0}]->color();
-};
-
-auto isEmptySell = [](const GameBoard &board, const stf::Vec2d &p0, const stf::Vec2d &p1) {
-    return board[{p1}]->color() == cells::emptyCell()->color();
-};
-
 uint8_t Pawn::view() const
 {
     return 'P';
@@ -25,7 +17,7 @@ bool Pawn::canAttack(const GameBoard& board, const stf::Vec2d &selected, const s
 
 bool Pawn::canJump(const GameBoard& board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
-    return isEmptySell(board, selected, selectable) && noPiecesOnWay(board, selected, selectable);
+    return BoardCell::canJump(board, selected, selectable) && noPiecesOnWay(board, selected, selectable);
 }
 
 uint8_t Queen::view() const
