@@ -46,7 +46,7 @@ public:
             if(mCursor.selectedCell.cell->canJump(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos) ||
                mCursor.selectedCell.cell->canAttack(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos))
             {
-                mBoard.isCheck(stf::ColorTable::Black, mCursor.selectableCell.pos);
+                mBoard.isCheck(stf::ColorTable::Black);
                 if(mBoard.isCheckmate(mCursor.selectableCell.pos, stf::ColorTable::Black))
                     stf::Renderer::log << stf::endl << "CHECKMATE";
 

@@ -58,7 +58,7 @@ public:
         mBoard.at(Size.x * pos.y + pos.x) = cells::emptyCell();
     }
 
-    bool isCheck(const stf::ColorTable &playerColor, const stf::Vec2d &selectable) const
+    bool isCheck(const stf::ColorTable &playerColor) const
     {
         stf::Vec2d king {0,0};
         std::vector<stf::Vec2d> pieces;
