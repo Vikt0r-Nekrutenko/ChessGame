@@ -28,13 +28,6 @@ struct Cursor
     }
 };
 
-struct Note
-{
-    BoardCell *cell;
-    stf::Vec2d from;
-    stf::Vec2d to;
-};
-
 class GameModel : public stf::smv::BaseModel
 {
 public:
@@ -51,39 +44,27 @@ public:
         }
         else
         {
-            stf::Vec2d kingCastlingPos = {std::abs((mCursor.selectableCell.pos - mCursor.selectedCell.pos).x), std::abs((mCursor.selectableCell.pos - mCursor.selectedCell.pos).y)};
-            uint8_t kingView = mBoard[{mCursor.selectedCell.pos}]->view();
-
-
-            if(kingView == King().view() && kingCastlingPos == stf::Vec2d{2,0})
+            if(mCursor.selectedCell.cell->view() == King().view())
             {
-                stf::Vec2d kingPos  = stf::Vec2d(4,mCursor.selectedCell.pos.y);
-
-                stf::Vec2d lRookPos = stf::Vec2d(0,mCursor.selectedCell.pos.y);
-                stf::Vec2d lRookDes = stf::Vec2d(mCursor.selectableCell.pos.x + 1,mCursor.selectedCell.pos.y);
-
-                stf::Vec2d rRookPos = stf::Vec2d(7,mCursor.selectedCell.pos.y);
-                stf::Vec2d rRookDes = stf::Vec2d(mCursor.selectableCell.pos.x - 1,mCursor.selectedCell.pos.y);
-
-                if(mBoard[kingPos]->noPiecesOnWay(mBoard, kingPos, mCursor.selectableCell.pos)){
-                    if(mBoard[lRookPos]->noPiecesOnWay(mBoard, lRookPos, lRookDes)) {
-                        bool ex = true;
-                        for(auto i : log) {
-                            if(i.from == lRookPos)
-                                ex = false;
-                        }
-                        if(ex)
-                            stf::Renderer::log << stf::endl << "L!!!" << stf::endl;
+                if(mCursor.selectableCell.pos == pieces::wKing()->longCastlingPos()) {
+                    if(pieces::wKing()->isLongCastlingPossible(mBoard, log)) {
+                        mBoard.clear({0,7});
+                        mBoard.clear({4,7});
+                        mBoard.place({2,7}, pieces::wKing());
+                        mBoard.place({3,7}, pieces::wRook());
+                        log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos });
+                        mCursor.reset();
                     }
-                    else if(mBoard[rRookPos]->noPiecesOnWay(mBoard, rRookPos, rRookDes)){
-                        bool ex = true;
-                        for(auto i : log) {
-                            if(i.from == rRookPos)
-                                ex = false;
-                        }
-                        if(ex)
-                            stf::Renderer::log << stf::endl << "R!!!" << stf::endl;
-                    }
+                } else if(mCursor.selectableCell.pos == pieces::wKing()->shortCastlingPos()) {
+                    if(pieces::wKing()->isShortCastlingPossible(mBoard, log))
+                        stf::Renderer::log << stf::endl << "WR!" << stf::endl;
+
+                } else if(mCursor.selectableCell.pos == pieces::bKing()->longCastlingPos()) {
+                    if(pieces::bKing()->isLongCastlingPossible(mBoard, log))
+                        stf::Renderer::log << stf::endl << "BL!" << stf::endl;
+                } else if(mCursor.selectableCell.pos == pieces::bKing()->shortCastlingPos()) {
+                    if(pieces::bKing()->isShortCastlingPossible(mBoard, log))
+                        stf::Renderer::log << stf::endl << "BR!" << stf::endl;
                 }
             }
             if(mCursor.selectedCell.cell->canJump(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos) ||

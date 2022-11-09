@@ -1,4 +1,5 @@
 #include "pawns.hpp"
+#include "gameboard.hpp"
 
 #define WPAWN_SPAWN_Y 6
 #define BPAWN_SPAWN_Y 1
@@ -49,4 +50,84 @@ bool BPawn::canAttack(const GameBoard &board, const stf::Vec2d &selected, const 
     if((pos == stf::Vec2d(+1, +1) || pos == stf::Vec2d(-1, +1)) && Pawn::canAttack(board, selected, selectable)) {
         return true;
     } return false;
+}
+
+bool WKing::isLongCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const
+{
+    if(!noMovesYet(log, uniquePos()))
+        return false;
+
+    if(board[{0,castlingY()}]->view() != pieces::wRook()->view())
+        return false;
+
+    if(!board[{0,castlingY()}]->noMovesYet(log, {0,castlingY()}))
+        return false;
+
+    if(!noPiecesOnWay(board, uniquePos(), longCastlingPos()))
+        return false;
+
+    if(!noPiecesOnWay(board, {0,castlingY()}, longCastlingPos() + stf::Vec2d(+1,0)))
+        return false;
+
+    return true;
+}
+
+bool WKing::isShortCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const
+{
+    if(!noMovesYet(log, uniquePos()))
+        return false;
+
+    if(board[{7,castlingY()}]->view() != pieces::wRook()->view())
+        return false;
+
+    if(!board[{7,castlingY()}]->noMovesYet(log, {7,castlingY()}))
+        return false;
+
+    if(!noPiecesOnWay(board, uniquePos(), shortCastlingPos()))
+        return false;
+
+    if(!noPiecesOnWay(board, {7,castlingY()}, shortCastlingPos() + stf::Vec2d(-1,0)))
+        return false;
+
+    return true;
+}
+
+bool BKing::isLongCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const
+{
+    if(!noMovesYet(log, uniquePos()))
+        return false;
+
+    if(board[{0,castlingY()}]->view() != pieces::wRook()->view())
+        return false;
+
+    if(!board[{0,castlingY()}]->noMovesYet(log, {0,castlingY()}))
+        return false;
+
+    if(!noPiecesOnWay(board, uniquePos(), longCastlingPos()))
+        return false;
+
+    if(!noPiecesOnWay(board, {0,castlingY()}, longCastlingPos() + stf::Vec2d(+1,0)))
+        return false;
+
+    return true;
+}
+
+bool BKing::isShortCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const
+{
+    if(!noMovesYet(log, uniquePos()))
+        return false;
+
+    if(board[{7,castlingY()}]->view() != pieces::wRook()->view())
+        return false;
+
+    if(!board[{7,castlingY()}]->noMovesYet(log, {7,castlingY()}))
+        return false;
+
+    if(!noPiecesOnWay(board, uniquePos(), shortCastlingPos()))
+        return false;
+
+    if(!noPiecesOnWay(board, {7,castlingY()}, shortCastlingPos() + stf::Vec2d(-1,0)))
+        return false;
+
+    return true;
 }

@@ -49,9 +49,7 @@ public:
     virtual bool noPiecesOnWay(const GameBoard& board, const stf::Vec2d& selected, const stf::Vec2d& selectable) const;
     virtual bool canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) const;
 
-    virtual stf::Vec2d spesialMovePos() const;
     virtual bool noMovesYet(const std::vector<Note> &log, const stf::Vec2d &pos) const;
-    virtual bool isSpecialMovePossible() const;
 };
 
 class WhiteColoredCell : virtual public BoardCell

@@ -77,6 +77,16 @@ bool Bishop::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) 
     return x == y;
 }
 
+bool King::isLongCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const
+{
+    return false;
+}
+
+bool King::isShortCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const
+{
+    return false;
+}
+
 uint8_t King::view() const
 {
     return 'K';

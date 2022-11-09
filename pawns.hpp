@@ -81,12 +81,24 @@ class WKing : public King, public WhiteColoredCell
 {
 public:
     int uniqueView() const override { return +6; }
+
+    stf::Vec2d uniquePos() const final { return { x(), 7 }; }
+    int castlingY() const final { return 7; }
+
+    bool isLongCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const;
+    bool isShortCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const;
 };
 
 class BKing : public King, public BlackColoredCell
 {
 public:
     int uniqueView() const override { return -6; }
+
+    stf::Vec2d uniquePos() const final { return { x(), 0 }; }
+    int castlingY() const final { return 0; }
+
+    bool isLongCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const;
+    bool isShortCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const;
 };
 
 namespace pieces {
