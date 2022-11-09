@@ -46,26 +46,28 @@ public:
         {
             if(mCursor.selectedCell.cell->view() == King().view())
             {
-                if(mCursor.selectableCell.pos == pieces::wKing()->longCastlingPos()) {
-                    if(pieces::wKing()->isLongCastlingPossible(mBoard, log)) {
-                        mBoard.clear({0,7});
-                        mBoard.clear({4,7});
-                        mBoard.place({2,7}, pieces::wKing());
-                        mBoard.place({3,7}, pieces::wRook());
-                        log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos });
-                        mCursor.reset();
-                    }
-                } else if(mCursor.selectableCell.pos == pieces::wKing()->shortCastlingPos()) {
-                    if(pieces::wKing()->isShortCastlingPossible(mBoard, log))
-                        stf::Renderer::log << stf::endl << "WR!" << stf::endl;
+                CastlingKing *k = dynamic_cast<CastlingKing*>(mCursor.selectedCell.cell);
+                if(mCursor.selectableCell.pos == k->longCastlingPos())
+                    if(k->isLongCastlingPossible(mBoard, log))
+                        stf::Renderer::log << stf::endl << "L!" << stf::endl;
+//                        mBoard.clear({0,7});
+//                        mBoard.clear({4,7});
+//                        mBoard.place({2,7}, pieces::wKing());
+//                        mBoard.place({3,7}, pieces::wRook());
+//                        log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos });
+//                        mCursor.reset();
+//                    }
+//                } else if(mCursor.selectableCell.pos == pieces::wKing()->shortCastlingPos()) {
+//                    if(pieces::wKing()->isShortCastlingPossible(mBoard, log))
+//                        stf::Renderer::log << stf::endl << "WR!" << stf::endl;
 
-                } else if(mCursor.selectableCell.pos == pieces::bKing()->longCastlingPos()) {
-                    if(pieces::bKing()->isLongCastlingPossible(mBoard, log))
-                        stf::Renderer::log << stf::endl << "BL!" << stf::endl;
-                } else if(mCursor.selectableCell.pos == pieces::bKing()->shortCastlingPos()) {
-                    if(pieces::bKing()->isShortCastlingPossible(mBoard, log))
-                        stf::Renderer::log << stf::endl << "BR!" << stf::endl;
-                }
+//                } else if(mCursor.selectableCell.pos == pieces::bKing()->longCastlingPos()) {
+//                    if(pieces::bKing()->isLongCastlingPossible(mBoard, log))
+//                        stf::Renderer::log << stf::endl << "BL!" << stf::endl;
+//                } else if(mCursor.selectableCell.pos == pieces::bKing()->shortCastlingPos()) {
+//                    if(pieces::bKing()->isShortCastlingPossible(mBoard, log))
+//                        stf::Renderer::log << stf::endl << "BR!" << stf::endl;
+//                }
             }
             if(mCursor.selectedCell.cell->canJump(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos) ||
                mCursor.selectedCell.cell->canAttack(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos))
