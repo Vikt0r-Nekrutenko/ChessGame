@@ -8,6 +8,15 @@
 
 class BoardCell;
 
+enum class TurnType : uint8_t
+{
+    Nothing,
+    Move,
+    Attack,
+    LeftCastling,
+    RightCastling,
+};
+
 struct Note
 {
     BoardCell *cell;

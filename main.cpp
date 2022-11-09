@@ -36,6 +36,28 @@ public:
     Cursor mCursor = Cursor();
     std::vector<Note> log;
 
+    void castlingProc(CastlingKing *king, const int rookSX, const int rookDX)
+    {
+        mBoard.clear({rookSX, king->y()});
+        mBoard.clear(king->uniquePos());
+
+        mBoard.place(king->longCastlingPos(),                         king->getKing());
+        mBoard.place(king->longCastlingPos() + stf::Vec2d(rookDX, 0), king->getRook());
+    }
+
+    TurnType findCastlingTurn(CastlingKing *king)
+    {
+        if(mCursor.selectableCell.pos == king->longCastlingPos() && king->isLongCastlingPossible(mBoard, log)) {
+            castlingProc(king, 0, +1);
+            return TurnType::LeftCastling;
+        }
+        else if(mCursor.selectableCell.pos == king->shortCastlingPos() && king->isShortCastlingPossible(mBoard, log)) {
+            castlingProc(king, 7, -1);
+            return TurnType::RightCastling;
+        }
+        return TurnType::Nothing;
+    }
+
     stf::smv::IView *put(stf::smv::IView *sender)
     {
         if(mCursor.selectedCell.cell == cells::emptyCell())
@@ -46,32 +68,13 @@ public:
         {
             if(mCursor.selectedCell.cell->view() == King().view())
             {
-                CastlingKing *k = dynamic_cast<CastlingKing*>(mCursor.selectedCell.cell);
-                if(mCursor.selectableCell.pos == k->longCastlingPos()) {
-                    if(k->isLongCastlingPossible(mBoard, log)) {
-                        mBoard.clear({0,k->y()});
-                        mBoard.clear(k->uniquePos());
+                CastlingKing *king = dynamic_cast<CastlingKing*>(mCursor.selectedCell.cell);
+                TurnType isCastling = findCastlingTurn(king);
 
-                        mBoard.place(k->longCastlingPos(),                    k->getKing());
-                        mBoard.place(k->longCastlingPos() + stf::Vec2d(+1,0), k->getRook());
-
-                        log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos });
-                        mCursor.reset();
-                    }
-                } else if(mCursor.selectableCell.pos == k->shortCastlingPos()) {
-                    if(k->isShortCastlingPossible(mBoard, log)) {
-                        mBoard.clear({7,k->y()});
-                        mBoard.clear(k->uniquePos());
-
-                        mBoard.place(k->shortCastlingPos(),                    k->getKing());
-                        mBoard.place(k->shortCastlingPos() + stf::Vec2d(-1,0), k->getRook());
-
-                        log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos });
-                        mCursor.reset();
-                    }
-                }
+                log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos });
+                mCursor.reset();
             }
-            if(mCursor.selectedCell.cell->canJump(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos) ||
+            else if(mCursor.selectedCell.cell->canJump(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos) ||
                mCursor.selectedCell.cell->canAttack(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos))
             {
                 log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos });
