@@ -66,6 +66,26 @@ bool BoardCell::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destinatio
     return false;
 }
 
+stf::Vec2d BoardCell::spesialMovePos() const
+{
+    return { -1, -1 };
+}
+
+bool BoardCell::noMovesYet(const std::vector<Note> &log, const stf::Vec2d &pos) const
+{
+    for(auto &note : log) {
+        if(note.from == pos) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool BoardCell::isSpecialMovePossible() const
+{
+    return false;
+}
+
 int BoardCell::uniqueView() const
 {
     return 0;

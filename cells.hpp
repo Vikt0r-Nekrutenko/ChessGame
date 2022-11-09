@@ -6,6 +6,15 @@
 #include <list>
 #include <iostream>
 
+class BoardCell;
+
+struct Note
+{
+    BoardCell *cell;
+    stf::Vec2d from;
+    stf::Vec2d to;
+};
+
 class CellAllocator
 {
 public:
@@ -39,6 +48,10 @@ public:
     virtual bool canAttack(const GameBoard& board, const stf::Vec2d& selected, const stf::Vec2d& selectable) const;
     virtual bool noPiecesOnWay(const GameBoard& board, const stf::Vec2d& selected, const stf::Vec2d& selectable) const;
     virtual bool canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) const;
+
+    virtual stf::Vec2d spesialMovePos() const;
+    virtual bool noMovesYet(const std::vector<Note> &log, const stf::Vec2d &pos) const;
+    virtual bool isSpecialMovePossible() const;
 };
 
 class WhiteColoredCell : virtual public BoardCell
