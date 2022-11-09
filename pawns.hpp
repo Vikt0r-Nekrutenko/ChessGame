@@ -99,6 +99,9 @@ public:
     int x() const final { return 4; }
     int longCastlingX() const override {return 2;}
     int shortCastlingX() const override {return 6;}
+
+    virtual BoardCell *getKing() const = 0;
+    virtual BoardCell *getRook() const = 0;
 };
 
 class WKing : public King, public WhiteColoredCell, public CastlingKing
@@ -106,6 +109,9 @@ class WKing : public King, public WhiteColoredCell, public CastlingKing
 public:
     int y() const final { return 7; }
     int uniqueView() const override { return +6; }
+
+    BoardCell *getKing() const final;
+    BoardCell *getRook() const final;
 
     bool isLongCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const override;
     bool isShortCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const override;
@@ -116,6 +122,9 @@ class BKing : public King, public BlackColoredCell, public CastlingKing
 public:
     int y() const final { return 0; }
     int uniqueView() const override { return -6; }
+
+    BoardCell *getKing() const final;
+    BoardCell *getRook() const final;
 
     bool isLongCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const override;
     bool isShortCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const override;

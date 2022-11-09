@@ -72,6 +72,16 @@ bool CastlingPiece::isCastlingPossible(BoardCell *cell, const GameBoard &board, 
     return true;
 }
 
+BoardCell *WKing::getKing() const
+{
+    return pieces::wKing();
+}
+
+BoardCell *WKing::getRook() const
+{
+    return pieces::wRook();
+}
+
 bool WKing::isLongCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const
 {
     return CastlingPiece::isCastlingPossible((BoardCell*)this, board, log, longCastlingPos(), 0, +1);
@@ -80,6 +90,16 @@ bool WKing::isLongCastlingPossible(const GameBoard &board, const std::vector<Not
 bool WKing::isShortCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const
 {
     return CastlingPiece::isCastlingPossible((BoardCell*)this, board, log, shortCastlingPos(), 7, -1);
+}
+
+BoardCell *BKing::getKing() const
+{
+    return pieces::bKing();
+}
+
+BoardCell *BKing::getRook() const
+{
+    return pieces::bRook();
 }
 
 bool BKing::isLongCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const
