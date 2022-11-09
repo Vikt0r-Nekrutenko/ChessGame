@@ -52,82 +52,42 @@ bool BPawn::canAttack(const GameBoard &board, const stf::Vec2d &selected, const 
     } return false;
 }
 
-bool WKing::isLongCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const
+bool CastlingPiece::isCastlingPossible(BoardCell *cell, const GameBoard &board, const std::vector<Note> &log, const stf::Vec2d &castlingPos, const int rookX, const int rookXDest) const
 {
-    if(!noMovesYet(log, uniquePos()))
+    if(!cell->noMovesYet(log, uniquePos()))
         return false;
 
-    if(board[{0,castlingY()}]->view() != pieces::wRook()->view())
+    if(board[{rookX,y()}]->view() != Rook().view())
         return false;
 
-    if(!board[{0,castlingY()}]->noMovesYet(log, {0,castlingY()}))
+    if(!board[{rookX,y()}]->noMovesYet(log, {rookX, y()}))
         return false;
 
-    if(!noPiecesOnWay(board, uniquePos(), longCastlingPos()))
+    if(!cell->noPiecesOnWay(board, uniquePos(), castlingPos))
         return false;
 
-    if(!noPiecesOnWay(board, {0,castlingY()}, longCastlingPos() + stf::Vec2d(+1,0)))
+    if(!cell->noPiecesOnWay(board, {rookX, y()}, castlingPos + stf::Vec2d(rookXDest,0)))
         return false;
 
     return true;
+}
+
+bool WKing::isLongCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const
+{
+    return CastlingPiece::isCastlingPossible((BoardCell*)this, board, log, longCastlingPos(), 0, +1);
 }
 
 bool WKing::isShortCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const
 {
-    if(!noMovesYet(log, uniquePos()))
-        return false;
-
-    if(board[{7,castlingY()}]->view() != pieces::wRook()->view())
-        return false;
-
-    if(!board[{7,castlingY()}]->noMovesYet(log, {7,castlingY()}))
-        return false;
-
-    if(!noPiecesOnWay(board, uniquePos(), shortCastlingPos()))
-        return false;
-
-    if(!noPiecesOnWay(board, {7,castlingY()}, shortCastlingPos() + stf::Vec2d(-1,0)))
-        return false;
-
-    return true;
+    return CastlingPiece::isCastlingPossible((BoardCell*)this, board, log, shortCastlingPos(), 7, -1);
 }
 
 bool BKing::isLongCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const
 {
-    if(!noMovesYet(log, uniquePos()))
-        return false;
-
-    if(board[{0,castlingY()}]->view() != pieces::wRook()->view())
-        return false;
-
-    if(!board[{0,castlingY()}]->noMovesYet(log, {0,castlingY()}))
-        return false;
-
-    if(!noPiecesOnWay(board, uniquePos(), longCastlingPos()))
-        return false;
-
-    if(!noPiecesOnWay(board, {0,castlingY()}, longCastlingPos() + stf::Vec2d(+1,0)))
-        return false;
-
-    return true;
+    return CastlingPiece::isCastlingPossible((BoardCell*)this, board, log, longCastlingPos(), 0, +1);
 }
 
 bool BKing::isShortCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const
 {
-    if(!noMovesYet(log, uniquePos()))
-        return false;
-
-    if(board[{7,castlingY()}]->view() != pieces::wRook()->view())
-        return false;
-
-    if(!board[{7,castlingY()}]->noMovesYet(log, {7,castlingY()}))
-        return false;
-
-    if(!noPiecesOnWay(board, uniquePos(), shortCastlingPos()))
-        return false;
-
-    if(!noPiecesOnWay(board, {7,castlingY()}, shortCastlingPos() + stf::Vec2d(-1,0)))
-        return false;
-
-    return true;
+    return CastlingPiece::isCastlingPossible((BoardCell*)this, board, log, shortCastlingPos(), 7, -1);
 }

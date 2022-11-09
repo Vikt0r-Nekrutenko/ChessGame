@@ -76,29 +76,49 @@ public:
 };
 
 
-
-class WKing : public King, public WhiteColoredCell
+class CastlingPiece
 {
 public:
-    int uniqueView() const override { return +6; }
+    virtual int x() const = 0;
+    virtual int longCastlingX() const = 0;
+    virtual int shortCastlingX() const = 0;
+    virtual int y() const = 0;
 
-    stf::Vec2d uniquePos() const final { return { x(), 7 }; }
-    int castlingY() const final { return 7; }
+    stf::Vec2d uniquePos() const { return {x(), y()}; }
+    stf::Vec2d longCastlingPos() const {return {longCastlingX(), y()};}
+    stf::Vec2d shortCastlingPos() const {return {shortCastlingX(), y()};}
 
-    bool isLongCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const;
-    bool isShortCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const;
+    bool isCastlingPossible(BoardCell *cell, const GameBoard &board, const std::vector<Note> &log, const stf::Vec2d &castlingPos, const int rookX, const int rookXDest) const;
+    virtual bool isShortCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const = 0;
+    virtual bool isLongCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const = 0;
 };
 
-class BKing : public King, public BlackColoredCell
+class CastlingKing : public CastlingPiece
 {
 public:
+    int x() const final { return 4; }
+    int longCastlingX() const override {return 2;}
+    int shortCastlingX() const override {return 6;}
+};
+
+class WKing : public King, public WhiteColoredCell, public CastlingKing
+{
+public:
+    int y() const final { return 7; }
+    int uniqueView() const override { return +6; }
+
+    bool isLongCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const override;
+    bool isShortCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const override;
+};
+
+class BKing : public King, public BlackColoredCell, public CastlingKing
+{
+public:
+    int y() const final { return 0; }
     int uniqueView() const override { return -6; }
 
-    stf::Vec2d uniquePos() const final { return { x(), 0 }; }
-    int castlingY() const final { return 0; }
-
-    bool isLongCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const;
-    bool isShortCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const;
+    bool isLongCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const override;
+    bool isShortCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const override;
 };
 
 namespace pieces {
