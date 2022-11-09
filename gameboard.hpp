@@ -21,10 +21,10 @@ public:
 //            mBoard.at(Size.x * 6 + i) = pieces::wPawn();
 //        }
 
-//        mBoard.at(Size.x * 0 + 0) = pieces::bRook();
-//        mBoard.at(Size.x * 0 + 7) = pieces::bRook();
-//        mBoard.at(Size.x * 7 + 0) = pieces::wRook();
-//        mBoard.at(Size.x * 7 + 7) = pieces::wRook();
+        mBoard.at(Size.x * 0 + 0) = pieces::bRook();
+        mBoard.at(Size.x * 0 + 7) = pieces::bRook();
+        mBoard.at(Size.x * 7 + 0) = pieces::wRook();
+        mBoard.at(Size.x * 7 + 7) = pieces::wRook();
 
 //        mBoard.at(Size.x * 0 + 1) = pieces::bKnight();
 //        mBoard.at(Size.x * 0 + 6) = pieces::bKnight();
@@ -40,7 +40,7 @@ public:
 //        mBoard.at(Size.x * 7 + 3) = pieces::wQueen();
 
         mBoard.at(Size.x * 0 + 4) = pieces::bKing();
-        mBoard.at(Size.x * 3 + 4) = pieces::wKing();
+        mBoard.at(Size.x * 7 + 4) = pieces::wKing();
     }
 
     BoardCell* operator[](const stf::Vec2d& pos) const

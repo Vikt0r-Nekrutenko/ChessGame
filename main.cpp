@@ -28,12 +28,20 @@ struct Cursor
     }
 };
 
+struct Note
+{
+    BoardCell *cell;
+    stf::Vec2d from;
+    stf::Vec2d to;
+};
+
 class GameModel : public stf::smv::BaseModel
 {
 public:
 
     GameBoard mBoard = GameBoard();
     Cursor mCursor = Cursor();
+    std::vector<Note> log;
 
     stf::smv::IView *put(stf::smv::IView *sender)
     {
@@ -43,9 +51,47 @@ public:
         }
         else
         {
+            stf::Vec2d kingCastlingPos = {std::abs((mCursor.selectableCell.pos - mCursor.selectedCell.pos).x), std::abs((mCursor.selectableCell.pos - mCursor.selectedCell.pos).y)};
+            uint8_t kingView = mBoard[{mCursor.selectedCell.pos}]->view();
+
+
+            if(kingView == King().view() && kingCastlingPos == stf::Vec2d{2,0})
+            {
+                stf::Vec2d kingPos  = stf::Vec2d(4,mCursor.selectedCell.pos.y);
+
+                stf::Vec2d lRookPos = stf::Vec2d(0,mCursor.selectedCell.pos.y);
+                stf::Vec2d lRookDes = stf::Vec2d(mCursor.selectableCell.pos.x + 1,mCursor.selectedCell.pos.y);
+
+                stf::Vec2d rRookPos = stf::Vec2d(7,mCursor.selectedCell.pos.y);
+                stf::Vec2d rRookDes = stf::Vec2d(mCursor.selectableCell.pos.x - 1,mCursor.selectedCell.pos.y);
+
+                if(mBoard[kingPos]->noPiecesOnWay(mBoard, kingPos, mCursor.selectableCell.pos)){
+                    if(mBoard[lRookPos]->noPiecesOnWay(mBoard, lRookPos, lRookDes)) {
+                        bool ex = true;
+                        for(auto i : log) {
+                            if(i.from == lRookPos)
+                                ex = false;
+                        }
+                        if(ex)
+                            stf::Renderer::log << stf::endl << "L!!!" << stf::endl;
+                    }
+                    else if(mBoard[rRookPos]->noPiecesOnWay(mBoard, rRookPos, rRookDes)){
+                        bool ex = true;
+                        for(auto i : log) {
+                            if(i.from == rRookPos)
+                                ex = false;
+                        }
+                        if(ex)
+                            stf::Renderer::log << stf::endl << "R!!!" << stf::endl;
+                    }
+                }
+            }
             if(mCursor.selectedCell.cell->canJump(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos) ||
                mCursor.selectedCell.cell->canAttack(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos))
             {
+                log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos });
+                stf::Renderer::log << stf::endl << log.back().cell->uniqueView() << " from " << log.back().from << " to " << log.back().to << stf::endl;
+
                 mBoard.isCheck(stf::ColorTable::Black);
                 if(mBoard.isCheckmate(mCursor.selectableCell.pos, stf::ColorTable::Black))
                     stf::Renderer::log << stf::endl << "CHECKMATE";
