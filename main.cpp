@@ -35,24 +35,31 @@ public:
     GameBoard mBoard = GameBoard();
     Cursor mCursor = Cursor();
     std::vector<Note> log;
+    stf::ColorTable player = stf::ColorTable::White;
 
-    void castlingProc(CastlingKing *king, const int rookSX, const int rookDX)
+    void pieceMoveProc()
+    {
+        mBoard.place(mCursor.selectableCell.pos, mCursor.selectedCell.cell);
+        mBoard.clear(mCursor.selectedCell.pos);
+    }
+
+    void castlingProc(CastlingKing *king, const stf::Vec2d& kingDPos, const int rookSX, const int rookDX)
     {
         mBoard.clear({rookSX, king->y()});
         mBoard.clear(king->uniquePos());
 
-        mBoard.place(king->longCastlingPos(),                         king->getKing());
-        mBoard.place(king->longCastlingPos() + stf::Vec2d(rookDX, 0), king->getRook());
+        mBoard.place(kingDPos,                         king->getKing());
+        mBoard.place(kingDPos + stf::Vec2d(rookDX, 0), king->getRook());
     }
 
     TurnType findCastlingTurn(CastlingKing *king)
     {
         if(mCursor.selectableCell.pos == king->longCastlingPos() && king->isLongCastlingPossible(mBoard, log)) {
-            castlingProc(king, 0, +1);
+            castlingProc(king, king->longCastlingPos(), 0, +1);
             return TurnType::LeftCastling;
         }
         else if(mCursor.selectableCell.pos == king->shortCastlingPos() && king->isShortCastlingPossible(mBoard, log)) {
-            castlingProc(king, 7, -1);
+            castlingProc(king, king->shortCastlingPos(), 7, -1);
             return TurnType::RightCastling;
         }
         return TurnType::Nothing;
@@ -66,31 +73,38 @@ public:
         }
         else
         {
-            if(mCursor.selectedCell.cell->view() == King().view())
-            {
-                CastlingKing *king = dynamic_cast<CastlingKing*>(mCursor.selectedCell.cell);
-                TurnType isCastling = findCastlingTurn(king);
-
-                log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos });
-                mCursor.reset();
+            TurnType turn;
+            CastlingKing *king = dynamic_cast<CastlingKing*>(mCursor.selectedCell.cell);
+            if(mCursor.selectedCell.cell->view() == King().view()) {
+                turn = findCastlingTurn(king);
             }
-            else if(mCursor.selectedCell.cell->canJump(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos) ||
-               mCursor.selectedCell.cell->canAttack(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos))
-            {
-                log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos });
-                stf::Renderer::log << stf::endl << log.back().cell->uniqueView() << " from " << log.back().from << " to " << log.back().to << stf::endl;
-
-                mBoard.isCheck(stf::ColorTable::Black);
-                if(mBoard.isCheckmate(mCursor.selectableCell.pos, stf::ColorTable::Black))
-                    stf::Renderer::log << stf::endl << "CHECKMATE";
-
-                mBoard.place(mCursor.selectableCell.pos, mCursor.selectedCell.cell);
-                mBoard.clear(mCursor.selectedCell.pos);
-                mCursor.reset();
+            if(mCursor.selectedCell.cell->canAttack(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos)) {
+                pieceMoveProc();
+                turn = TurnType::Attack;
             }
+            if(mCursor.selectedCell.cell->canJump(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos)) {
+                pieceMoveProc();
+                turn = TurnType::Move;
+            }
+
+            mBoard.transformPawns();
+
+            turn = mBoard.isCheck(player);
+
+//            if(turn != TurnType::Nothing) {
+                log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos, turn });
+//            }
+
+            if(mBoard.isCheckmate(mCursor.selectableCell.pos, player))
+                stf::Renderer::log << stf::endl << "CHECKMATE";
+
+            stf::Renderer::log << stf::endl <<
+                                  log.back().cell->uniqueView() << " from " <<
+                                  log.back().from << " to " <<
+                                  log.back().to << " " <<
+                                  static_cast<uint8_t>(log.back().type);
+            mCursor.reset();
         }
-
-        mBoard.transformPawns();
 
         return sender;
     }

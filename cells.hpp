@@ -15,6 +15,8 @@ enum class TurnType : uint8_t
     Attack,
     LeftCastling,
     RightCastling,
+    WCheckToB,
+    BCheckToW,
 };
 
 struct Note
@@ -22,6 +24,7 @@ struct Note
     BoardCell *cell;
     stf::Vec2d from;
     stf::Vec2d to;
+    TurnType type;
 };
 
 class CellAllocator
