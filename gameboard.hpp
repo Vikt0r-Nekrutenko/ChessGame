@@ -96,9 +96,9 @@ public:
         return TurnType::Nothing;
     }
 
-    bool isCheckmate(const stf::Vec2d &selectable, const stf::ColorTable &playerColor) const
+    TurnType isCheckmate(const stf::ColorTable &playerColor) const
     {
-        return (*this)[selectable]->color() != playerColor && (*this)[selectable]->view() == King().view();
+        return blackCheckToWhite();
     }
 
     void transformPawns();
