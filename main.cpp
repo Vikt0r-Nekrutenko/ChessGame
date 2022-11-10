@@ -75,8 +75,9 @@ public:
         {
             TurnType turn;
             CastlingKing *king = dynamic_cast<CastlingKing*>(mCursor.selectedCell.cell);
-            if(mBoard.isCheckmate(mCursor.selectableCell.pos, player))
-                stf::Renderer::log << stf::endl << "CHECKMATE";
+
+            BoardCell *selectedBackUp = mBoard[mCursor.selectedCell.pos];
+            BoardCell *selectableBackUp = mBoard[mCursor.selectableCell.pos];
 
             if(mCursor.selectedCell.cell->view() == King().view()) {
                 turn = findCastlingTurn(king);
@@ -100,10 +101,15 @@ public:
             if(wIsCheckB != TurnType::Nothing)
                 turn = wIsCheckB;
 
-            if(player == stf::ColorTable::White && turn == TurnType::BCheckToW)
+            if((player == stf::ColorTable::White && turn == TurnType::BCheckToW) || (player == stf::ColorTable::Red && turn == TurnType::WCheckToB))
+            {
                 stf::Renderer::log<<stf::endl<<"Huinya!!";
-            if(player == stf::ColorTable::Red && turn == TurnType::WCheckToB)
-                stf::Renderer::log<<stf::endl<<"Huinya!!";
+                mBoard.place(mCursor.selectedCell.pos, selectedBackUp);
+                mBoard.place(mCursor.selectableCell.pos, selectableBackUp);
+            }
+
+            if(mBoard.isCheckmate(mCursor.selectableCell.pos, player))
+                stf::Renderer::log << stf::endl << "CHECKMATE";
 
             log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos, turn });
 

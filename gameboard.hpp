@@ -60,104 +60,39 @@ public:
 
     TurnType blackCheckToWhite() const
     {
-        stf::Vec2d whiteKing {-1,-1};
-        std::vector<stf::Vec2d> blackPieces;
-
-        for(int y = 0; y < Size.y; ++y) {
-            for(int x = 0; x < Size.x; ++x) {
-                BoardCell *cell = (*this)[{x,y}];
-                if(cell->view() == cells::emptyCell()->view())
-                    continue;
-                if(cell->color() == stf::ColorTable::Red) {
-                    blackPieces.push_back({x,y});
-                    continue;
-                }
-                if(cell->uniqueView() == pieces::wKing()->uniqueView()) {
-                    whiteKing = stf::Vec2d{x,y};
-                }
-            }
-        }
-
-        for(auto &piecePos : blackPieces) {
-            BoardCell *piece = (*this)[{piecePos}];
-            if(piece->canAttack(*this,piecePos,whiteKing))
-                return TurnType::BCheckToW;
-        }
-        return TurnType::Nothing;
+        return isCheck(pieces::wKing(), stf::ColorTable::Red) == TurnType::Nothing ?  TurnType::Nothing : TurnType::WCheckToB;
     }
 
     TurnType whiteCheckToBlack() const
     {
-        stf::Vec2d blackKing {-1,-1};
-        std::vector<stf::Vec2d> whitePieces;
-
-        for(int y = 0; y < Size.y; ++y) {
-            for(int x = 0; x < Size.x; ++x) {
-                BoardCell *cell = (*this)[{x,y}];
-                if(cell->view() == cells::emptyCell()->view())
-                    continue;
-                if(cell->color() == stf::ColorTable::White) {
-                    whitePieces.push_back({x,y});
-                    continue;
-                }
-                if(cell->uniqueView() == pieces::bKing()->uniqueView()) {
-                    blackKing = stf::Vec2d{x,y};
-                }
-            }
-        }
-
-        for(auto &piecePos : whitePieces) {
-            BoardCell *piece = (*this)[{piecePos}];
-            if(piece->canAttack(*this,piecePos,blackKing))
-                return TurnType::WCheckToB;
-        }
-        return TurnType::Nothing;
+        return isCheck(pieces::bKing(), stf::ColorTable::White) == TurnType::Nothing ?  TurnType::Nothing : TurnType::WCheckToB;
     }
 
-
-
-    TurnType isCheck(const stf::ColorTable &playerColor) const
+    TurnType isCheck(BoardCell *attackedKing, const stf::ColorTable &playerColor) const
     {
-        stf::Vec2d king1 {-1,-1};
-        stf::Vec2d king2 {-1,-1};
-        std::vector<stf::Vec2d> pieces1;
-        std::vector<stf::Vec2d> pieces2;
+        stf::Vec2d king {-1,-1};
+        std::vector<stf::Vec2d> pieces;
 
         for(int y = 0; y < Size.y; ++y) {
             for(int x = 0; x < Size.x; ++x) {
                 BoardCell *cell = (*this)[{x,y}];
-
                 if(cell->view() == cells::emptyCell()->view())
                     continue;
-
-                if(cell->uniqueView() == pieces::wKing()->uniqueView())
-                    king1 = stf::Vec2d({x,y});
-
-                if(cell->uniqueView() == pieces::bKing()->uniqueView())
-                    king2 = stf::Vec2d{x,y};
-
-                if(cell->color() != playerColor) {
-                    pieces1.push_back({x,y});
-                }
-
                 if(cell->color() == playerColor) {
-                    pieces2.push_back({x,y});
+                    pieces.push_back({x,y});
+                    continue;
                 }
-
+                if(cell->uniqueView() == attackedKing->uniqueView()) {
+                    king = stf::Vec2d{x,y};
+                }
             }
         }
 
-        for(auto pos : pieces1) {
-            if(king1 != stf::Vec2d(-1,-1) && (*this)[pos]->canAttack(*this, pos, king1)) {
-                return TurnType::BCheckToW;
-            }
+        for(auto &piecePos : pieces) {
+            BoardCell *piece = (*this)[{piecePos}];
+            if(piece->canAttack(*this,piecePos,king))
+                return TurnType::Attack;
         }
-        for(auto pos : pieces2) {
-            if(king2 != stf::Vec2d(-1,-1) && (*this)[pos]->canAttack(*this, pos, king2)) {
-                return TurnType::WCheckToB;
-            }
-        }
-
         return TurnType::Nothing;
     }
 
