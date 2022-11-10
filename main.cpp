@@ -67,7 +67,7 @@ public:
 
     stf::smv::IView *put(stf::smv::IView *sender)
     {
-        if(mCursor.selectedCell.cell == cells::emptyCell())
+        if(mCursor.selectedCell.cell == cells::emptyCell() && mBoard[mCursor.selectableCell.pos]->color() == player)
         {
             mCursor.select(mBoard[{mCursor.selectableCell.pos}]);
         }
@@ -75,6 +75,9 @@ public:
         {
             TurnType turn;
             CastlingKing *king = dynamic_cast<CastlingKing*>(mCursor.selectedCell.cell);
+            if(mBoard.isCheckmate(mCursor.selectableCell.pos, player))
+                stf::Renderer::log << stf::endl << "CHECKMATE";
+
             if(mCursor.selectedCell.cell->view() == King().view()) {
                 turn = findCastlingTurn(king);
             }
@@ -89,21 +92,30 @@ public:
 
             mBoard.transformPawns();
 
-            turn = mBoard.isCheck(player);
+            TurnType bIsCheckW = mBoard.blackCheckToWhite();
+            TurnType wIsCheckB = mBoard.whiteCheckToBlack();
 
-//            if(turn != TurnType::Nothing) {
-                log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos, turn });
-//            }
+            if(bIsCheckW != TurnType::Nothing)
+                turn = bIsCheckW;
+            if(wIsCheckB != TurnType::Nothing)
+                turn = wIsCheckB;
 
-            if(mBoard.isCheckmate(mCursor.selectableCell.pos, player))
-                stf::Renderer::log << stf::endl << "CHECKMATE";
+            if(player == stf::ColorTable::White && turn == TurnType::BCheckToW)
+                stf::Renderer::log<<stf::endl<<"Huinya!!";
+            if(player == stf::ColorTable::Red && turn == TurnType::WCheckToB)
+                stf::Renderer::log<<stf::endl<<"Huinya!!";
 
+            log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos, turn });
+
+            if(!log.empty())
             stf::Renderer::log << stf::endl <<
                                   log.back().cell->uniqueView() << " from " <<
                                   log.back().from << " to " <<
                                   log.back().to << " " <<
                                   static_cast<uint8_t>(log.back().type);
             mCursor.reset();
+            if(turn != TurnType::Nothing)
+                player = player == stf::ColorTable::White ? stf::ColorTable::Red : stf::ColorTable::White;
         }
 
         return sender;
@@ -175,6 +187,8 @@ public:
         }
         renderer.drawPixel({gm->mCursor.selectableCell.pos.x * 2,     gm->mCursor.selectableCell.pos.y + 2}, '[');
         renderer.drawPixel({gm->mCursor.selectableCell.pos.x * 2 + 2, gm->mCursor.selectableCell.pos.y + 2}, ']');
+
+        renderer.drawPixel({0,12}, gm->player == stf::ColorTable::Red ? 'B' : 'W');
     }
 };
 

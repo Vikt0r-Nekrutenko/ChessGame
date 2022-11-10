@@ -58,6 +58,64 @@ public:
         mBoard.at(Size.x * pos.y + pos.x) = cells::emptyCell();
     }
 
+    TurnType blackCheckToWhite() const
+    {
+        stf::Vec2d whiteKing {-1,-1};
+        std::vector<stf::Vec2d> blackPieces;
+
+        for(int y = 0; y < Size.y; ++y) {
+            for(int x = 0; x < Size.x; ++x) {
+                BoardCell *cell = (*this)[{x,y}];
+                if(cell->view() == cells::emptyCell()->view())
+                    continue;
+                if(cell->color() == stf::ColorTable::Red) {
+                    blackPieces.push_back({x,y});
+                    continue;
+                }
+                if(cell->uniqueView() == pieces::wKing()->uniqueView()) {
+                    whiteKing = stf::Vec2d{x,y};
+                }
+            }
+        }
+
+        for(auto &piecePos : blackPieces) {
+            BoardCell *piece = (*this)[{piecePos}];
+            if(piece->canAttack(*this,piecePos,whiteKing))
+                return TurnType::BCheckToW;
+        }
+        return TurnType::Nothing;
+    }
+
+    TurnType whiteCheckToBlack() const
+    {
+        stf::Vec2d blackKing {-1,-1};
+        std::vector<stf::Vec2d> whitePieces;
+
+        for(int y = 0; y < Size.y; ++y) {
+            for(int x = 0; x < Size.x; ++x) {
+                BoardCell *cell = (*this)[{x,y}];
+                if(cell->view() == cells::emptyCell()->view())
+                    continue;
+                if(cell->color() == stf::ColorTable::White) {
+                    whitePieces.push_back({x,y});
+                    continue;
+                }
+                if(cell->uniqueView() == pieces::bKing()->uniqueView()) {
+                    blackKing = stf::Vec2d{x,y};
+                }
+            }
+        }
+
+        for(auto &piecePos : whitePieces) {
+            BoardCell *piece = (*this)[{piecePos}];
+            if(piece->canAttack(*this,piecePos,blackKing))
+                return TurnType::WCheckToB;
+        }
+        return TurnType::Nothing;
+    }
+
+
+
     TurnType isCheck(const stf::ColorTable &playerColor) const
     {
         stf::Vec2d king1 {-1,-1};
@@ -72,6 +130,12 @@ public:
                 if(cell->view() == cells::emptyCell()->view())
                     continue;
 
+                if(cell->uniqueView() == pieces::wKing()->uniqueView())
+                    king1 = stf::Vec2d({x,y});
+
+                if(cell->uniqueView() == pieces::bKing()->uniqueView())
+                    king2 = stf::Vec2d{x,y};
+
                 if(cell->color() != playerColor) {
                     pieces1.push_back({x,y});
                 }
@@ -80,11 +144,6 @@ public:
                     pieces2.push_back({x,y});
                 }
 
-                if(cell->uniqueView() == pieces::wKing()->uniqueView())
-                    king1 = stf::Vec2d({x,y});
-
-                if(cell->uniqueView() == pieces::bKing()->uniqueView())
-                    king2 = stf::Vec2d{x,y};
             }
         }
 
