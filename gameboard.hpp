@@ -68,6 +68,21 @@ public:
         return isCheck(pieces::bKing(), stf::ColorTable::White) == TurnType::Nothing ?  TurnType::Nothing : TurnType::WCheckToB;
     }
 
+    stf::Vec2d findKingPos(const BoardCell *king) const
+    {
+        stf::Vec2d kingPos {-1,-1};
+
+        for(int y = 0; y < Size.y; ++y) {
+            for(int x = 0; x < Size.x; ++x) {
+                BoardCell *cell = (*this)[{x,y}];
+                if(cell->uniqueView() == king->uniqueView()) {
+                    return stf::Vec2d{x,y};
+                }
+            }
+        }
+        return kingPos;
+    }
+
     TurnType isCheck(BoardCell *attackedKing, const stf::ColorTable &playerColor) const
     {
         stf::Vec2d king {-1,-1};

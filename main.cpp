@@ -39,7 +39,7 @@ public:
 
     GameModel()
     {
-        log.push_back({nullptr, {0,0}, {0,0}, TurnType::Nothing});
+        log.push_back({nullptr, stf::ColorTable::Default, {0,0}, stf::ColorTable::Default, {0,0}, TurnType::Nothing});
     }
 
     void pieceMoveProc()
@@ -76,7 +76,7 @@ public:
         {
             mCursor.select(mBoard[{mCursor.selectableCell.pos}]);
         }
-        else
+        else if(mCursor.selectableCell.pos != mCursor.selectedCell.pos)
         {
             TurnType turn = TurnType::Nothing;
             CastlingKing *king = dynamic_cast<CastlingKing*>(mCursor.selectedCell.cell);
@@ -84,28 +84,41 @@ public:
             if(mCursor.selectedCell.cell->canAttack(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos)) {
                 pieceMoveProc();
                 turn = TurnType::Attack;
-            }
-            else if(mCursor.selectedCell.cell->canJump(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos)) {
+            } else if(mCursor.selectedCell.cell->canJump(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos)) {
                 pieceMoveProc();
                 turn = TurnType::Move;
-            }
-            else if(mCursor.selectedCell.cell->view() == King().view()) {
+            } else if(mCursor.selectedCell.cell->view() == King().view()) {
                 turn = findCastlingTurn(king);
             }
-            if(turn != TurnType::Nothing)
-                player = player == stf::ColorTable::White ? stf::ColorTable::Red : stf::ColorTable::White;
 
             mBoard.transformPawns();
 
-//            TurnType bIsCheckW = mBoard.blackCheckToWhite();
-//            if(bIsCheckW != TurnType::Nothing)
-//                turn = bIsCheckW;
+            if(mBoard.findKingPos(pieces::wKing()) == stf::Vec2d{-1,-1} || mBoard.findKingPos(pieces::bKing()) == stf::Vec2d{-1,-1}) {
+                stf::Renderer::log << stf::endl << "CHECKMATE";
+                return sender;
+            }
 
-//            TurnType wIsCheckB = mBoard.whiteCheckToBlack();
-//            if(wIsCheckB != TurnType::Nothing)
-//                turn = wIsCheckB;
+            TurnType bIsCheckW = mBoard.blackCheckToWhite();
+            if(bIsCheckW != TurnType::Nothing)
+                turn = bIsCheckW;
 
-            log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos, turn });
+            TurnType wIsCheckB = mBoard.whiteCheckToBlack();
+            if(wIsCheckB != TurnType::Nothing)
+                turn = wIsCheckB;
+
+
+            log.push_back({ mCursor.selectedCell.cell,
+                            player,
+                            mCursor.selectedCell.pos,
+                            player == stf::ColorTable::Red ? stf::ColorTable::White : stf::ColorTable::Red,
+                            mCursor.selectableCell.pos,
+                            turn });
+
+            if(log.back().type == TurnType::BCheckToW && player == stf::ColorTable::White)
+                stf::Renderer::log<<stf::endl<<"UNRESOLVED";
+            if(log.back().type == TurnType::WCheckToB && player == stf::ColorTable::Red)
+                stf::Renderer::log<<stf::endl<<"UNRESOLVED";
+
 
             stf::Renderer::log << stf::endl <<
                                   log.back().cell->uniqueView() << " from " <<
@@ -113,6 +126,8 @@ public:
                                   log.back().to << " " <<
                                   static_cast<uint8_t>(log.back().type);
             mCursor.reset();
+            if(turn != TurnType::Nothing)
+                player = player == stf::ColorTable::White ? stf::ColorTable::Red : stf::ColorTable::White;
         }
 
         return sender;
