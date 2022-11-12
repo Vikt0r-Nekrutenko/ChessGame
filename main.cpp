@@ -151,14 +151,7 @@ public:
             mBoard.transformPawns();
 
             TurnType bIsCheckW = mBoard.blackCheckToWhite();
-            if(bIsCheckW != TurnType::Nothing)
-                turn = bIsCheckW;
-
             TurnType wIsCheckB = mBoard.whiteCheckToBlack();
-            if(wIsCheckB != TurnType::Nothing)
-                turn = wIsCheckB;
-
-
 
             if(bIsCheckW == TurnType::BCheckToW && player == stf::ColorTable::White) {
                 stf::Renderer::log<<stf::endl<<"UNRESOLVED";
