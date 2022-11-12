@@ -94,6 +94,7 @@ public:
 
             BoardCell *dest = mBoard[mCursor.selectableCell.pos];
             BoardCell *cell = mCursor.selectedCell.cell;
+            GameBoard backUp = mBoard;
 
             stf::Vec2d selected = mCursor.selectedCell.pos;
             stf::Vec2d selectable = mCursor.selectableCell.pos;
@@ -125,8 +126,9 @@ public:
             if((bIsCheckW == TurnType::BCheckToW && player == stf::ColorTable::White) || (wIsCheckB == TurnType::WCheckToB && player == stf::ColorTable::Red)) {
                 stf::Renderer::log<<stf::endl<<"UNRESOLVED";
 
-                mBoard.place(selected, cell);
-                mBoard.place(selectable, dest);
+//                mBoard.place(selected, cell);
+//                mBoard.place(selectable, dest);
+                mBoard = backUp;
 
                 return sender;
             }

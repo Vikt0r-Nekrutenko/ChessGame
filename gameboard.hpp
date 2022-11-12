@@ -43,6 +43,27 @@ public:
         mBoard.at(Size.x * 7 + 4) = pieces::wKing();
     }
 
+    GameBoard(const GameBoard& board)
+    {
+        copyBoard(board);
+    }
+
+    GameBoard& operator =(const GameBoard& board)
+    {
+        return copyBoard(board);
+    }
+
+    GameBoard& copyBoard(const GameBoard& board)
+    {
+        if(mBoard.size() != size_t(Size.x * Size.y))
+            mBoard.resize(Size.x * Size.y);
+
+        for(int i = 0; i < Size.x * Size.y; ++i) {
+            mBoard.at(i) = board.mBoard.at(i);
+        }
+        return *this;
+    }
+
     BoardCell* operator[](const stf::Vec2d& pos) const
     {
         return mBoard.at(Size.x * pos.y + pos.x);
