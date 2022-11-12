@@ -73,6 +73,44 @@ public:
         return TurnType::Nothing;
     }
 
+    std::vector<stf::Vec2d> kingPossibleMoves()
+    {
+        stf::Vec2d kingPos = mCursor.selectedCell.pos;
+        BoardCell *king = mCursor.selectedCell.cell;
+        std::vector<stf::Vec2d> possibleMoves;
+        mBoard.clear(kingPos);
+
+        for(int y = 0; y < mBoard.Size.y; ++y) {
+            for(int x = 0; x < mBoard.Size.x; ++x) {
+                BoardCell *cell = mBoard[{x,y}];
+                if(player == stf::ColorTable::White)
+                    mBoard.place(mCursor.selectableCell.pos, pieces::wKing());
+                else
+                    mBoard.place(mCursor.selectableCell.pos, pieces::bKing());
+
+                if(cell->color() == player)
+                    continue;
+                if(cell->view() == King().view())
+                    continue;
+                if(cell->canAttack(mBoard, {x,y}, mCursor.selectableCell.pos))
+                    possibleMoves.push_back({x,y});
+
+                mBoard.clear(mCursor.selectableCell.pos);
+            }
+        }
+        mBoard.place(kingPos, king);
+        return possibleMoves;
+    }
+
+    bool moveAreValid(const std::vector<stf::Vec2d>& pos)
+    {
+        for(auto &p : pos)
+            if(p == mCursor.selectableCell.pos) {
+                return true;
+            }
+        return false;
+    }
+
     stf::smv::IView *put(stf::smv::IView *sender)
     {
         if(mCursor.selectedCell.cell == cells::emptyCell() && mBoard[mCursor.selectableCell.pos]->color() == player)
@@ -83,9 +121,22 @@ public:
         {
             TurnType turn = TurnType::Nothing;
             CastlingKing *king = dynamic_cast<CastlingKing*>(mCursor.selectedCell.cell);
+
+            BoardCell *dest = mBoard[mCursor.selectableCell.pos];
             BoardCell *cell = mCursor.selectedCell.cell;
+
             stf::Vec2d selected = mCursor.selectedCell.pos;
             stf::Vec2d selectable = mCursor.selectableCell.pos;
+
+//            if(mCursor.selectedCell.cell->view() == King().view()) {
+//                auto pos = kingPossibleMoves();
+//                if(pos.empty()){
+//                    stf::Renderer::log << stf::endl << "CHECKMATE";
+//                    return sender;
+//                }
+//                if(moveAreValid(pos) == false)
+//                    return sender;
+//            }
 
             turn = findCastlingTurn(king);
 
@@ -97,33 +148,38 @@ public:
                 turn = TurnType::Move;
             }
 
-//            mBoard.transformPawns();
+            mBoard.transformPawns();
 
-//            if(mBoard.findKingPos(pieces::wKing()) == stf::Vec2d{-1,-1} || mBoard.findKingPos(pieces::bKing()) == stf::Vec2d{-1,-1}) {
-//                stf::Renderer::log << stf::endl << "CHECKMATE";
-//                return sender;
-//            }
+            TurnType bIsCheckW = mBoard.blackCheckToWhite();
+            if(bIsCheckW != TurnType::Nothing)
+                turn = bIsCheckW;
 
-//            TurnType bIsCheckW = mBoard.blackCheckToWhite();
-//            if(bIsCheckW != TurnType::Nothing)
-//                turn = bIsCheckW;
-
-//            TurnType wIsCheckB = mBoard.whiteCheckToBlack();
-//            if(wIsCheckB != TurnType::Nothing)
-//                turn = wIsCheckB;
+            TurnType wIsCheckB = mBoard.whiteCheckToBlack();
+            if(wIsCheckB != TurnType::Nothing)
+                turn = wIsCheckB;
 
 
-            log.push_back({ mCursor.selectedCell.cell,
-                            player,
-                            mCursor.selectedCell.pos,
-                            player == stf::ColorTable::Red ? stf::ColorTable::White : stf::ColorTable::Red,
-                            mCursor.selectableCell.pos,
-                            turn });
 
-            if(log.back().type == TurnType::BCheckToW && player == stf::ColorTable::White)
+            if(bIsCheckW == TurnType::BCheckToW && player == stf::ColorTable::White) {
                 stf::Renderer::log<<stf::endl<<"UNRESOLVED";
-            if(log.back().type == TurnType::WCheckToB && player == stf::ColorTable::Red)
+                mBoard.place(selected, cell);
+                mBoard.place(selectable, dest);
+                return sender;
+            }
+            if(wIsCheckB == TurnType::WCheckToB && player == stf::ColorTable::Red){
                 stf::Renderer::log<<stf::endl<<"UNRESOLVED";
+                mBoard.place(selected, cell);
+                mBoard.place(selectable, dest);
+                return sender;
+            }
+
+            if(turn != TurnType::Nothing && turn != TurnType::Unresolved)
+                log.push_back({ mCursor.selectedCell.cell,
+                                player,
+                                mCursor.selectedCell.pos,
+                                player == stf::ColorTable::Red ? stf::ColorTable::White : stf::ColorTable::Red,
+                                mCursor.selectableCell.pos,
+                                turn });
 
 
             stf::Renderer::log << stf::endl <<
@@ -132,7 +188,7 @@ public:
                                   log.back().to << " " <<
                                   static_cast<uint8_t>(log.back().type);
             mCursor.reset();
-            if(turn != TurnType::Nothing)
+            if(turn != TurnType::Nothing && turn != TurnType::Unresolved)
                 player = player == stf::ColorTable::White ? stf::ColorTable::Red : stf::ColorTable::White;
         }
 

@@ -11,6 +11,7 @@ class BoardCell;
 enum class TurnType : uint8_t
 {
     Nothing,
+    Unresolved,
     Move,
     Attack,
     LeftCastling,

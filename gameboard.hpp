@@ -60,7 +60,7 @@ public:
 
     TurnType blackCheckToWhite() const
     {
-        return isCheck(pieces::wKing(), stf::ColorTable::Red) == TurnType::Nothing ?  TurnType::Nothing : TurnType::WCheckToB;
+        return isCheck(pieces::wKing(), stf::ColorTable::Red) == TurnType::Nothing ?  TurnType::Nothing : TurnType::BCheckToW;
     }
 
     TurnType whiteCheckToBlack() const

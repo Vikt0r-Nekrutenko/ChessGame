@@ -101,17 +101,5 @@ bool King::canJump(const GameBoard &board, const stf::Vec2d &selected, const stf
         }
     }
 
-    for(int y = 0; y < board.Size.y; ++y) {
-        for(int x = 0; x < board.Size.x; ++x) {
-            BoardCell *cell = board[{x,y}];
-            if(cell->color() == color())
-                continue;
-            if(board[{x,y}]->view() == King().view())
-                continue;
-            if(board[{x,y}]->canJump(board, {x,y}, selectable))
-                return false;
-        }
-    }
-
     return BoardCell::canJump(board, selected, selectable);
 }
