@@ -59,6 +59,9 @@ public:
 
     TurnType findCastlingTurn(CastlingKing *king)
     {
+        if(mCursor.selectedCell.cell->view() != King().view())
+            return TurnType::Nothing;
+
         if(mCursor.selectableCell.pos == king->longCastlingPos() && king->isLongCastlingPossible(mBoard, log)) {
             castlingProc(king, king->longCastlingPos(), 0, +1);
             return TurnType::LeftCastling;
@@ -76,35 +79,38 @@ public:
         {
             mCursor.select(mBoard[{mCursor.selectableCell.pos}]);
         }
-        else if(mCursor.selectableCell.pos != mCursor.selectedCell.pos)
+        else if(mCursor.selectableCell.pos.x != mCursor.selectedCell.pos.x || mCursor.selectableCell.pos.y != mCursor.selectedCell.pos.y)
         {
             TurnType turn = TurnType::Nothing;
             CastlingKing *king = dynamic_cast<CastlingKing*>(mCursor.selectedCell.cell);
+            BoardCell *cell = mCursor.selectedCell.cell;
+            stf::Vec2d selected = mCursor.selectedCell.pos;
+            stf::Vec2d selectable = mCursor.selectableCell.pos;
 
-            if(mCursor.selectedCell.cell->canAttack(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos)) {
+            turn = findCastlingTurn(king);
+
+            if(cell->canAttack(mBoard, selected, selectable)) {
                 pieceMoveProc();
                 turn = TurnType::Attack;
-            } else if(mCursor.selectedCell.cell->canJump(mBoard, mCursor.selectedCell.pos, mCursor.selectableCell.pos)) {
+            } else if(cell->canJump(mBoard, selected, selectable)) {
                 pieceMoveProc();
                 turn = TurnType::Move;
-            } else if(mCursor.selectedCell.cell->view() == King().view()) {
-                turn = findCastlingTurn(king);
             }
 
-            mBoard.transformPawns();
+//            mBoard.transformPawns();
 
-            if(mBoard.findKingPos(pieces::wKing()) == stf::Vec2d{-1,-1} || mBoard.findKingPos(pieces::bKing()) == stf::Vec2d{-1,-1}) {
-                stf::Renderer::log << stf::endl << "CHECKMATE";
-                return sender;
-            }
+//            if(mBoard.findKingPos(pieces::wKing()) == stf::Vec2d{-1,-1} || mBoard.findKingPos(pieces::bKing()) == stf::Vec2d{-1,-1}) {
+//                stf::Renderer::log << stf::endl << "CHECKMATE";
+//                return sender;
+//            }
 
-            TurnType bIsCheckW = mBoard.blackCheckToWhite();
-            if(bIsCheckW != TurnType::Nothing)
-                turn = bIsCheckW;
+//            TurnType bIsCheckW = mBoard.blackCheckToWhite();
+//            if(bIsCheckW != TurnType::Nothing)
+//                turn = bIsCheckW;
 
-            TurnType wIsCheckB = mBoard.whiteCheckToBlack();
-            if(wIsCheckB != TurnType::Nothing)
-                turn = wIsCheckB;
+//            TurnType wIsCheckB = mBoard.whiteCheckToBlack();
+//            if(wIsCheckB != TurnType::Nothing)
+//                turn = wIsCheckB;
 
 
             log.push_back({ mCursor.selectedCell.cell,

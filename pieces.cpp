@@ -90,15 +90,34 @@ bool King::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) co
 
 bool King::canJump(const GameBoard &board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
-    for(int y = selectable.y-1; y < selectable.y + 2; ++y) {
-        for(int x = selectable.x-1; x < selectable.x + 2; ++x) {
-            if(x < 0 || y < 0 || x > board.Size.x - 1 || y > board.Size.y - 1)
-                continue;
-            if(selected == stf::Vec2d{x,y})
+//    for(int y = selectable.y-1; y < selectable.y + 2; ++y) {
+//        for(int x = selectable.x-1; x < selectable.x + 2; ++x) {
+//            if(x < 0 || y < 0 || x > board.Size.x - 1 || y > board.Size.y - 1)
+//                continue;
+//            if(selected == stf::Vec2d{x,y})
+//                continue;
+//        }
+//    }
+
+    for(int y = 0; y < board.Size.y; ++y) {
+        for(int x = 0; x < board.Size.x; ++x) {
+            BoardCell *cell = board[{x,y}];
+            if(cell->color() == color())
                 continue;
             if(board[{x,y}]->view() == King().view())
+                continue;
+            if(board[{x,y}]->canJump(board, {x,y}, selectable))
                 return false;
+//            for(int py = selectable.y-1; py < selectable.y + 2; ++py) {
+//                for(int px = selectable.x-1; px < selectable.x + 2; ++px) {
+//                    if(px < 0 || py < 0 || px > board.Size.x - 1 || py > board.Size.y - 1)
+//                        continue;
+//                    if(selected == stf::Vec2d{px,py})
+//                        continue;
+//                }
+//            }
         }
     }
+
     return BoardCell::canJump(board, selected, selectable);
 }
