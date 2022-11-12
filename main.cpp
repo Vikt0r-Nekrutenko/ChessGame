@@ -39,7 +39,7 @@ public:
 
     GameModel()
     {
-        log.push_back({nullptr, stf::ColorTable::Default, {0,0}, stf::ColorTable::Default, {0,0}, TurnType::Nothing});
+        log.push_back({cells::emptyCell(), stf::ColorTable::Default, {0,0}, stf::ColorTable::Default, {0,0}, TurnType::Nothing});
     }
 
     void pieceMoveProc()
@@ -73,47 +73,56 @@ public:
         return TurnType::Nothing;
     }
 
-    std::vector<stf::Vec2d> kingPossibleMoves()
+
+    bool makeMove(const stf::Vec2d &selected, const stf::Vec2d &selectable)
     {
-        stf::Vec2d kingPos = mCursor.selectedCell.pos;
-        BoardCell *king = mCursor.selectedCell.cell;
-        std::vector<stf::Vec2d> possibleMoves;
-        mBoard.clear(kingPos);
+        GameBoard gb = mBoard;
+        BoardCell *dest = gb[selectable];
+        BoardCell *cell = gb[selected];
 
-        for(int y = 0; y < mBoard.Size.y; ++y) {
-            for(int x = 0; x < mBoard.Size.x; ++x) {
-                BoardCell *cell = mBoard[{x,y}];
-                if(player == stf::ColorTable::White)
-                    mBoard.place(mCursor.selectableCell.pos, pieces::wKing());
-                else
-                    mBoard.place(mCursor.selectableCell.pos, pieces::bKing());
-
-                if(cell->color() == player)
-                    continue;
-                if(cell->view() == King().view())
-                    continue;
-                if(cell->canAttack(mBoard, {x,y}, mCursor.selectableCell.pos))
-                    possibleMoves.push_back({x,y});
-
-                mBoard.clear(mCursor.selectableCell.pos);
-            }
+        if(cell->canAttack(gb, selected, selectable)) {
+            gb.place(selectable, cell);
+            gb.clear(selected);
         }
-        mBoard.place(kingPos, king);
-        return possibleMoves;
+        if(cell->canJump(gb, selected, selectable)) {
+            gb.place(selectable, cell);
+            gb.clear(selected);
+        }
+
+        TurnType bIsCheckW = gb.blackCheckToWhite();
+        TurnType wIsCheckB = gb.whiteCheckToBlack();
+
+        if((bIsCheckW == TurnType::BCheckToW) || (wIsCheckB == TurnType::WCheckToB)) {
+            return false;
+        }
+        return true;
     }
 
-    bool moveAreValid(const std::vector<stf::Vec2d>& pos)
+    bool isCheckmate()
     {
-        for(auto &p : pos)
-            if(p == mCursor.selectableCell.pos) {
-                return true;
+        for(int cy = 0; cy < mBoard.Size.y; ++cy) {
+            for(int cx = 0; cx < mBoard.Size.x; ++cx) {
+                for(int dy = 0; dy < mBoard.Size.y; ++dy) {
+                    for(int dx = 0; dx < mBoard.Size.x; ++dx) {
+                        if(mBoard[{cx,cy}]->color() != player)
+                            continue;
+                        if(stf::Vec2d{cx,cy} == stf::Vec2d{dx,dy})
+                            continue;
+                        if(makeMove({cx,cy}, {dx,dy}))
+                            return true;
+                    }
+                }
             }
+        }
         return false;
     }
 
     stf::smv::IView *put(stf::smv::IView *sender)
     {
-        if(mCursor.selectedCell.cell == cells::emptyCell() && mBoard[mCursor.selectableCell.pos]->color() == player)
+        if(!isCheckmate())
+            stf::Renderer::log<<stf::endl<<"Checkmate!";
+//            exit(0);
+        else if(mCursor.selectedCell.cell == cells::emptyCell() && mBoard[mCursor.selectableCell.pos]->color() == player)
         {
             mCursor.select(mBoard[{mCursor.selectableCell.pos}]);
         }
@@ -128,16 +137,6 @@ public:
             stf::Vec2d selected = mCursor.selectedCell.pos;
             stf::Vec2d selectable = mCursor.selectableCell.pos;
 
-//            if(mCursor.selectedCell.cell->view() == King().view()) {
-//                auto pos = kingPossibleMoves();
-//                if(pos.empty()){
-//                    stf::Renderer::log << stf::endl << "CHECKMATE";
-//                    return sender;
-//                }
-//                if(moveAreValid(pos) == false)
-//                    return sender;
-//            }
-
             turn = findCastlingTurn(king);
 
             if(cell->canAttack(mBoard, selected, selectable)) {
@@ -151,22 +150,20 @@ public:
             mBoard.transformPawns();
 
             TurnType bIsCheckW = mBoard.blackCheckToWhite();
+            if(bIsCheckW == TurnType::BCheckToW) stf::Renderer::log << stf::endl << "Black check to the white!";
             TurnType wIsCheckB = mBoard.whiteCheckToBlack();
+            if(wIsCheckB == TurnType::WCheckToB) stf::Renderer::log << stf::endl << "White check to the black!";
 
-            if(bIsCheckW == TurnType::BCheckToW && player == stf::ColorTable::White) {
+            if((bIsCheckW == TurnType::BCheckToW && player == stf::ColorTable::White) || (wIsCheckB == TurnType::WCheckToB && player == stf::ColorTable::Red)) {
                 stf::Renderer::log<<stf::endl<<"UNRESOLVED";
+
                 mBoard.place(selected, cell);
                 mBoard.place(selectable, dest);
-                return sender;
-            }
-            if(wIsCheckB == TurnType::WCheckToB && player == stf::ColorTable::Red){
-                stf::Renderer::log<<stf::endl<<"UNRESOLVED";
-                mBoard.place(selected, cell);
-                mBoard.place(selectable, dest);
+
                 return sender;
             }
 
-            if(turn != TurnType::Nothing && turn != TurnType::Unresolved)
+            if(turn != TurnType::Nothing)
                 log.push_back({ mCursor.selectedCell.cell,
                                 player,
                                 mCursor.selectedCell.pos,
@@ -247,6 +244,8 @@ public:
                         gm->mBoard[{x,y}]->color());
             }
         }
+
+
         if(gm->mCursor.selectedCell.cell != cells::emptyCell())
         {
             renderer.drawPixel({gm->mCursor.selectedCell.pos.x * 2,     gm->mCursor.selectedCell.pos.y + 2}, '(');
