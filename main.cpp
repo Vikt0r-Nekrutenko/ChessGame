@@ -92,7 +92,6 @@ public:
         {
             TurnType turn = TurnType::Nothing;
 
-            BoardCell *dest = mBoard[mCursor.selectableCell.pos];
             BoardCell *cell = mCursor.selectedCell.cell;
             GameBoard backUp = mBoard;
 
@@ -117,19 +116,22 @@ public:
                 stf::Renderer::log << stf::endl << "Black check to the white!";
                 turn = bIsCheckW;
             }
+
+            if(bIsCheckW == TurnType::BCheckToW && player == stf::ColorTable::White) {
+                stf::Renderer::log<<stf::endl<<"UNRESOLVED WHITE KING UNDER ATTACK!";
+                mBoard = backUp;
+                return sender;
+            }
+
             TurnType wIsCheckB = mBoard.whiteCheckToBlack();
             if(wIsCheckB == TurnType::WCheckToB) {
                 stf::Renderer::log << stf::endl << "White check to the black!";
                 turn = wIsCheckB;
             }
 
-            if((bIsCheckW == TurnType::BCheckToW && player == stf::ColorTable::White) || (wIsCheckB == TurnType::WCheckToB && player == stf::ColorTable::Red)) {
-                stf::Renderer::log<<stf::endl<<"UNRESOLVED";
-
-//                mBoard.place(selected, cell);
-//                mBoard.place(selectable, dest);
+            if(wIsCheckB == TurnType::WCheckToB && player == stf::ColorTable::Red) {
+                stf::Renderer::log<<stf::endl<<"UNRESOLVED BLACK KING UNDER ATTACK!";
                 mBoard = backUp;
-
                 return sender;
             }
 
