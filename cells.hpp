@@ -1,7 +1,7 @@
 #ifndef CELLS_HPP
 #define CELLS_HPP
 
-#include "model.hpp"
+#include "fieldsallocator.hpp"
 #include "renderer.hpp"
 #include <list>
 #include <iostream>
