@@ -23,14 +23,8 @@ TurnType GameModel::findCastlingTurn()
 
 stf::smv::IView *GameModel::put(stf::smv::IView *sender)
 {
-    if(mCursor.isValidForSelect(mBoard[mCursor.selectableCell.pos], player))
-    {
-        mCursor.select(mBoard[{mCursor.selectableCell.pos}]);
-    }
-    else if(mCursor.isValidForPut())
-    {
         TurnType turn = TurnType::Nothing;
-        GameBoard backUp = mBoard;
+        GameBoard backup = mBoard;
 
         turn = findCastlingTurn();
         turn = mBoard.makeTurn(mCursor);
@@ -39,7 +33,7 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
         TurnType bIsCheckW = mBoard.blackCheckToWhite();
         if(bIsCheckW == TurnType::BCheckToW) {
             if(player == stf::ColorTable::White) {
-                mBoard = backUp;
+                mBoard = backup;
                 turn = TurnType::Unavailiable;
             } else {
                 turn = bIsCheckW;
@@ -49,7 +43,7 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
         TurnType wIsCheckB = mBoard.whiteCheckToBlack();
         if(wIsCheckB == TurnType::WCheckToB) {
             if(player == stf::ColorTable::Red) {
-                mBoard = backUp;
+                mBoard = backup;
                 turn = TurnType::Unavailiable;
             } else {
                 turn = wIsCheckB;
@@ -60,10 +54,7 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
             stf::Renderer::log<<stf::endl<<"Checkmate!";
 
         if(turn != TurnType::Nothing)
-            log.push_back({ mCursor.selectedCell.cell,
-                            mCursor.selectedCell.pos,
-                            mCursor.selectableCell.pos,
-                            turn });
+            log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos, turn });
 
 
         stf::Renderer::log << stf::endl <<
@@ -74,7 +65,6 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
         mCursor.reset();
         if(turn != TurnType::Nothing && turn != TurnType::Unavailiable)
             player = player == stf::ColorTable::White ? stf::ColorTable::Red : stf::ColorTable::White;
-    }
 
     return sender;
 }
@@ -120,7 +110,12 @@ stf::smv::IView *GameModel::keyEventsHandler(stf::smv::IView *sender, const int 
         break;
 
     case ' ':
-        return put(sender);
+        if(mCursor.isValidForSelect(mBoard[mCursor.selectableCell.pos], player))
+        {
+            mCursor.select(mBoard[{mCursor.selectableCell.pos}]);
+        } else if(mCursor.isValidForPut()) {
+            return put(sender);
+        }
     }
     return sender;
 }
