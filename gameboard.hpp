@@ -4,6 +4,7 @@
 #include "cells.hpp"
 
 struct Cursor;
+class CastlingKing;
 
 class GameBoard
 {
@@ -24,6 +25,9 @@ public:
     TurnType makeAttack(const Cursor &cursor);
     TurnType makeMove(const Cursor &cursor);
     TurnType makeTurn(const Cursor &cursor);
+    void makeCastlingTurn(CastlingKing *king, const stf::Vec2d& kingDPos, const int rookSX, const int rookDX);
+    TurnType shortCastling(const Cursor &cursor, CastlingKing *king, const std::vector<Note> &log);
+    TurnType longCastling(const Cursor &cursor, CastlingKing *king, const std::vector<Note> &log);
 
     TurnType blackCheckToWhite() const;
     TurnType whiteCheckToBlack() const;

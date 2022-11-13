@@ -110,6 +110,33 @@ TurnType GameBoard::makeMove(const Cursor &cursor)
     return TurnType::Move;
 }
 
+void GameBoard::makeCastlingTurn(CastlingKing *king, const stf::Vec2d &kingDPos, const int rookSX, const int rookDX)
+{
+    clear({rookSX, king->y()});
+    clear(king->uniquePos());
+
+    place(kingDPos,                         king->getKing());
+    place(kingDPos + stf::Vec2d(rookDX, 0), king->getRook());
+}
+
+TurnType GameBoard::shortCastling(const Cursor &cursor, CastlingKing *king, const std::vector<Note> &log)
+{
+    if(cursor.selectableCell.pos == king->shortCastlingPos() && king->isShortCastlingPossible(*this, log)) {
+        makeCastlingTurn(king, king->shortCastlingPos(), SHORTCASTLING_ROOKX, SHORTCASTLING_ROOK_OFFSET);
+        return TurnType::ShortCastling;
+    }
+    return TurnType::Nothing;
+}
+
+TurnType GameBoard::longCastling(const Cursor &cursor, CastlingKing *king, const std::vector<Note> &log)
+{
+    if(cursor.selectableCell.pos == king->longCastlingPos() && king->isLongCastlingPossible(*this, log)) {
+        makeCastlingTurn(king, king->longCastlingPos(), LONGCASTLING_ROOKX, LONGCASTLING_ROOK_OFFSET);
+        return TurnType::LongCastling;
+    }
+    return TurnType::Nothing;
+}
+
 TurnType GameBoard::blackCheckToWhite() const
 {
     return isCheck(pieces::wKing(), stf::ColorTable::Red) == TurnType::Nothing ?  TurnType::Nothing : TurnType::BCheckToW;

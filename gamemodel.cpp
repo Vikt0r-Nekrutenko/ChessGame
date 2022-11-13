@@ -6,15 +6,6 @@ GameModel::GameModel()
     log.push_back({cells::emptyCell(), stf::ColorTable::Default, {0,0}, stf::ColorTable::Default, {0,0}, TurnType::Nothing});
 }
 
-void GameModel::castlingProc(CastlingKing *king, const stf::Vec2d &kingDPos, const int rookSX, const int rookDX)
-{
-    mBoard.clear({rookSX, king->y()});
-    mBoard.clear(king->uniquePos());
-
-    mBoard.place(kingDPos,                         king->getKing());
-    mBoard.place(kingDPos + stf::Vec2d(rookDX, 0), king->getRook());
-}
-
 TurnType GameModel::findCastlingTurn()
 {
     if(mCursor.selectedCell.cell->view() != King().view())
@@ -22,16 +13,12 @@ TurnType GameModel::findCastlingTurn()
 
     CastlingKing *king = dynamic_cast<CastlingKing*>(mCursor.selectedCell.cell);
 
-    if(mCursor.selectableCell.pos == king->longCastlingPos() && king->isLongCastlingPossible(mBoard, log)) {
-        castlingProc(king, king->longCastlingPos(), LONGCASTLING_ROOKX, LONGCASTLING_ROOK_OFFSET);
-        return TurnType::LeftCastling;
-    }
+    TurnType longC  = mBoard.longCastling(mCursor, king, log);
+    TurnType shortC = mBoard.shortCastling(mCursor, king, log);
 
-    if(mCursor.selectableCell.pos == king->shortCastlingPos() && king->isShortCastlingPossible(mBoard, log)) {
-        castlingProc(king, king->shortCastlingPos(), SHORTCASTLING_ROOKX, SHORTCASTLING_ROOK_OFFSET);
-        return TurnType::RightCastling;
-    }
-    return TurnType::Nothing;
+    return longC == TurnType::LongCastling
+            ? longC
+            : shortC;
 }
 
 stf::smv::IView *GameModel::update(stf::smv::IView *sender, const float)

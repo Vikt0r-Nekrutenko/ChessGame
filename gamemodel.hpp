@@ -40,8 +40,6 @@ public:
 
     GameModel();
 
-    void castlingProc(CastlingKing *king, const stf::Vec2d& kingDPos, const int rookSX, const int rookDX);
-
     TurnType findCastlingTurn();
 
     stf::smv::IView *update(stf::smv::IView *sender, const float dt) override;

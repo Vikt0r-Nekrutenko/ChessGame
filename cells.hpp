@@ -14,8 +14,8 @@ enum class TurnType : uint8_t
     Unresolved,
     Move,
     Attack,
-    LeftCastling,
-    RightCastling,
+    LongCastling,
+    ShortCastling,
     WCheckToB,
     BCheckToW,
 };
