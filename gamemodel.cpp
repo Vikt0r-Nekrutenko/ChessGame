@@ -36,11 +36,11 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
     TurnType turn = TurnType::Nothing;
     GameBoard backup = mBoard;
 
-    if(mCursor.selectedCell.cell->uniqueView() == pieces::wPawn()->uniqueView())
+    if(mCursor.selectedCell.cell->view() == Pawn().view())
     {
-        WPawn *pawn = dynamic_cast<WPawn*>(mCursor.selectedCell.cell);
+        Pawn *pawn = dynamic_cast<Pawn*>(mCursor.selectedCell.cell);
         if(pawn->isAttackInPassing(mBoard,log,mCursor.selectedCell.pos,mCursor.selectableCell.pos)){
-            stf::Renderer::log<<stf::endl<<"LEFT attack in passing";
+            stf::Renderer::log<<stf::endl<<"attack in passing";
         }
     }
 

@@ -9,6 +9,17 @@ uint8_t Pawn::view() const
     return 'P';
 }
 
+bool WPawn::isRightAttackInPassing(const GameBoard &board, const std::vector<Note> &log, const stf::Vec2d &selected, const stf::Vec2d &selectable)
+{
+    if(selectable != selected + stf::Vec2d{+1,-1})
+        return false;
+    if(log.back().cell->uniqueView() != pieces::bPawn()->uniqueView())
+        return false;
+    if(log.back().from != stf::Vec2d{selected.x + 1, BPAWN_SPAWN_Y} && log.back().to != selected + stf::Vec2d{+1,0})
+        return false;
+    return true;
+}
+
 bool WPawn::isLeftAttackInPassing(const GameBoard &board, const std::vector<Note> &log, const stf::Vec2d &selected, const stf::Vec2d &selectable)
 {
     if(selectable != selected + stf::Vec2d{-1,-1})
@@ -20,11 +31,15 @@ bool WPawn::isLeftAttackInPassing(const GameBoard &board, const std::vector<Note
     return true;
 }
 
-bool WPawn::isAttackInPassing(const GameBoard &board, const std::vector<Note> &log, const stf::Vec2d &selected, const stf::Vec2d &selectable)
+bool Pawn::isRightAttackInPassing(const GameBoard &board, const std::vector<Note> &log, const stf::Vec2d &selected, const stf::Vec2d &selectable) { return false; }
+
+bool Pawn::isLeftAttackInPassing(const GameBoard &board, const std::vector<Note> &log, const stf::Vec2d &selected, const stf::Vec2d &selectable) { return false; }
+
+bool Pawn::isAttackInPassing(const GameBoard &board, const std::vector<Note> &log, const stf::Vec2d &selected, const stf::Vec2d &selectable)
 {
     if(!Pawn::canJump(board, selected, selectable))
         return false;
-    if(!isLeftAttackInPassing(board,log,selected,selectable))
+    if(!isLeftAttackInPassing(board,log,selected,selectable) && !isRightAttackInPassing(board,log,selected,selectable))
         return false;
     return true;
 }
@@ -44,14 +59,26 @@ int WPawn::uniqueView() const
     return +1;
 }
 
-bool BPawn::isLeftAttackInPassing(const GameBoard &board, const std::vector<Note> &log, const stf::Vec2d &selected, const stf::Vec2d &selectable)
+bool BPawn::isRightAttackInPassing(const GameBoard &board, const std::vector<Note> &log, const stf::Vec2d &selected, const stf::Vec2d &selectable)
 {
-    return false;
+    if(selectable != selected + stf::Vec2d{+1,+1})
+        return false;
+    if(log.back().cell->uniqueView() != pieces::wPawn()->uniqueView())
+        return false;
+    if(log.back().from != stf::Vec2d{selected.x + 1, WPAWN_SPAWN_Y} && log.back().to != selected + stf::Vec2d{+1,0})
+        return false;
+    return true;
 }
 
-bool BPawn::isAttackInPassing(const GameBoard &board, const std::vector<Note> &log, const stf::Vec2d &selected, const stf::Vec2d &selectable)
+bool BPawn::isLeftAttackInPassing(const GameBoard &board, const std::vector<Note> &log, const stf::Vec2d &selected, const stf::Vec2d &selectable)
 {
-    return false;
+    if(selectable != selected + stf::Vec2d{-1,+1})
+        return false;
+    if(log.back().cell->uniqueView() != pieces::wPawn()->uniqueView())
+        return false;
+    if(log.back().from != stf::Vec2d{selected.x - 1, WPAWN_SPAWN_Y} && log.back().to != selected + stf::Vec2d{-1,0})
+        return false;
+    return true;
 }
 
 int BPawn::uniqueView() const
