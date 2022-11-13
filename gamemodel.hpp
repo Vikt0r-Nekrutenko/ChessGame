@@ -40,8 +40,6 @@ public:
 
     GameModel();
 
-    void pieceMoveProc();
-
     void castlingProc(CastlingKing *king, const stf::Vec2d& kingDPos, const int rookSX, const int rookDX);
 
     TurnType findCastlingTurn();

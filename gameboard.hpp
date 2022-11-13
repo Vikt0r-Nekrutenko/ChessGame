@@ -3,6 +3,8 @@
 
 #include "cells.hpp"
 
+struct Cursor;
+
 class GameBoard
 {
 public:
@@ -19,6 +21,9 @@ public:
     void place(const stf::Vec2d& pos, BoardCell *cell);
     void clear(const stf::Vec2d& pos);
     void transformPawns();
+    TurnType makeAttack(const Cursor &cursor);
+    TurnType makeMove(const Cursor &cursor);
+    TurnType makeTurn(const Cursor &cursor);
 
     TurnType blackCheckToWhite() const;
     TurnType whiteCheckToBlack() const;

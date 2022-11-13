@@ -6,12 +6,6 @@ GameModel::GameModel()
     log.push_back({cells::emptyCell(), stf::ColorTable::Default, {0,0}, stf::ColorTable::Default, {0,0}, TurnType::Nothing});
 }
 
-void GameModel::pieceMoveProc()
-{
-    mBoard.place(mCursor.selectableCell.pos, mCursor.selectedCell.cell);
-    mBoard.clear(mCursor.selectedCell.pos);
-}
-
 void GameModel::castlingProc(CastlingKing *king, const stf::Vec2d &kingDPos, const int rookSX, const int rookDX)
 {
     mBoard.clear({rookSX, king->y()});
@@ -66,11 +60,9 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
         turn = findCastlingTurn();
 
         if(cell->canAttack(mBoard, selected, selectable)) {
-            pieceMoveProc();
-            turn = TurnType::Attack;
+            turn = mBoard.makeTurn(mCursor);
         } else if(cell->canJump(mBoard, selected, selectable)) {
-            pieceMoveProc();
-            turn = TurnType::Move;
+            turn = mBoard.makeTurn(mCursor);
         }
 
         mBoard.transformPawns();

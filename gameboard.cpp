@@ -1,4 +1,5 @@
 #include "gameboard.hpp"
+#include "gamemodel.hpp"
 #include "pawns.hpp"
 #include "rooks.hpp"
 #include "knights.hpp"
@@ -84,6 +85,27 @@ void GameBoard::clear(const stf::Vec2d &pos)
 {
     if(pos.x >= 0 && pos.x < Size.x && pos.y >= 0 && pos.y < Size.y)
         mBoard.at(Size.x * pos.y + pos.x) = cells::emptyCell();
+}
+
+TurnType GameBoard::makeTurn(const Cursor &cursor)
+{
+    if((*this)[cursor.selectableCell.pos] != cells::emptyCell())
+        return makeAttack(cursor);
+    return makeMove(cursor);
+}
+
+TurnType GameBoard::makeAttack(const Cursor &cursor)
+{
+    place(cursor.selectableCell.pos, cursor.selectedCell.cell);
+    clear(cursor.selectedCell.pos);
+    return TurnType::Attack;
+}
+
+TurnType GameBoard::makeMove(const Cursor &cursor)
+{
+    place(cursor.selectableCell.pos, cursor.selectedCell.cell);
+    clear(cursor.selectedCell.pos);
+    return TurnType::Move;
 }
 
 TurnType GameBoard::blackCheckToWhite() const
