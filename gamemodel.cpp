@@ -41,6 +41,8 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
         Pawn *pawn = dynamic_cast<Pawn*>(mCursor.selectedCell.cell);
         if(pawn->isAttackInPassing(mBoard,log,mCursor.selectedCell.pos,mCursor.selectableCell.pos)){
             stf::Renderer::log<<stf::endl<<"attack in passing";
+            mBoard.clear({mCursor.selectableCell.pos.x, mCursor.selectedCell.pos.y});
+            mBoard.makeMove(mCursor);
         }
     }
 
