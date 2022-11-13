@@ -17,6 +17,7 @@ DEPENDPATH += $$PWD/../stf/ \
 SOURCES += \
         bishops.cpp \
         cells.cpp \
+        cursor.cpp \
         gameboard.cpp \
         gamemodel.cpp \
         kings.cpp \
@@ -30,6 +31,7 @@ SOURCES += \
 HEADERS += \
     bishops.hpp \
     cells.hpp \
+    cursor.hpp \
     gameboard.hpp \
     gamemodel.hpp \
     kings.hpp \

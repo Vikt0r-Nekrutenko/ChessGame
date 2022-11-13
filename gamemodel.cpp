@@ -49,7 +49,7 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
     if(wIsCheckB == TurnType::WCheckToB)
         turn = unavailiableTurnHandler(backup, stf::ColorTable::Red, wIsCheckB);
 
-    if(mBoard.isCheckmate(player) || !mBoard.possibleMovesExitst())
+    if(mBoard.isCheckmate(player) || mBoard.possibleMovesExitst() == false)
         stf::Renderer::log<<stf::endl<<"Checkmate!";
 
     if(turn != TurnType::Nothing)
