@@ -36,18 +36,18 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
         GameBoard backup = mBoard;
 
         turn = findCastlingTurn();
-        turn = mBoard.makeTurn(mCursor);
+        if(turn == TurnType::Nothing)
+            turn = mBoard.makeTurn(mCursor);
+
         mBoard.transformPawns();
 
         TurnType bIsCheckW = mBoard.blackCheckToWhite();
-        if(bIsCheckW == TurnType::BCheckToW) {
+        if(bIsCheckW == TurnType::BCheckToW)
             turn = unavailiableTurnHandler(backup, stf::ColorTable::White, bIsCheckW);
-        }
 
         TurnType wIsCheckB = mBoard.whiteCheckToBlack();
-        if(wIsCheckB == TurnType::WCheckToB) {
+        if(wIsCheckB == TurnType::WCheckToB)
             turn = unavailiableTurnHandler(backup, stf::ColorTable::Red, wIsCheckB);
-        }
 
         if(mBoard.isCheckmate(player) || !mBoard.possibleMovesExitst())
             stf::Renderer::log<<stf::endl<<"Checkmate!";
