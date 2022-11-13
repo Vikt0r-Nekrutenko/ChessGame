@@ -24,9 +24,7 @@ enum class TurnType : uint8_t
 struct Note
 {
     BoardCell *cell;
-    stf::ColorTable player;
     stf::Vec2d from;
-    stf::ColorTable opponent;
     stf::Vec2d to;
     TurnType type;
 };

@@ -3,7 +3,7 @@
 
 GameModel::GameModel()
 {
-    log.push_back({cells::emptyCell(), stf::ColorTable::Default, {0,0}, stf::ColorTable::Default, {0,0}, TurnType::Nothing});
+    log.push_back({cells::emptyCell(), {0,0}, {0,0}, TurnType::Nothing});
 }
 
 TurnType GameModel::findCastlingTurn()
@@ -61,9 +61,7 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
 
         if(turn != TurnType::Nothing)
             log.push_back({ mCursor.selectedCell.cell,
-                            player,
                             mCursor.selectedCell.pos,
-                            player == stf::ColorTable::Red ? stf::ColorTable::White : stf::ColorTable::Red,
                             mCursor.selectableCell.pos,
                             turn });
 
