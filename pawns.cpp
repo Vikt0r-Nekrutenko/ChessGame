@@ -46,7 +46,7 @@ bool Pawn::isAttackInPassing(const GameBoard &board, const std::vector<Note> &lo
 {
     if(!Pawn::canJump(board, selected, selectable))
         return false;
-    if(!isLeftAttackInPassing(board,log,selected,selectable) && !isRightAttackInPassing(board,log,selected,selectable))
+    if(!isLeftAttackInPassing(log,selected,selectable) && !isRightAttackInPassing(log,selected,selectable))
         return false;
     return true;
 }

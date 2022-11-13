@@ -36,6 +36,11 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
     TurnType turn = TurnType::Nothing;
     GameBoard backup = mBoard;
 
+
+    turn = findCastlingTurn();
+    if(turn == TurnType::Nothing)
+        turn = mBoard.makeTurn(mCursor);
+
     if(mCursor.selectedCell.cell->view() == Pawn().view())
     {
         Pawn *pawn = dynamic_cast<Pawn*>(mCursor.selectedCell.cell);
@@ -43,13 +48,9 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
             stf::Renderer::log<<stf::endl<<"attack in passing";
             mBoard.clear({mCursor.selectableCell.pos.x, mCursor.selectedCell.pos.y});
             mBoard.makeMove(mCursor);
+            turn = TurnType::AttackInPassing;
         }
     }
-
-    turn = findCastlingTurn();
-    if(turn == TurnType::Nothing)
-        turn = mBoard.makeTurn(mCursor);
-
     mBoard.transformPawns();
 
     TurnType bIsCheckW = mBoard.blackCheckToWhite();
@@ -60,8 +61,6 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
     if(wIsCheckB == TurnType::WCheckToB)
         turn = unavailiableTurnHandler(backup, stf::ColorTable::Red, wIsCheckB);
 
-    if(mBoard.isCheckmate(player) || mBoard.possibleMovesExitst() == false)
-        stf::Renderer::log<<stf::endl<<"Checkmate!";
 
     if(turn != TurnType::Nothing)
         log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos, turn });
@@ -75,6 +74,8 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
     if(turn != TurnType::Nothing && turn != TurnType::Unavailiable)
         player = player == stf::ColorTable::White ? stf::ColorTable::Red : stf::ColorTable::White;
 
+    if(mBoard.isCheckmate(player) || mBoard.possibleMovesExitst() == false)
+        stf::Renderer::log<<stf::endl<<"Checkmate!";
     return sender;
 }
 
