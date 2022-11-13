@@ -61,7 +61,7 @@ bool BoardCell::noPiecesOnWay(const GameBoard &board, const stf::Vec2d &selected
     return true;
 }
 
-bool BoardCell::canMoveTo(const stf::Vec2d &source, const stf::Vec2d &destination) const
+bool BoardCell::canMoveTo(const stf::Vec2d &, const stf::Vec2d &) const
 {
     return false;
 }

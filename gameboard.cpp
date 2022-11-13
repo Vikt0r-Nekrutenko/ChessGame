@@ -1,5 +1,10 @@
 #include "gameboard.hpp"
 #include "pawns.hpp"
+#include "rooks.hpp"
+#include "knights.hpp"
+#include "bishops.hpp"
+#include "kings.hpp"
+#include "queens.hpp"
 
 auto findPawnOnLine = [](std::vector<BoardCell *> &board, int beginLine, int endLine, BoardCell *pawn, BoardCell *toPawn){
     for(int x = beginLine; x < endLine; ++x)
@@ -19,23 +24,23 @@ GameBoard::GameBoard()
         mBoard.at(Size.x * 6 + i) = pieces::wPawn();
     }
 
-    //        mBoard.at(Size.x * 0 + 0) = pieces::bRook();
-    //        mBoard.at(Size.x * 0 + 7) = pieces::bRook();
-    //        mBoard.at(Size.x * 7 + 0) = pieces::wRook();
-    //        mBoard.at(Size.x * 7 + 7) = pieces::wRook();
+    mBoard.at(Size.x * 0 + 0) = pieces::bRook();
+    mBoard.at(Size.x * 0 + 7) = pieces::bRook();
+    mBoard.at(Size.x * 7 + 0) = pieces::wRook();
+    mBoard.at(Size.x * 7 + 7) = pieces::wRook();
 
     mBoard.at(Size.x * 0 + 1) = pieces::bKnight();
     mBoard.at(Size.x * 0 + 6) = pieces::bKnight();
     mBoard.at(Size.x * 7 + 1) = pieces::wKnight();
     mBoard.at(Size.x * 7 + 6) = pieces::wKnight();
 
-    //        mBoard.at(Size.x * 0 + 2) = pieces::bBishop();
-    //        mBoard.at(Size.x * 0 + 5) = pieces::bBishop();
-    //        mBoard.at(Size.x * 7 + 2) = pieces::wBishop();
-    //        mBoard.at(Size.x * 7 + 5) = pieces::wBishop();
+    mBoard.at(Size.x * 0 + 2) = pieces::bBishop();
+    mBoard.at(Size.x * 0 + 5) = pieces::bBishop();
+    mBoard.at(Size.x * 7 + 2) = pieces::wBishop();
+    mBoard.at(Size.x * 7 + 5) = pieces::wBishop();
 
-    //        mBoard.at(Size.x * 0 + 3) = pieces::bQueen();
-    //        mBoard.at(Size.x * 7 + 3) = pieces::wQueen();
+    mBoard.at(Size.x * 0 + 3) = pieces::bQueen();
+    mBoard.at(Size.x * 7 + 3) = pieces::wQueen();
 
     mBoard.at(Size.x * 0 + 4) = pieces::bKing();
     mBoard.at(Size.x * 7 + 4) = pieces::wKing();

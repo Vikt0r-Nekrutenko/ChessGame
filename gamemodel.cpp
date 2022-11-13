@@ -1,5 +1,5 @@
 #include "gamemodel.hpp"
-#include "pawns.hpp"
+#include "kings.hpp"
 
 GameModel::GameModel()
 {
@@ -39,7 +39,7 @@ TurnType GameModel::findCastlingTurn()
     return TurnType::Nothing;
 }
 
-stf::smv::IView *GameModel::update(stf::smv::IView *sender, const float dt)
+stf::smv::IView *GameModel::update(stf::smv::IView *sender, const float)
 {
     if(mBoard.isCheckmate(player) || !mBoard.possibleMovesExitst())
         stf::Renderer::log<<stf::endl<<"Checkmate!";
