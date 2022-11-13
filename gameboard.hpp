@@ -23,6 +23,8 @@ public:
     void clear(const stf::Vec2d& pos);
     void transformPawns();
     void makeCastlingTurn(CastlingKing *king, const stf::Vec2d& kingDPos, const int rookSX, const int rookDX);
+
+    TurnType isAttackInPassingAvailiable(const Cursor &cursor, const std::vector<Note> &log);
     TurnType makeAttack(const Cursor &cursor);
     TurnType makeMove(const Cursor &cursor);
     TurnType makeTurn(const Cursor &cursor);

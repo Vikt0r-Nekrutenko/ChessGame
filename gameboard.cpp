@@ -119,6 +119,17 @@ void GameBoard::makeCastlingTurn(CastlingKing *king, const stf::Vec2d &kingDPos,
     place(kingDPos + stf::Vec2d(rookDX, 0), king->getRook());
 }
 
+TurnType GameBoard::isAttackInPassingAvailiable(const Cursor &cursor, const std::vector<Note> &log)
+{
+    Pawn *pawn = dynamic_cast<Pawn*>(cursor.selectedCell.cell);
+    if(pawn->isAttackInPassing(*this, log, cursor.selectedCell.pos, cursor.selectableCell.pos)){
+        clear({cursor.selectableCell.pos.x, cursor.selectedCell.pos.y});
+        makeMove(cursor);
+        return TurnType::AttackInPassing;
+    }
+    return TurnType::Nothing;
+}
+
 TurnType GameBoard::shortCastling(const Cursor &cursor, CastlingKing *king, const std::vector<Note> &log)
 {
     if(cursor.selectableCell.pos == king->shortCastlingPos() && king->isShortCastlingPossible(*this, log)) {
