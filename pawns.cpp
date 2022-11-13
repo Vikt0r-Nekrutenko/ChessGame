@@ -4,6 +4,21 @@
 #define WPAWN_SPAWN_Y 6
 #define BPAWN_SPAWN_Y 1
 
+uint8_t Pawn::view() const
+{
+    return 'P';
+}
+
+bool Pawn::canAttack(const GameBoard& board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
+{
+    return board[{selectable}]->getOpponent() == board[{selected}]->color() && noPiecesOnWay(board, selected, selectable);
+}
+
+bool Pawn::canJump(const GameBoard& board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
+{
+    return board[selectable]->color() == cells::emptyCell()->color() && noPiecesOnWay(board, selected, selectable);
+}
+
 int WPawn::uniqueView() const
 {
     return +1;

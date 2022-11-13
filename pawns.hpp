@@ -1,7 +1,15 @@
 #ifndef PAWNS_HPP
 #define PAWNS_HPP
 
-#include "pieces.hpp"
+#include "cells.hpp"
+
+class Pawn : virtual public BoardCell
+{
+public:
+    uint8_t view() const override;
+    bool canAttack(const GameBoard &board, const stf::Vec2d& selected, const stf::Vec2d& selectable) const override;
+    bool canJump(const GameBoard &board, const stf::Vec2d& selected, const stf::Vec2d& selectable) const override;
+};
 
 class WPawn : public Pawn, public WhiteColoredCell
 {
