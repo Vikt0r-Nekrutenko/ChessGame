@@ -50,21 +50,10 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
     else if(mCursor.selectableCell.pos.x != mCursor.selectedCell.pos.x || mCursor.selectableCell.pos.y != mCursor.selectedCell.pos.y)
     {
         TurnType turn = TurnType::Nothing;
-
-        BoardCell *cell = mCursor.selectedCell.cell;
         GameBoard backUp = mBoard;
 
-        stf::Vec2d selected = mCursor.selectedCell.pos;
-        stf::Vec2d selectable = mCursor.selectableCell.pos;
-
         turn = findCastlingTurn();
-
-        if(cell->canAttack(mBoard, selected, selectable)) {
-            turn = mBoard.makeTurn(mCursor);
-        } else if(cell->canJump(mBoard, selected, selectable)) {
-            turn = mBoard.makeTurn(mCursor);
-        }
-
+        turn = mBoard.makeTurn(mCursor);
         mBoard.transformPawns();
 
         TurnType bIsCheckW = mBoard.blackCheckToWhite();

@@ -89,9 +89,11 @@ void GameBoard::clear(const stf::Vec2d &pos)
 
 TurnType GameBoard::makeTurn(const Cursor &cursor)
 {
-    if((*this)[cursor.selectableCell.pos] != cells::emptyCell())
+    if((*this)[cursor.selectedCell.pos]->canAttack(*this, cursor.selectedCell.pos, cursor.selectableCell.pos))
         return makeAttack(cursor);
-    return makeMove(cursor);
+    else if((*this)[cursor.selectedCell.pos]->canJump(*this, cursor.selectedCell.pos, cursor.selectableCell.pos))
+        return makeMove(cursor);
+    return TurnType::Nothing;
 }
 
 TurnType GameBoard::makeAttack(const Cursor &cursor)
