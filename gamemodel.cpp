@@ -32,38 +32,37 @@ TurnType GameModel::findCastlingTurn()
 
 stf::smv::IView *GameModel::put(stf::smv::IView *sender)
 {
-        TurnType turn = TurnType::Nothing;
-        GameBoard backup = mBoard;
+    TurnType turn = TurnType::Nothing;
+    GameBoard backup = mBoard;
 
-        turn = findCastlingTurn();
-        if(turn == TurnType::Nothing)
-            turn = mBoard.makeTurn(mCursor);
+    turn = findCastlingTurn();
+    if(turn == TurnType::Nothing)
+        turn = mBoard.makeTurn(mCursor);
 
-        mBoard.transformPawns();
+    mBoard.transformPawns();
 
-        TurnType bIsCheckW = mBoard.blackCheckToWhite();
-        if(bIsCheckW == TurnType::BCheckToW)
-            turn = unavailiableTurnHandler(backup, stf::ColorTable::White, bIsCheckW);
+    TurnType bIsCheckW = mBoard.blackCheckToWhite();
+    if(bIsCheckW == TurnType::BCheckToW)
+        turn = unavailiableTurnHandler(backup, stf::ColorTable::White, bIsCheckW);
 
-        TurnType wIsCheckB = mBoard.whiteCheckToBlack();
-        if(wIsCheckB == TurnType::WCheckToB)
-            turn = unavailiableTurnHandler(backup, stf::ColorTable::Red, wIsCheckB);
+    TurnType wIsCheckB = mBoard.whiteCheckToBlack();
+    if(wIsCheckB == TurnType::WCheckToB)
+        turn = unavailiableTurnHandler(backup, stf::ColorTable::Red, wIsCheckB);
 
-        if(mBoard.isCheckmate(player) || !mBoard.possibleMovesExitst())
-            stf::Renderer::log<<stf::endl<<"Checkmate!";
+    if(mBoard.isCheckmate(player) || !mBoard.possibleMovesExitst())
+        stf::Renderer::log<<stf::endl<<"Checkmate!";
 
-        if(turn != TurnType::Nothing)
-            log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos, turn });
+    if(turn != TurnType::Nothing)
+        log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos, turn });
 
-
-        stf::Renderer::log << stf::endl <<
-                              pieces::Pieces[log.back().cell->uniqueView()] << " " <<
-                              cells::Turns[log.back().type] << " from " <<
-                              log.back().from << " to " <<
-                              log.back().to;
-        mCursor.reset();
-        if(turn != TurnType::Nothing && turn != TurnType::Unavailiable)
-            player = player == stf::ColorTable::White ? stf::ColorTable::Red : stf::ColorTable::White;
+    stf::Renderer::log << stf::endl <<
+                          pieces::Pieces[log.back().cell->uniqueView()] << " " <<
+                          cells::Turns[log.back().type] << " from " <<
+                          log.back().from << " to " <<
+                          log.back().to;
+    mCursor.reset();
+    if(turn != TurnType::Nothing && turn != TurnType::Unavailiable)
+        player = player == stf::ColorTable::White ? stf::ColorTable::Red : stf::ColorTable::White;
 
     return sender;
 }
