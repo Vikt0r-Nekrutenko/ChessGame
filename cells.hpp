@@ -12,7 +12,7 @@ class BoardCell;
 enum class TurnType : uint8_t
 {
     Nothing,
-    Unresolved,
+    Unavailiable,
     Move,
     Attack,
     LongCastling,
@@ -98,7 +98,7 @@ static CellCreator<EmptyCell> emptyCell = CellCreator<EmptyCell>();
 
 static std::map<TurnType, std::string> Turns = {
     {TurnType::Nothing, "Nothing"} ,
-    {TurnType::Unresolved, "Unresolved turn"} ,
+    {TurnType::Unavailiable, "Unavailiable turn"} ,
     {TurnType::Move, "Move"} ,
     {TurnType::Attack, "Attack"} ,
     {TurnType::LongCastling, "LongCastling"} ,

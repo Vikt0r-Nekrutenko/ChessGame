@@ -40,7 +40,7 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
         if(bIsCheckW == TurnType::BCheckToW) {
             if(player == stf::ColorTable::White) {
                 mBoard = backUp;
-                turn = TurnType::Unresolved;
+                turn = TurnType::Unavailiable;
             } else {
                 turn = bIsCheckW;
             }
@@ -50,7 +50,7 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
         if(wIsCheckB == TurnType::WCheckToB) {
             if(player == stf::ColorTable::Red) {
                 mBoard = backUp;
-                turn = TurnType::Unresolved;
+                turn = TurnType::Unavailiable;
             } else {
                 turn = wIsCheckB;
             }
@@ -69,12 +69,12 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
 
 
         stf::Renderer::log << stf::endl <<
-                              log.back().cell->uniqueView() << " from " <<
+                              pieces::Pieces[log.back().cell->uniqueView()] << " " <<
+                              cells::Turns[log.back().type] << " from " <<
                               log.back().from << " to " <<
-                              log.back().to << " " <<
-                              cells::Turns[log.back().type];
+                              log.back().to;
         mCursor.reset();
-        if(turn != TurnType::Nothing && turn != TurnType::Unresolved)
+        if(turn != TurnType::Nothing && turn != TurnType::Unavailiable)
             player = player == stf::ColorTable::White ? stf::ColorTable::Red : stf::ColorTable::White;
     }
 
