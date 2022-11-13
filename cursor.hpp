@@ -15,11 +15,8 @@ struct Cursor
     Selector selectedCell;
 
     void reset();
-
     void select(BoardCell *cell);
-
     bool isValidForSelect(const BoardCell *cell, const stf::ColorTable player) const;
-
     bool isValidForPut() const;
 };
 
