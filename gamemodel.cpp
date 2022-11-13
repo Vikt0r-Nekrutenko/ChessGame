@@ -1,5 +1,6 @@
 #include "gamemodel.hpp"
 #include "kings.hpp"
+#include "pawns.hpp"
 
 
 GameModel::GameModel()
@@ -34,6 +35,14 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
 {
     TurnType turn = TurnType::Nothing;
     GameBoard backup = mBoard;
+
+    if(mCursor.selectedCell.cell->uniqueView() == pieces::wPawn()->uniqueView())
+    {
+        WPawn *pawn = dynamic_cast<WPawn*>(mCursor.selectedCell.cell);
+        if(pawn->isAttackInPassing(mBoard,log,mCursor.selectedCell.pos,mCursor.selectableCell.pos)){
+            stf::Renderer::log<<stf::endl<<"LEFT attack in passing";
+        }
+    }
 
     turn = findCastlingTurn();
     if(turn == TurnType::Nothing)

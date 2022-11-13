@@ -9,6 +9,26 @@ uint8_t Pawn::view() const
     return 'P';
 }
 
+bool WPawn::isLeftAttackInPassing(const GameBoard &board, const std::vector<Note> &log, const stf::Vec2d &selected, const stf::Vec2d &selectable)
+{
+    if(selectable != selected + stf::Vec2d{-1,-1})
+        return false;
+    if(log.back().cell->uniqueView() != pieces::bPawn()->uniqueView())
+        return false;
+    if(log.back().from != stf::Vec2d{selected.x - 1, BPAWN_SPAWN_Y} && log.back().to != selected + stf::Vec2d{-1,0})
+        return false;
+    return true;
+}
+
+bool WPawn::isAttackInPassing(const GameBoard &board, const std::vector<Note> &log, const stf::Vec2d &selected, const stf::Vec2d &selectable)
+{
+    if(!Pawn::canJump(board, selected, selectable))
+        return false;
+    if(!isLeftAttackInPassing(board,log,selected,selectable))
+        return false;
+    return true;
+}
+
 bool Pawn::canAttack(const GameBoard& board, const stf::Vec2d &selected, const stf::Vec2d &selectable) const
 {
     return board[{selectable}]->getOpponent() == board[{selected}]->color() && noPiecesOnWay(board, selected, selectable);
@@ -22,6 +42,16 @@ bool Pawn::canJump(const GameBoard& board, const stf::Vec2d &selected, const stf
 int WPawn::uniqueView() const
 {
     return +1;
+}
+
+bool BPawn::isLeftAttackInPassing(const GameBoard &board, const std::vector<Note> &log, const stf::Vec2d &selected, const stf::Vec2d &selectable)
+{
+    return false;
+}
+
+bool BPawn::isAttackInPassing(const GameBoard &board, const std::vector<Note> &log, const stf::Vec2d &selected, const stf::Vec2d &selectable)
+{
+    return false;
 }
 
 int BPawn::uniqueView() const

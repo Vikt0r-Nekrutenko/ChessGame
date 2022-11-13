@@ -20,10 +20,10 @@ GameBoard::GameBoard()
         mBoard.push_back(cells::emptyCell());
     }
 
-//    for(int i = 0; i < Size.x; ++i) {
-//        mBoard.at(Size.x * 1 + i) = pieces::bPawn();
-//        mBoard.at(Size.x * 6 + i) = pieces::wPawn();
-//    }
+    for(int i = 0; i < Size.x; ++i) {
+        mBoard.at(Size.x * 1 + i) = pieces::bPawn();
+        mBoard.at(Size.x * 6 + i) = pieces::wPawn();
+    }
 
     mBoard.at(Size.x * 0 + 0) = pieces::bRook();
     mBoard.at(Size.x * 0 + 7) = pieces::bRook();
