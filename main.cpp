@@ -20,8 +20,7 @@ public:
             }
         }
 
-
-        if(gm->mCursor.selectedCell.cell != cells::emptyCell())
+        if(gm->mCursor.selectedCell.cell->view() != cells::emptyCell()->view())
         {
             renderer.drawPixel({gm->mCursor.selectedCell.pos.x * 2,     gm->mCursor.selectedCell.pos.y + 2}, '(');
             renderer.drawPixel({gm->mCursor.selectedCell.pos.x * 2 + 2, gm->mCursor.selectedCell.pos.y + 2}, ')');
@@ -50,7 +49,6 @@ public:
     bool onUpdate(const float dt) final
     {
         currentView->show(renderer);
-        currentView->update(dt);
         return true;
     }
 

@@ -25,6 +25,22 @@ struct Cursor
         selectedCell.pos = selectableCell.pos;
         selectedCell.cell = selectableCell.cell = cell;
     }
+
+    bool isValidForSelect(const BoardCell *cell, const stf::ColorTable player) const
+    {
+        if(cell->color() != player)
+            return false;
+        return true;
+    }
+
+    bool isValidForPut() const
+    {
+        if(selectedCell.cell->uniqueView() == cells::emptyCell()->uniqueView())
+            return false;
+        if(selectableCell.pos.x == selectedCell.pos.x && selectableCell.pos.y == selectedCell.pos.y)
+            return false;
+        return true;
+    }
 };
 
 class CastlingKing;
@@ -41,8 +57,6 @@ public:
     GameModel();
 
     TurnType findCastlingTurn();
-
-    stf::smv::IView *update(stf::smv::IView *sender, const float dt) override;
 
     stf::smv::IView *put(stf::smv::IView *sender);
 

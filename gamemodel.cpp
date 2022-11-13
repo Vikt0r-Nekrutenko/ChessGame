@@ -21,20 +21,13 @@ TurnType GameModel::findCastlingTurn()
             : shortC;
 }
 
-stf::smv::IView *GameModel::update(stf::smv::IView *sender, const float)
-{
-    if(mBoard.isCheckmate(player) || !mBoard.possibleMovesExitst())
-        stf::Renderer::log<<stf::endl<<"Checkmate!";
-    return sender;
-}
-
 stf::smv::IView *GameModel::put(stf::smv::IView *sender)
 {
-    if(mCursor.selectedCell.cell == cells::emptyCell() && mBoard[mCursor.selectableCell.pos]->color() == player)
+    if(mCursor.isValidForSelect(mBoard[mCursor.selectableCell.pos], player))
     {
         mCursor.select(mBoard[{mCursor.selectableCell.pos}]);
     }
-    else if(mCursor.selectableCell.pos.x != mCursor.selectedCell.pos.x || mCursor.selectableCell.pos.y != mCursor.selectedCell.pos.y)
+    else if(mCursor.isValidForPut())
     {
         TurnType turn = TurnType::Nothing;
         GameBoard backUp = mBoard;
@@ -45,27 +38,26 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
 
         TurnType bIsCheckW = mBoard.blackCheckToWhite();
         if(bIsCheckW == TurnType::BCheckToW) {
-            stf::Renderer::log << stf::endl << "Black check to the white!";
-            turn = bIsCheckW;
-        }
-
-        if(bIsCheckW == TurnType::BCheckToW && player == stf::ColorTable::White) {
-            stf::Renderer::log<<stf::endl<<"UNRESOLVED WHITE KING UNDER ATTACK!";
-            mBoard = backUp;
-            return sender;
+            if(player == stf::ColorTable::White) {
+                mBoard = backUp;
+                turn = TurnType::Unresolved;
+            } else {
+                turn = bIsCheckW;
+            }
         }
 
         TurnType wIsCheckB = mBoard.whiteCheckToBlack();
         if(wIsCheckB == TurnType::WCheckToB) {
-            stf::Renderer::log << stf::endl << "White check to the black!";
-            turn = wIsCheckB;
+            if(player == stf::ColorTable::Red) {
+                mBoard = backUp;
+                turn = TurnType::Unresolved;
+            } else {
+                turn = wIsCheckB;
+            }
         }
 
-        if(wIsCheckB == TurnType::WCheckToB && player == stf::ColorTable::Red) {
-            stf::Renderer::log<<stf::endl<<"UNRESOLVED BLACK KING UNDER ATTACK!";
-            mBoard = backUp;
-            return sender;
-        }
+        if(mBoard.isCheckmate(player) || !mBoard.possibleMovesExitst())
+            stf::Renderer::log<<stf::endl<<"Checkmate!";
 
         if(turn != TurnType::Nothing)
             log.push_back({ mCursor.selectedCell.cell,
@@ -80,7 +72,7 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
                               log.back().cell->uniqueView() << " from " <<
                               log.back().from << " to " <<
                               log.back().to << " " <<
-                              static_cast<uint8_t>(log.back().type);
+                              cells::Turns[log.back().type];
         mCursor.reset();
         if(turn != TurnType::Nothing && turn != TurnType::Unresolved)
             player = player == stf::ColorTable::White ? stf::ColorTable::Red : stf::ColorTable::White;

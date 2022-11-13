@@ -5,6 +5,7 @@
 #include "renderer.hpp"
 #include <list>
 #include <iostream>
+#include <map>
 
 class BoardCell;
 
@@ -94,6 +95,17 @@ public:
 namespace cells
 {
 static CellCreator<EmptyCell> emptyCell = CellCreator<EmptyCell>();
+
+static std::map<TurnType, std::string> Turns = {
+    {TurnType::Nothing, "Nothing"} ,
+    {TurnType::Unresolved, "Unresolved turn"} ,
+    {TurnType::Move, "Move"} ,
+    {TurnType::Attack, "Attack"} ,
+    {TurnType::LongCastling, "LongCastling"} ,
+    {TurnType::ShortCastling, "ShortCastling"} ,
+    {TurnType::WCheckToB, "White check to black"} ,
+    {TurnType::BCheckToW, "Black check to white"} ,
+};
 }
 
 #endif // CELLS_HPP
