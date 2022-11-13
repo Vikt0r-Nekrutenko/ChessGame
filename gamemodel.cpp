@@ -29,12 +29,12 @@ TurnType GameModel::findCastlingTurn()
     CastlingKing *king = dynamic_cast<CastlingKing*>(mCursor.selectedCell.cell);
 
     if(mCursor.selectableCell.pos == king->longCastlingPos() && king->isLongCastlingPossible(mBoard, log)) {
-        castlingProc(king, king->longCastlingPos(), 0, +1);
+        castlingProc(king, king->longCastlingPos(), LONGCASTLING_ROOKX, LONGCASTLING_ROOK_OFFSET);
         return TurnType::LeftCastling;
     }
 
     if(mCursor.selectableCell.pos == king->shortCastlingPos() && king->isShortCastlingPossible(mBoard, log)) {
-        castlingProc(king, king->shortCastlingPos(), 7, -1);
+        castlingProc(king, king->shortCastlingPos(), SHORTCASTLING_ROOKX, SHORTCASTLING_ROOK_OFFSET);
         return TurnType::RightCastling;
     }
     return TurnType::Nothing;
