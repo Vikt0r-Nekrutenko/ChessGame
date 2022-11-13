@@ -63,8 +63,7 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
         stf::Vec2d selected = mCursor.selectedCell.pos;
         stf::Vec2d selectable = mCursor.selectableCell.pos;
 
-        if(log.back().type != TurnType::WCheckToB)
-            turn = findCastlingTurn();
+        turn = findCastlingTurn();
 
         if(cell->canAttack(mBoard, selected, selectable)) {
             pieceMoveProc();
