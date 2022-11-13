@@ -3,6 +3,11 @@
 
 #include "cells.hpp"
 
+#define LONGCASTLING_ROOKX 0
+#define LONGCASTLING_ROOK_OFFSET +1
+#define SHORTCASTLING_ROOKX 7
+#define SHORTCASTLING_ROOK_OFFSET -1
+
 class King : virtual public BoardCell
 {
 public:

@@ -32,7 +32,8 @@ TurnType GameModel::findCastlingTurn()
         castlingProc(king, king->longCastlingPos(), 0, +1);
         return TurnType::LeftCastling;
     }
-    else if(mCursor.selectableCell.pos == king->shortCastlingPos() && king->isShortCastlingPossible(mBoard, log)) {
+
+    if(mCursor.selectableCell.pos == king->shortCastlingPos() && king->isShortCastlingPossible(mBoard, log)) {
         castlingProc(king, king->shortCastlingPos(), 7, -1);
         return TurnType::RightCastling;
     }

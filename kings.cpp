@@ -50,12 +50,16 @@ BoardCell *WKing::getRook() const
 
 bool WKing::isLongCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const
 {
-    return CastlingPiece::isCastlingPossible((BoardCell*)this, board, log, longCastlingPos(), 0, +1);
+    if(log.back().type == TurnType::BCheckToW)
+        return false;
+    return CastlingPiece::isCastlingPossible((BoardCell*)this, board, log, longCastlingPos(), LONGCASTLING_ROOKX, LONGCASTLING_ROOK_OFFSET);
 }
 
 bool WKing::isShortCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const
 {
-    return CastlingPiece::isCastlingPossible((BoardCell*)this, board, log, shortCastlingPos(), 7, -1);
+    if(log.back().type == TurnType::BCheckToW)
+        return false;
+    return CastlingPiece::isCastlingPossible((BoardCell*)this, board, log, shortCastlingPos(), SHORTCASTLING_ROOKX, SHORTCASTLING_ROOK_OFFSET);
 }
 
 BoardCell *BKing::getKing() const
@@ -70,10 +74,14 @@ BoardCell *BKing::getRook() const
 
 bool BKing::isLongCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const
 {
-    return CastlingPiece::isCastlingPossible((BoardCell*)this, board, log, longCastlingPos(), 0, +1);
+    if(log.back().type == TurnType::WCheckToB)
+        return false;
+    return CastlingPiece::isCastlingPossible((BoardCell*)this, board, log, longCastlingPos(), LONGCASTLING_ROOKX, LONGCASTLING_ROOK_OFFSET);
 }
 
 bool BKing::isShortCastlingPossible(const GameBoard &board, const std::vector<Note> &log) const
 {
-    return CastlingPiece::isCastlingPossible((BoardCell*)this, board, log, shortCastlingPos(), 7, -1);
+    if(log.back().type == TurnType::WCheckToB)
+        return false;
+    return CastlingPiece::isCastlingPossible((BoardCell*)this, board, log, shortCastlingPos(), SHORTCASTLING_ROOKX, SHORTCASTLING_ROOK_OFFSET);
 }
