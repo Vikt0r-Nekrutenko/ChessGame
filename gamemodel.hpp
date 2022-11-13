@@ -57,6 +57,7 @@ public:
     GameModel();
 
     TurnType findCastlingTurn();
+    TurnType unavailiableTurnHandler(const GameBoard &backup, const stf::ColorTable col, const TurnType isCheckType);
 
     stf::smv::IView *put(stf::smv::IView *sender);
 

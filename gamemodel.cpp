@@ -1,9 +1,18 @@
 #include "gamemodel.hpp"
 #include "kings.hpp"
 
+
 GameModel::GameModel()
 {
     log.push_back({cells::emptyCell(), {0,0}, {0,0}, TurnType::Nothing});
+}
+
+TurnType GameModel::unavailiableTurnHandler(const GameBoard &backup, const stf::ColorTable col, const TurnType isCheckType)
+{
+    if(player == col) {
+        mBoard = backup;
+        return TurnType::Unavailiable;
+    } else return isCheckType;
 }
 
 TurnType GameModel::findCastlingTurn()
@@ -32,22 +41,12 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
 
         TurnType bIsCheckW = mBoard.blackCheckToWhite();
         if(bIsCheckW == TurnType::BCheckToW) {
-            if(player == stf::ColorTable::White) {
-                mBoard = backup;
-                turn = TurnType::Unavailiable;
-            } else {
-                turn = bIsCheckW;
-            }
+            turn = unavailiableTurnHandler(backup, stf::ColorTable::White, bIsCheckW);
         }
 
         TurnType wIsCheckB = mBoard.whiteCheckToBlack();
         if(wIsCheckB == TurnType::WCheckToB) {
-            if(player == stf::ColorTable::Red) {
-                mBoard = backup;
-                turn = TurnType::Unavailiable;
-            } else {
-                turn = wIsCheckB;
-            }
+            turn = unavailiableTurnHandler(backup, stf::ColorTable::Red, wIsCheckB);
         }
 
         if(mBoard.isCheckmate(player) || !mBoard.possibleMovesExitst())
