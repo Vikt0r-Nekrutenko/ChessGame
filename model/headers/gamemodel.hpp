@@ -53,6 +53,7 @@ public:
 
     void reset();
     std::string playerName() const;
+    std::string opponentName() const;
     TurnType findCastlingTurn();
     TurnType findAttackInPassigTurn();
     TurnType unavailiableTurnHandler(const GameBoard &backup, const stf::ColorTable col, const TurnType isCheckType);

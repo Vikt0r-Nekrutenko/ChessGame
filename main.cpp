@@ -16,13 +16,13 @@ public:
     {
         enableLog();
         stf::Renderer::log.setHeight(20);
-        stf::Renderer::log.setX(30);
+        stf::Renderer::log.setX(renderer.Size.x - 15);
     }
 
     bool onUpdate(const float) final
     {
         currentView->show(renderer);
-        return true;
+        return currentView->isContinue();
     }
 
     void keyEvents(const int key) final

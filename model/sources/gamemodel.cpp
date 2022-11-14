@@ -45,7 +45,7 @@ GameModel::GameModel()
         results.load(results.header().size - 1);
     } catch(...) { }
 
-    log.push_back({cells::emptyCell(), {0,0}, {0,0}, TurnType::Nothing});
+    log.push_back({cells::emptyCell(), {-1,-1}, {-1,-1}, TurnType::Nothing});
 }
 
 void GameModel::reset()
@@ -55,12 +55,17 @@ void GameModel::reset()
     player = stf::ColorTable::White;
 
     log.clear();
-    log.push_back({cells::emptyCell(), {0,0}, {0,0}, TurnType::Nothing});
+    log.push_back({cells::emptyCell(), {-1,-1}, {-1,-1}, TurnType::Nothing});
 }
 
 std::string GameModel::playerName() const
 {
     return player == stf::ColorTable::White ? "White" : "Black";
+}
+
+std::string GameModel::opponentName() const
+{
+    return player == stf::ColorTable::White ? "Black" : "White";
 }
 
 TurnType GameModel::unavailiableTurnHandler(const GameBoard &backup, const stf::ColorTable col, const TurnType isCheckType)
@@ -129,10 +134,9 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
 
     if(mBoard.isCheckmate(player) || mBoard.possibleMovesExitst() == false) {
         if(player == stf::ColorTable::White)
-            results.gameOverHandler((int)stf::ColorTable::White, {1,0});
-        else if(player == stf::ColorTable::Red)
             results.gameOverHandler((int)stf::ColorTable::Red, {0,1});
-        results.save();
+        else if(player == stf::ColorTable::Red)
+            results.gameOverHandler((int)stf::ColorTable::White, {1,0});
         return new EndView(this);
     }
 
