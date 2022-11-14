@@ -38,14 +38,13 @@ void GameView::show(Renderer &renderer)
     GameModel *gameModel = static_cast<GameModel*>(m_model);
 
     renderer.drawText(pzero + m_board.markers().at(0), gameModel->playerName().c_str());
-
     // draw board
     for(size_t i = 0; i < gameModel->mBoard.mBoard.size(); ++i) {
         renderer.drawPixel(cell1(m_board, i), gameModel->mBoard.mBoard[i]->view(), gameModel->mBoard.mBoard[i]->color());
     }
 
     // draw cursors
-    if(gameModel->mCursor.selectedCell.cell->view() != cells::emptyCell()->view())
+    if(gameModel->mCursor.selectedCell.cell->color() != stf::ColorTable::Black)//cells::emptyCell()->view())
     {
         renderer.drawPixel(cell(m_board, gameModel, gameModel->mCursor.selectedCell.pos) - stf::Vec2d(1,0), '<');
         renderer.drawPixel(cell(m_board, gameModel, gameModel->mCursor.selectedCell.pos) - stf::Vec2d(-1,0), '>');

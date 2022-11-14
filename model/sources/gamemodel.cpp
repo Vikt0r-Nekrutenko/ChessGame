@@ -49,7 +49,9 @@ GameModel::GameModel()
 
 void GameModel::reset()
 {
-
+    mCursor.reset();
+    mBoard = GameBoard();
+    player = stf::ColorTable::White;
 }
 
 std::string GameModel::playerName() const
@@ -114,9 +116,9 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
 
     stf::Renderer::log << stf::endl <<
                           char(log.back().cell->view()) <<
-                          char(log.back().from.x + 'a') << std::abs(log.back().from.y - 8) <<
+                          char(log.back().from.x + 'a') << std::abs(log.back().from.y - BOARD_H) <<
                           cells::Turns[log.back().type] <<
-                          char(log.back().to.x + 'a') << std::abs(log.back().to.y - 8);
+                          char(log.back().to.x + 'a') << std::abs(log.back().to.y - BOARD_H);
     mCursor.reset();
     if(turn != TurnType::Nothing && turn != TurnType::Unavailiable)
         player = player == stf::ColorTable::White ? stf::ColorTable::Red : stf::ColorTable::White;

@@ -1,5 +1,6 @@
 #include <window.hpp>
 #include <iostream>
+#include <gameview.hpp>
 #include "iview.hpp"
 #include "gamemodel.hpp"
 #include "menuview.hpp"
@@ -8,8 +9,8 @@ class Game : public stf::Window
 {
 public:
     GameModel gameModel = GameModel();
-    MenuView gameView = MenuView(&gameModel);
-    stf::smv::IView *currentView = &gameView;
+    GameView menuView = GameView(&gameModel);
+    stf::smv::IView *currentView = &menuView;
 
     Game()
     {
@@ -20,13 +21,14 @@ public:
 
     bool onUpdate(const float) final
     {
-        currentView->show(renderer);
+//        currentView->show(renderer);
         return true;
     }
 
     void keyEvents(const int key) final
     {
-        currentView = currentView->keyEventsHandler(key);
+//        currentView = currentView->keyEventsHandler(key);
+        gameModel.keyEventsHandler(nullptr, key);
     }
 
     void mouseEvents(const stf::MouseRecord& mr) final
