@@ -192,3 +192,15 @@ stf::smv::IView *GameModel::keyEventsHandler(stf::smv::IView *sender, const int 
     }
     return sender;
 }
+
+IView *GameModel::mouseEventsHandler(stf::smv::IView *sender, const stf::MouseRecord &mr)
+{
+    if(mr.type == MouseInputType::leftPressed) {
+        if(mCursor.isValidForSelect(mBoard[mCursor.selectableCell.pos], player)) {
+            mCursor.select(mBoard[{mCursor.selectableCell.pos}]);
+        } else if(mCursor.isValidForPut()) {
+            return put(sender);
+        }
+    }
+    return sender;
+}

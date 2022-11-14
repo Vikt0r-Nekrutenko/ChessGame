@@ -60,6 +60,7 @@ public:
 
     stf::smv::IView *put(stf::smv::IView *sender);
     stf::smv::IView *keyEventsHandler(stf::smv::IView *sender, const int key) override;
+    stf::smv::IView *mouseEventsHandler(stf::smv::IView *sender, const stf::MouseRecord &mr) override;
 };
 
 #endif // GAMEMODEL_HPP
