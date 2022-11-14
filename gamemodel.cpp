@@ -34,9 +34,7 @@ TurnType GameModel::findCastlingTurn()
 TurnType GameModel::findAttackInPassigTurn()
 {
     if(mCursor.selectedCell.cell->view() == Pawn().view())
-    {
         return mBoard.isAttackInPassingAvailiable(mCursor, log);
-    }
     return TurnType::Nothing;
 }
 
@@ -121,8 +119,7 @@ stf::smv::IView *GameModel::keyEventsHandler(stf::smv::IView *sender, const int 
         break;
 
     case ' ':
-        if(mCursor.isValidForSelect(mBoard[mCursor.selectableCell.pos], player))
-        {
+        if(mCursor.isValidForSelect(mBoard[mCursor.selectableCell.pos], player)) {
             mCursor.select(mBoard[{mCursor.selectableCell.pos}]);
         } else if(mCursor.isValidForPut()) {
             return put(sender);
