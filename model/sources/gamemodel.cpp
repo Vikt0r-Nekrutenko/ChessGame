@@ -1,6 +1,7 @@
 #include "gamemodel.hpp"
 #include "endview.hpp"
 #include "kings.hpp"
+#include "pausemenuview.hpp"
 #include "pawns.hpp"
 
 
@@ -52,6 +53,9 @@ void GameModel::reset()
     mCursor.reset();
     mBoard = GameBoard();
     player = stf::ColorTable::White;
+
+    log.clear();
+    log.push_back({cells::emptyCell(), {0,0}, {0,0}, TurnType::Nothing});
 }
 
 std::string GameModel::playerName() const
@@ -168,7 +172,7 @@ stf::smv::IView *GameModel::keyEventsHandler(stf::smv::IView *sender, const int 
         break;
 
     case 'q':
-        mCursor.reset();
+        return new PauseMenuView(this);
         break;
 
     case 'f':
