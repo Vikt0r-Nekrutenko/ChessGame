@@ -7,11 +7,12 @@ At the start, each player controls sixteen pieces: one king, one queen, two rook
 The player who moves first controls white pieces, and the other controls black pieces. 
 The object of the game is to checkmate the opponent's king, whereby the king is under immediate attack (in "check") and there is no way for it to escape. There are also several ways a game can end in a draw.
 
-**Screenshot of old version**
-<img src="https://sun1-94.userapi.com/MzUJd08cKdklXvSNoWT_c_e97hdSQOVAE6MThQ/Pt97As0Gj1w.jpg"/>
+**Screenshot of old version**<br>
+![Menu](https://sun1-94.userapi.com/MzUJd08cKdklXvSNoWT_c_e97hdSQOVAE6MThQ/Pt97As0Gj1w.jpg)<br>
 
 **Screenshot of NEW(STF based) version**
 *Menu*:
+
 ![Menu](https://sun9-west.userapi.com/sun9-48/s/v1/ig2/HFpdWWkkdzVXNUPLWMnc8t6AFOUTLykxbKrSWwphPqOa803r46I4ui_cgkuXLrAFF_DeE2vcvPAwe6dTpiKKmjbY.jpg?size=823x579&quality=95&type=album)</br>
 
 **Features**</br>
