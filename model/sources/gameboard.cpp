@@ -1,10 +1,4 @@
 #include "gameboard.hpp"
-#include "pawns.hpp"
-#include "rooks.hpp"
-#include "knights.hpp"
-#include "bishops.hpp"
-#include "kings.hpp"
-#include "queens.hpp"
 #include "cursor.hpp"
 
 auto findPawnOnLine = [](std::vector<BoardCell *> &board, int beginLine, int endLine, BoardCell *pawn, BoardCell *toPawn){
@@ -79,6 +73,11 @@ void GameBoard::place(const stf::Vec2d &pos, BoardCell *cell)
 {
     if(pos.x >= 0 && pos.x < Size.x && pos.y >= 0 && pos.y < Size.y)
         mBoard.at(Size.x * pos.y + pos.x) = cell;
+}
+
+void GameBoard::place(const size_t i, BoardCell *cell)
+{
+    mBoard.at(i) = cell;
 }
 
 void GameBoard::clear(const stf::Vec2d &pos)

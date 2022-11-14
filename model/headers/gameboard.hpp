@@ -2,6 +2,15 @@
 #define GAMEBOARD_HPP
 
 #include "cells.hpp"
+#include "pawns.hpp"
+#include "rooks.hpp"
+#include "knights.hpp"
+#include "bishops.hpp"
+#include "kings.hpp"
+#include "queens.hpp"
+
+#define BOARD_W 8
+#define BOARD_H 8
 
 struct Cursor;
 class CastlingKing;
@@ -10,7 +19,7 @@ class GameBoard
 {
 public:
 
-    const stf::Vec2d Size { 8, 8 };
+    const stf::Vec2d Size { BOARD_W, BOARD_H };
 
     GameBoard();
     GameBoard(const GameBoard& board);
@@ -19,6 +28,7 @@ public:
     BoardCell* operator[](const stf::Vec2d& pos) const;
     GameBoard& copyBoard(const GameBoard& board);
 
+    void place(const size_t i, BoardCell *cell);
     void place(const stf::Vec2d& pos, BoardCell *cell);
     void clear(const stf::Vec2d& pos);
     void transformPawns();
@@ -44,20 +54,20 @@ public:
 };
 
 namespace pieces {
-static std::map<int, std::string> Pieces = {
-    {-6, "Black King"},
-    {-5, "Black Queen"},
-    {-4, "Black Bishop"},
-    {-3, "Black Knight"},
-    {-2, "Black Rook"},
-    {-1, "Black Pawn"},
-    { 0, "Empty Cell"},
-    {+1, "White Pawn"},
-    {+2, "White Rook"},
-    {+3, "White Knight"},
-    {+4, "White Bishop"},
-    {+5, "White Queen"},
-    {+6, "White King"},
+static std::map<int, BoardCell*> Pieces = {
+    {-6, pieces::bKing()},
+    {-5, pieces::bQueen()},
+    {-4, pieces::bBishop()},
+    {-3, pieces::bKnight()},
+    {-2, pieces::bRook()},
+    {-1, pieces::bPawn()},
+    { 0, cells::emptyCell()},
+    {+1, pieces::wPawn()},
+    {+2, pieces::wRook()},
+    {+3, pieces::wKnight()},
+    {+4, pieces::wBishop()},
+    {+5, pieces::wQueen()},
+    {+6, pieces::wKing()},
 };
 }
 

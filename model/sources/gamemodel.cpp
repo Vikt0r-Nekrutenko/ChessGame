@@ -1,10 +1,49 @@
 #include "gamemodel.hpp"
+#include "endview.hpp"
 #include "kings.hpp"
 #include "pawns.hpp"
 
 
+GameSaveModel::GameSaveModel(GameModel *model)
+    : stf::sdb::StackModel("chess_saves.sdb"), mModel(model) {}
+
+void GameSaveModel::save()
+{
+    for(size_t i = 0; i < mModel->mBoard.mBoard.size(); ++i) {
+        board[i] = mModel->mBoard.mBoard.at(i)->uniqueView();
+    }
+    player = (int)mModel->player;
+
+    push<GameSaveModel>();
+}
+
+void GameSaveModel::load()
+{
+    pop<GameSaveModel>();
+
+    for(size_t i = 0; i < mModel->mBoard.mBoard.size(); ++i) {
+        int uniqueIndx = board[i];
+        mModel->mBoard.place(i, pieces::Pieces[uniqueIndx]);
+    }
+    mModel->player = (stf::ColorTable)player();
+}
+
+GameResultModel::GameResultModel()
+    : stf::sdb::Model("chess_results.sdb") {}
+
+void GameResultModel::gameOverHandler(int winner, const stf::Vec2d &wins){
+    gameTime = stf::Time(nullptr);
+    wWins = wWins() + wins.x;
+    bWins = bWins() + wins.y;
+    this->winner = winner;
+}
+
 GameModel::GameModel()
 {
+    try {
+        results.load(results.header().size - 1);
+    } catch(...) { }
+
     log.push_back({cells::emptyCell(), {0,0}, {0,0}, TurnType::Nothing});
 }
 
@@ -82,8 +121,14 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
     if(turn != TurnType::Nothing && turn != TurnType::Unavailiable)
         player = player == stf::ColorTable::White ? stf::ColorTable::Red : stf::ColorTable::White;
 
-    if(mBoard.isCheckmate(player) || mBoard.possibleMovesExitst() == false)
-        stf::Renderer::log<<stf::endl<<"Checkmate!";
+    if(mBoard.isCheckmate(player) || mBoard.possibleMovesExitst() == false) {
+        if(player == stf::ColorTable::White)
+            results.gameOverHandler((int)stf::ColorTable::White, {1,0});
+        else if(player == stf::ColorTable::Red)
+            results.gameOverHandler((int)stf::ColorTable::Red, {0,1});
+        results.save();
+        return new EndView(this);
+    }
 
     return sender;
 }
