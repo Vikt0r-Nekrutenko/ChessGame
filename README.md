@@ -23,15 +23,15 @@ The object of the game is to checkmate the opponent's king, whereby the king is 
 <li>To move, enter the cell number on which the figure stands, for example: a2, and the cell number to which you want to transfer the figure, for example a4. In general, the team looks like a2 a4.</li>
 <li>The moves must be made according to the color of the active player. The player's color is specified before entering the command.</li>
 <li>See your games statistics.</li>
-<ul>
+<ul><br>
 
-![Game](https://sun9-east.userapi.com/sun9-17/s/v1/ig2/VH1wmzg61uYhhOBxDUA-_ZGFNzHjpUp5AR28Zq_kPSB27Vb5P7QrwIbDgJTfffoFLSq08Vi2Uq2KeOIfcL_IVN97.jpg?size=823x579&quality=95&type=album)</br>
+![Stats](https://sun9-east.userapi.com/sun9-30/s/v1/ig2/YRuV7JvzpNWv8X7XYuiMnrIRhHaVQ-LuT-vxj3Jocef-dXrUFBAVTAyrcmJrs3V4lhsJKkj8LWZ9mkkArB7hKS0L.jpg?size=828x579&quality=95&type=album)</br>
 
 <ul>
 <li>Use keyboard, touch and mouse to take a move.</li>
-</ul>
+</ul><br>
 
-![Stats](https://sun9-east.userapi.com/sun9-30/s/v1/ig2/YRuV7JvzpNWv8X7XYuiMnrIRhHaVQ-LuT-vxj3Jocef-dXrUFBAVTAyrcmJrs3V4lhsJKkj8LWZ9mkkArB7hKS0L.jpg?size=828x579&quality=95&type=album)</br>
+![Game](https://sun9-east.userapi.com/sun9-17/s/v1/ig2/VH1wmzg61uYhhOBxDUA-_ZGFNzHjpUp5AR28Zq_kPSB27Vb5P7QrwIbDgJTfffoFLSq08Vi2Uq2KeOIfcL_IVN97.jpg?size=823x579&quality=95&type=album)</br>
 
 **Controls:**<br>
 w - move up<br>
