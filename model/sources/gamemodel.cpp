@@ -8,6 +8,16 @@ GameModel::GameModel()
     log.push_back({cells::emptyCell(), {0,0}, {0,0}, TurnType::Nothing});
 }
 
+void GameModel::reset()
+{
+
+}
+
+std::string GameModel::playerName() const
+{
+    return player == stf::ColorTable::White ? "White" : "Black";
+}
+
 TurnType GameModel::unavailiableTurnHandler(const GameBoard &backup, const stf::ColorTable col, const TurnType isCheckType)
 {
     if(player == col) {
