@@ -7,7 +7,7 @@
 
 MenuView::MenuView(GameModel* model)
   : IView(model),
-    m_logo(Sprite("sprs/logo.spr")),
+    m_logo(SpriteFromBMP("sprs/logo.bmp")),
     m_smenu(Sprite("sprs/menu.spr"))
 {
     m_menuItemsCount = m_smenu.markers().size() / 2;
@@ -16,9 +16,9 @@ MenuView::MenuView(GameModel* model)
 void  MenuView::show(Renderer& renderer)
 {
   IView::show(renderer);
-  Vec2d pzero = renderer.Size / 2 - m_smenu.Size() / 2;
-  m_logo.show(renderer, true, {0,0}, {0, -m_logo.Size().y - 2});
-  m_smenu.show(renderer, true);
+  Vec2d pzero = renderer.Size / 2 - m_smenu.Size() / 2 + Vec2d(0,5);
+  m_logo.show(renderer, true, {0,0}, {0, -m_logo.Size().y + 7});
+  m_smenu.show(renderer, true, {0,0}, {0, 5});
 
   renderer.drawPixel(pzero + m_smenu.markers().at(m_cursor * 2), '>');
   renderer.drawPixel(pzero + m_smenu.markers().at(m_cursor * 2 + 1), '<');
@@ -47,7 +47,7 @@ IView* MenuView::keyEventsHandler(const int key)
 }
 
 MenuView::MenuView(GameModel *model, const char *sprite)
-    : IView(model), m_logo(Sprite("sprs/logo.spr")), m_smenu(Sprite(sprite))
+    : IView(model), m_logo(SpriteFromBMP("sprs/logo.bmp")), m_smenu(Sprite(sprite))
 
 {
     m_menuItemsCount = m_smenu.markers().size() / 2;

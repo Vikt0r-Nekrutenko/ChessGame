@@ -10,9 +10,9 @@ PauseMenuView::PauseMenuView(GameModel* model)
 void PauseMenuView::show(Renderer &renderer)
 {
     IView::show(renderer);
-    Vec2d pzero = renderer.Size / 2 - m_smenu.Size() / 2;
-    m_logo.show(renderer, true, {0,0}, {0, -m_logo.Size().y - 4});
-    m_smenu.show(renderer, true);
+    Vec2d pzero = renderer.Size / 2 - m_smenu.Size() / 2 + Vec2d(0,7);
+    m_logo.show(renderer, true, {0,0}, {0, -m_logo.Size().y + 7});
+    m_smenu.show(renderer, true, {0,0}, {0,7});
 
     renderer.drawPixel(pzero + m_smenu.markers().at(m_cursor * 2), '>');
     renderer.drawPixel(pzero + m_smenu.markers().at(m_cursor * 2 + 1), '<');

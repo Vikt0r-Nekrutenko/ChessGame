@@ -23,7 +23,7 @@ class MenuView : public IView
 
   MenuView(GameModel* model, const char* sprite);
 
-  Sprite m_logo;
+  SpriteFromBMP m_logo;
   Sprite m_smenu;
   int m_cursor = 0;
   int m_menuItemsCount;
