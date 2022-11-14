@@ -64,10 +64,10 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
         log.push_back({ mCursor.selectedCell.cell, mCursor.selectedCell.pos, mCursor.selectableCell.pos, turn });
 
     stf::Renderer::log << stf::endl <<
-                          pieces::Pieces[log.back().cell->uniqueView()] << " " <<
-                          cells::Turns[log.back().type] << " from " <<
-                          log.back().from << " to " <<
-                          log.back().to;
+                          char(log.back().cell->view()) <<
+                          char(log.back().from.x + 'a') << std::abs(log.back().from.y - 8) <<
+                          cells::Turns[log.back().type] <<
+                          char(log.back().to.x + 'a') << std::abs(log.back().to.y - 8);
     mCursor.reset();
     if(turn != TurnType::Nothing && turn != TurnType::Unavailiable)
         player = player == stf::ColorTable::White ? stf::ColorTable::Red : stf::ColorTable::White;

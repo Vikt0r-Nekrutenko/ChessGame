@@ -97,14 +97,14 @@ static CellCreator<EmptyCell> emptyCell = CellCreator<EmptyCell>();
 
 static std::map<TurnType, std::string> Turns = {
     {TurnType::Nothing, "Nothing"} ,
-    {TurnType::Unavailiable, "Unavailiable turn"} ,
-    {TurnType::Move, "Move"} ,
-    {TurnType::Attack, "Attack"} ,
-    {TurnType::AttackInPassing, "Attack in passing"} ,
-    {TurnType::LongCastling, "LongCastling"} ,
-    {TurnType::ShortCastling, "ShortCastling"} ,
-    {TurnType::WCheckToB, "White check to black"} ,
-    {TurnType::BCheckToW, "Black check to white"} ,
+    {TurnType::Unavailiable, "NOT"} ,
+    {TurnType::Move, "-"} ,
+    {TurnType::Attack, "x"} ,
+    {TurnType::AttackInPassing, "x"} ,
+    {TurnType::LongCastling, "0-0-0"} ,
+    {TurnType::ShortCastling, "0-0"} ,
+    {TurnType::WCheckToB, "+"} ,
+    {TurnType::BCheckToW, "+"} ,
 };
 }
 
