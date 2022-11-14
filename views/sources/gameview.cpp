@@ -44,7 +44,7 @@ void GameView::show(Renderer &renderer)
     }
 
     // draw cursors
-    if(gameModel->mCursor.selectedCell.cell->color() != stf::ColorTable::Black)//cells::emptyCell()->view())
+    if(gameModel->mCursor.selectedCell.cell->view() != cells::emptyCell()->view())
     {
         renderer.drawPixel(cell(m_board, gameModel, gameModel->mCursor.selectedCell.pos) - stf::Vec2d(1,0), '<');
         renderer.drawPixel(cell(m_board, gameModel, gameModel->mCursor.selectedCell.pos) - stf::Vec2d(-1,0), '>');

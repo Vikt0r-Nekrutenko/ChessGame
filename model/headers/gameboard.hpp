@@ -50,25 +50,22 @@ public:
     bool possibleMovesExitst();
     bool isMoveToMakeUncheckExist(const stf::Vec2d &selected, const stf::Vec2d &selectable) const;
 
+    std::map<int, BoardCell*> Pieces = {
+        {-6, pieces::bKing()},
+        {-5, pieces::bQueen()},
+        {-4, pieces::bBishop()},
+        {-3, pieces::bKnight()},
+        {-2, pieces::bRook()},
+        {-1, pieces::bPawn()},
+        { 0, cells::emptyCell()},
+        {+1, pieces::wPawn()},
+        {+2, pieces::wRook()},
+        {+3, pieces::wKnight()},
+        {+4, pieces::wBishop()},
+        {+5, pieces::wQueen()},
+        {+6, pieces::wKing()},
+    };
     std::vector<BoardCell *> mBoard;
 };
-
-namespace pieces {
-static std::map<int, BoardCell*> Pieces = {
-    {-6, pieces::bKing()},
-    {-5, pieces::bQueen()},
-    {-4, pieces::bBishop()},
-    {-3, pieces::bKnight()},
-    {-2, pieces::bRook()},
-    {-1, pieces::bPawn()},
-    { 0, cells::emptyCell()},
-    {+1, pieces::wPawn()},
-    {+2, pieces::wRook()},
-    {+3, pieces::wKnight()},
-    {+4, pieces::wBishop()},
-    {+5, pieces::wQueen()},
-    {+6, pieces::wKing()},
-};
-}
 
 #endif // GAMEBOARD_HPP

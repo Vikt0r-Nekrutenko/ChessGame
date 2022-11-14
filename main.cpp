@@ -9,7 +9,7 @@ class Game : public stf::Window
 {
 public:
     GameModel gameModel = GameModel();
-    GameView menuView = GameView(&gameModel);
+    MenuView menuView = MenuView(&gameModel);
     stf::smv::IView *currentView = &menuView;
 
     Game()
@@ -21,14 +21,13 @@ public:
 
     bool onUpdate(const float) final
     {
-//        currentView->show(renderer);
+        currentView->show(renderer);
         return true;
     }
 
     void keyEvents(const int key) final
     {
-//        currentView = currentView->keyEventsHandler(key);
-        gameModel.keyEventsHandler(nullptr, key);
+        currentView = currentView->keyEventsHandler(key);
     }
 
     void mouseEvents(const stf::MouseRecord& mr) final

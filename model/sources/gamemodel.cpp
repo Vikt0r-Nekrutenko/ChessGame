@@ -23,7 +23,7 @@ void GameSaveModel::load()
 
     for(size_t i = 0; i < mModel->mBoard.mBoard.size(); ++i) {
         int uniqueIndx = board[i];
-        mModel->mBoard.place(i, pieces::Pieces[uniqueIndx]);
+        mModel->mBoard.place(i, mModel->mBoard.Pieces[uniqueIndx]);
     }
     mModel->player = (stf::ColorTable)player();
 }
